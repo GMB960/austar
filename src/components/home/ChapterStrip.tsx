@@ -226,12 +226,12 @@ export function ChapterStrip() {
 
   return (
     <section
-      className={cn("relative bg-charcoal text-ivory", !reduced && "md:h-[480vh]")}
+      className={cn("chapter-section relative bg-charcoal text-ivory", !reduced && "md:h-[480vh]")}
       aria-label="A closer look, chapter by chapter"
     >
       <div
         ref={wrapperRef}
-        className={cn("relative", !reduced && "md:h-[480vh]")}
+        className={cn("chapter-wrapper relative", !reduced && "md:h-[480vh]")}
       >
         <div
           ref={stageRef}

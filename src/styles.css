@@ -515,25 +515,54 @@ html[data-reduced-motion="user"] .faq-questions { opacity: 1 !important; transfo
   inset: auto 20px 26px;
   z-index: 20;
 }
-@media (max-width: 767px) {
-  .chapter-frame { aspect-ratio: 16 / 10; }
-  .chapter-track { perspective: none; }
-  .chapter-panel { transform: none !important; opacity: 1 !important; visibility: visible !important; }
-  .chapter-text { transform: none !important; opacity: 1 !important; }
-}
-html[data-reduced-motion="user"] .chapter-track { transform: none !important; }
-html[data-reduced-motion="user"] .chapter-panel,
-html[data-reduced-motion="user"] .chapter-text {
-  transform: none !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-@media (prefers-reduced-motion: reduce) {
-  .chapter-track { transform: none !important; }
-  .chapter-panel,
-  .chapter-text {
+/* Fallback: narrow screens and reduced-motion visitors get the same
+   chapters stacked vertically instead of pinned sideways. */
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .chapter-section,
+  .chapter-wrapper { height: auto !important; }
+  .chapter-stage {
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .chapter-track {
+    flex-direction: column !important;
+    transform: none !important;
+  }
+  .chapter-panel {
+    width: 100% !important;
+    height: auto !important;
     transform: none !important;
     opacity: 1 !important;
     visibility: visible !important;
   }
+  .chapter-text {
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  .chapter-frame { aspect-ratio: 16 / 10; }
+}
+html[data-reduced-motion="user"] .chapter-section,
+html[data-reduced-motion="user"] .chapter-wrapper { height: auto !important; }
+html[data-reduced-motion="user"] .chapter-stage {
+  position: static !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+html[data-reduced-motion="user"] .chapter-track {
+  flex-direction: column !important;
+  transform: none !important;
+}
+html[data-reduced-motion="user"] .chapter-panel {
+  width: 100% !important;
+  height: auto !important;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html[data-reduced-motion="user"] .chapter-text {
+  transform: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
