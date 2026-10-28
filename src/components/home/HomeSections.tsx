@@ -382,7 +382,7 @@ export function ProcessTimeline() {
                   cardRefs.current[i] = el;
                 }}
                 className="absolute inset-0 overflow-hidden rounded-[28px] bg-charcoal shadow-[0_40px_80px_-30px_rgba(16,23,19,0.55)] will-change-transform"
-                style={{ transformStyle: "preserve-3d", transformOrigin: "50% 100%" }}
+                style={{ transformOrigin: "50% 100%" }}
               >
                 <img
                   ref={(el) => {
