@@ -83,7 +83,7 @@ export function SiteHeader() {
               <img
                 src={LOGO_URL}
                 alt={`${SITE.name} logo`}
-                className="h-7 w-auto md:h-8"
+                className="h-8 w-auto md:h-9"
                 width={200}
                 height={74}
               />
