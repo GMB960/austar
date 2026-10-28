@@ -59,7 +59,7 @@ export function TiltCard({
         {children}
         <span
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-[var(--glare,0)] transition-opacity duration-300 [background:radial-gradient(420px_circle_at_var(--gx,50%)_var(--gy,50%),color-mix(in_oklab,var(--color-ivory-bright)_38%,transparent),transparent_60%)]"
+          className="pointer-events-none absolute inset-0 rounded-[inherit] opacity-[var(--glare,0)] transition-opacity duration-300 [background:radial-gradient(420px_circle_at_var(--gx,50%)_var(--gy,50%),color-mix(in_oklab,var(--color-ivory-bright)_14%,transparent),transparent_60%)]"
         />
       </div>
     </div>
