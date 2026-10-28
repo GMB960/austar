@@ -4,6 +4,7 @@ import { ArrowRight, MapPin, Phone, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SITE } from "@/lib/site";
 import house from "@/assets/house-modern.asset.json";
+import { SatelliteMap } from "./SatelliteMap";
 
 const MapScene = lazy(() => import("./ServiceAreaScene"));
 
@@ -12,6 +13,7 @@ export function ServiceAreas() {
   const progress = useRef(0);
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState<"NSW" | "VIC">("NSW");
+  const [mapView, setMapView] = useState<"satellite" | "atlas">("satellite");
   useEffect(() => {
     const el = section.current;
     if (!el) return;
@@ -60,10 +62,14 @@ export function ServiceAreas() {
             <p className="mt-4 text-xs leading-relaxed text-ivory/45">Service availability varies by location and upgrade.</p>
           </div>
           <div className="relative min-w-0">
-            <div data-map-scene className="atlas-canvas relative h-[420px] w-full md:h-[520px]" aria-label="Dimensional Australia map highlighting New South Wales and Victoria">
-              {visible && <Suspense fallback={<div className="absolute inset-0 flex items-center justify-center text-sm text-ivory/50">Australia · VIC & NSW</div>}><MapScene selected={selected} onSelect={setSelected} progress={progress} /></Suspense>}
+            <div className="mb-4 flex justify-end gap-1" role="group" aria-label="Map view">
+              <Button variant="ghost" aria-pressed={mapView === "satellite"} onClick={() => setMapView("satellite")} className={mapView === "satellite" ? "bg-ivory/10 text-leaf-soft hover:bg-ivory/15 hover:text-ivory" : "text-ivory/60 hover:bg-ivory/10 hover:text-ivory"}>Satellite</Button>
+              <Button variant="ghost" aria-pressed={mapView === "atlas"} onClick={() => setMapView("atlas")} className={mapView === "atlas" ? "bg-ivory/10 text-leaf-soft hover:bg-ivory/15 hover:text-ivory" : "text-ivory/60 hover:bg-ivory/10 hover:text-ivory"}>3D atlas</Button>
             </div>
-            <div className="relative flex justify-center gap-6 text-[11px] text-ivory/60"><span className="flex items-center gap-2"><span className="size-2 rounded-full bg-leaf" />New South Wales</span><span className="flex items-center gap-2"><span className="size-2 rounded-full bg-amber" />Victoria</span></div>
+            <div data-map-scene className={`${mapView === "atlas" ? "atlas-canvas" : ""} relative h-[420px] w-full md:h-[520px]`} aria-label={mapView === "satellite" ? "Satellite service-region map" : "Dimensional Australia map highlighting New South Wales and Victoria"}>
+              {visible && (mapView === "satellite" ? <SatelliteMap selected={selected} /> : <Suspense fallback={<div className="absolute inset-0 flex items-center justify-center text-sm text-ivory/50">Australia · VIC & NSW</div>}><MapScene selected={selected} onSelect={setSelected} progress={progress} /></Suspense>)}
+            </div>
+            {mapView === "atlas" && <div className="relative flex justify-center gap-6 text-[11px] text-ivory/60"><span className="flex items-center gap-2"><span className="size-2 rounded-full bg-leaf" />New South Wales</span><span className="flex items-center gap-2"><span className="size-2 rounded-full bg-amber" />Victoria</span></div>}
           </div>
         </div>
         <div className="mt-12 grid items-center gap-5 border-t border-ivory/15 pt-6 sm:grid-cols-[112px_1fr_auto]">

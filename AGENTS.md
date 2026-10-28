@@ -23,3 +23,4 @@
 - Keep the service-area WebGL scene lazy-loaded after the section approaches the viewport; this preserves SSR and avoids loading 3D for the photographic hero.
 - Use the geographically sourced state rings in `src/lib/australia-map.json`, derived from rowanhogan/australian-states, instead of hand-drawn state silhouettes.
 - Resolve semantic CSS colors to sRGB inside the mounted scene; Three.js does not parse the site's oklch tokens directly.
+- Default the service-area map to Google Maps Embed satellite view, retaining the atlas as an alternate; load managed-key imagery only on authorized Lovable hosts to respect browser-key restrictions.
