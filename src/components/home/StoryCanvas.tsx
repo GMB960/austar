@@ -718,18 +718,22 @@ function CameraRig({
   pointerRef: MutableRefObject<{ x: number; y: number }>;
   beatRef: MutableRefObject<BeatSample>;
 }) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const current = useRef({
     pos: v3(BEATS[0]!.pos),
     target: v3(BEATS[0]!.target),
   });
   const offset = useMemo(() => new THREE.Vector3(), []);
+  const desired = useMemo(() => new THREE.Vector3(), []);
 
   useFrame((_, delta) => {
     const b = beatRef.current;
     const cur = current.current;
     const lambda = 2.8;
-    cur.pos.lerp(b.pos, Math.min(1, delta * lambda));
+    // narrow/portrait viewports pull the camera back so the home stays framed
+    const factor = size.width / size.height < 1 ? 1.55 : 1;
+    desired.copy(b.pos).sub(b.target).multiplyScalar(factor).add(b.target);
+    cur.pos.lerp(desired, Math.min(1, delta * lambda));
     cur.target.lerp(b.target, Math.min(1, delta * lambda));
     // pointer parallax — at most ~3 degrees
     offset.set(pointerRef.current.x * 0.2, pointerRef.current.y * 0.12, 0);
