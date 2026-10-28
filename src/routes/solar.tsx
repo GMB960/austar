@@ -5,6 +5,8 @@ import solarHipRoof from "@/assets/solar-hip-roof.asset.json";
 import solarMacro from "@/assets/solar-macro.asset.json";
 import solarInstaller from "@/assets/solar-installer.asset.json";
 import solarTiled from "@/assets/solar-tiled-roof.asset.json";
+import houseModern from "@/assets/house-modern.asset.json";
+import kitchen from "@/assets/kitchen.asset.json";
 import { OFFERS_NOTICE } from "@/lib/site";
 
 export const Route = createFileRoute("/solar")({
@@ -41,18 +43,26 @@ function SolarPage() {
         {
           title: "Tell us about your property",
           body: "Where you are, what kind of roof you have and how your household uses electricity through the day.",
+          image: houseModern.url,
+          alt: "A modern Australian home seen from the street",
         },
         {
           title: "Property assessment",
           body: "Orientation, shading, roof condition and switchboard details shape what a sensible system looks like for you.",
+          image: solarTiled.url,
+          alt: "Solar panels fitted to a tiled roof",
         },
         {
           title: "System planning",
           body: "Panel and inverter options are discussed against your usage patterns, with honest explanation of the trade-offs.",
+          image: kitchen.url,
+          alt: "A bright kitchen where everyday household energy is used",
         },
         {
           title: "Installation and support",
           body: "Once the design is confirmed, installation is arranged and we remain available for questions and service afterwards.",
+          image: solarInstaller.url,
+          alt: "An installer securing solar panels on a roof",
         },
       ]}
       faq={[

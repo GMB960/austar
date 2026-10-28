@@ -41,18 +41,26 @@ function HeatPumpsPage() {
         {
           title: "Heat from the surrounding air",
           body: "The unit draws in ambient air and extracts its heat — even on cool days — rather than generating heat directly.",
+          image: heatpumpUnit2.url,
+          alt: "A heat pump hot water unit beside a home, drawing in surrounding air",
         },
         {
           title: "Transferred into stored water",
           body: "A refrigerant cycle moves that collected heat into the water held in the storage tank.",
+          image: heatpumpUnit.url,
+          alt: "A heat pump unit connected to a hot water storage tank",
         },
         {
           title: "Ready for everyday use",
           body: "Hot water is stored and ready for showers, laundry and the kitchen — replenished as your household needs it.",
+          image: bathroom.url,
+          alt: "A warm bathroom where hot water is used every day",
         },
         {
           title: "Electricity runs the system",
           body: "Electricity powers the pump and controls. Because most of the heat comes from the air, less electricity is needed to do the same job.",
+          image: heatpumpInstall.url,
+          alt: "A technician installing a heat pump hot water system",
         },
       ]}
       faq={[
