@@ -236,31 +236,40 @@ function Window({
 }) {
   return (
     <group position={position} rotation={rotation}>
-      {/* painted surround, slightly proud of the brick */}
-      <mesh position={[0, 0, 0.02]} material={mats.trim} castShadow>
-        <boxGeometry args={[w + 0.18, h + 0.18, 0.07]} />
-      </mesh>
-      {/* dark reveal */}
-      <mesh position={[0, 0, -0.015]} material={mats.revealDark}>
-        <boxGeometry args={[w + 0.05, h + 0.05, 0.03]} />
+      {/* dark reveal box recessed into the wall */}
+      <mesh position={[0, 0, -0.03]} material={mats.revealDark}>
+        <boxGeometry args={[w + 0.1, h + 0.1, 0.06]} />
       </mesh>
       {/* glass */}
-      <mesh position={[0, 0, 0.004]} material={mats.glass}>
+      <mesh position={[0, 0, 0.01]} material={mats.glass}>
         <planeGeometry args={[w, h]} />
       </mesh>
       {/* mullions */}
-      <mesh position={[0, 0, 0.028]} material={mats.darkMetal}>
+      <mesh position={[0, 0, 0.03]} material={mats.darkMetal}>
         <boxGeometry args={[0.05, h, 0.04]} />
       </mesh>
-      <mesh position={[0, h * 0.18, 0.028]} material={mats.darkMetal}>
+      <mesh position={[0, h * 0.18, 0.03]} material={mats.darkMetal}>
         <boxGeometry args={[w, 0.05, 0.04]} />
       </mesh>
+      {/* painted picture-frame surround */}
+      <mesh position={[0, h / 2 + 0.05, 0.03]} material={mats.trim} castShadow>
+        <boxGeometry args={[w + 0.2, 0.1, 0.1]} />
+      </mesh>
+      <mesh position={[0, -h / 2 - 0.05, 0.03]} material={mats.trim} castShadow>
+        <boxGeometry args={[w + 0.2, 0.1, 0.1]} />
+      </mesh>
+      <mesh position={[-w / 2 - 0.05, 0, 0.03]} material={mats.trim} castShadow>
+        <boxGeometry args={[0.1, h, 0.1]} />
+      </mesh>
+      <mesh position={[w / 2 + 0.05, 0, 0.03]} material={mats.trim} castShadow>
+        <boxGeometry args={[0.1, h, 0.1]} />
+      </mesh>
       {/* sill */}
-      <mesh position={[0, -h / 2 - 0.065, 0.035]} material={mats.trim} castShadow>
-        <boxGeometry args={[w + 0.24, 0.07, 0.13]} />
+      <mesh position={[0, -h / 2 - 0.11, 0.055]} material={mats.trim} castShadow>
+        <boxGeometry args={[w + 0.28, 0.07, 0.15]} />
       </mesh>
       {/* warm interior glow at dusk */}
-      <mesh position={[0, 0, -0.05]}>
+      <mesh position={[0, 0, -0.07]}>
         <planeGeometry args={[w, h]} />
         <meshStandardMaterial ref={glowSetter} color="#ffd9a0" emissive="#ffb35c" emissiveIntensity={0} toneMapped={false} />
       </mesh>
@@ -442,24 +451,38 @@ function AcUnit({ mats, grille }: { mats: Mats; grille: THREE.Texture }) {
   );
 }
 
+// organic foliage blob: jitter keyed off vertex position so shared corners
+// of the (non-indexed) icosahedron stay welded
+function blobGeo(r: number) {
+  const g = new THREE.IcosahedronGeometry(r, 1);
+  const pos = g.attributes.position as THREE.BufferAttribute;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
+    const h1 = Math.abs(Math.sin(x * 12.9898 + y * 78.233 + z * 37.719) * 43758.5453) % 1;
+    const h2 = Math.abs(Math.sin(x * 93.989 + y * 47.233 + z * 61.719) * 24634.6345) % 1;
+    const j = 0.84 + h1 * 0.34;
+    pos.setXYZ(i, x * j, y * j * 0.82, z * j * (0.9 + h2 * 0.2));
+  }
+  g.computeVertexNormals();
+  return g;
+}
+
 function Tree({ position, scale = 1 }: { position: [number, number, number]; scale?: number }) {
   const trunk = useMemo(() => new THREE.MeshStandardMaterial({ color: "#6e5340", roughness: 0.95 }), []);
   const leaf = useMemo(() => new THREE.MeshStandardMaterial({ color: "#4f7a3e", roughness: 0.9 }), []);
   const leaf2 = useMemo(() => new THREE.MeshStandardMaterial({ color: "#61914c", roughness: 0.9 }), []);
+  const blobs = useMemo(
+    () => [blobGeo(0.9), blobGeo(0.62), blobGeo(0.52)],
+    [],
+  );
   return (
     <group position={position} scale={scale}>
       <mesh position={[0, 0.75, 0]} castShadow material={trunk}>
         <cylinderGeometry args={[0.1, 0.16, 1.5, 8]} />
       </mesh>
-      <mesh position={[0.25, 1.75, 0.1]} castShadow material={leaf}>
-        <icosahedronGeometry args={[0.9, 1]} />
-      </mesh>
-      <mesh position={[-0.32, 1.45, -0.2]} castShadow material={leaf2}>
-        <icosahedronGeometry args={[0.62, 1]} />
-      </mesh>
-      <mesh position={[0.05, 2.3, -0.05]} castShadow material={leaf}>
-        <icosahedronGeometry args={[0.52, 1]} />
-      </mesh>
+      <mesh geometry={blobs[0]} position={[0.25, 1.78, 0.1]} castShadow material={leaf} />
+      <mesh geometry={blobs[1]} position={[-0.34, 1.5, -0.2]} castShadow material={leaf2} />
+      <mesh geometry={blobs[2]} position={[0.05, 2.32, -0.05]} castShadow material={leaf} />
     </group>
   );
 }
