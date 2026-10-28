@@ -24,10 +24,29 @@ export function useRevealContainer<T extends HTMLElement>() {
           }
         }
       },
-      { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+      { threshold: 0.05, rootMargin: "0px 0px 10% 0px" },
     );
     targets.forEach((t) => io.observe(t));
-    return () => io.disconnect();
+
+    // Safety net: never leave an in-view element unrevealed, even if the
+    // observer races with fast scrolling or hydration.
+    let tries = 0;
+    const timer = window.setInterval(() => {
+      tries += 1;
+      for (const t of targets) {
+        if (t.classList.contains("is-visible")) continue;
+        const r = t.getBoundingClientRect();
+        if (r.top < window.innerHeight * 0.98 && r.bottom > 0) t.classList.add("is-visible");
+      }
+      if (tries > 12 || targets.every((t) => t.classList.contains("is-visible"))) {
+        window.clearInterval(timer);
+      }
+    }, 250);
+
+    return () => {
+      io.disconnect();
+      window.clearInterval(timer);
+    };
   }, []);
 
   return ref;
@@ -50,19 +69,37 @@ export function Reveal({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    const show = () => el.classList.add("is-visible");
+    const inView = () => {
+      const r = el.getBoundingClientRect();
+      return r.top < window.innerHeight * 0.98 && r.bottom > 0;
+    };
+    // Already on screen when we mount (fast scroll, anchor jump): show now.
+    if (inView()) {
+      show();
+      return;
+    }
     const io = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            el.classList.add("is-visible");
-            io.disconnect();
-          }
+        if (entries.some((entry) => entry.isIntersecting)) {
+          show();
+          io.disconnect();
         }
       },
-      { threshold: 0.15 },
+      { threshold: 0.05, rootMargin: "0px 0px 10% 0px" },
     );
     io.observe(el);
-    return () => io.disconnect();
+    // Safety net if the observer misfires.
+    let tries = 0;
+    const timer = window.setInterval(() => {
+      tries += 1;
+      if (inView()) show();
+      if (tries > 12 || el.classList.contains("is-visible")) window.clearInterval(timer);
+    }, 250);
+    return () => {
+      io.disconnect();
+      window.clearInterval(timer);
+    };
   }, []);
 
   return (
