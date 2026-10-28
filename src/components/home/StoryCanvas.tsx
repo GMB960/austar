@@ -455,7 +455,7 @@ function AcUnit({ mats, grille }: { mats: Mats; grille: THREE.Texture }) {
 // of the (non-indexed) icosahedron stay welded
 function blobGeo(r: number) {
   const g = new THREE.IcosahedronGeometry(r, 1);
-  const pos = g.attributes.position as THREE.BufferAttribute;
+  const pos = g.attributes["position"] as THREE.BufferAttribute;
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i);
     const h1 = Math.abs(Math.sin(x * 12.9898 + y * 78.233 + z * 37.719) * 43758.5453) % 1;
@@ -472,7 +472,7 @@ function Tree({ position, scale = 1 }: { position: [number, number, number]; sca
   const leaf = useMemo(() => new THREE.MeshStandardMaterial({ color: "#4f7a3e", roughness: 0.9 }), []);
   const leaf2 = useMemo(() => new THREE.MeshStandardMaterial({ color: "#61914c", roughness: 0.9 }), []);
   const blobs = useMemo(
-    () => [blobGeo(0.9), blobGeo(0.62), blobGeo(0.52)],
+    () => [blobGeo(0.9), blobGeo(0.62), blobGeo(0.52)] as const,
     [],
   );
   return (
