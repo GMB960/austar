@@ -36,7 +36,7 @@ export function FaqSection() {
     let pointerY = 0;
     let currentX = 0;
     let currentY = 0;
-    const reduced = () => motion.matches || document.documentElement.dataset.reducedMotion === "user";
+    const reduced = () => motion.matches || document.documentElement.dataset["reducedMotion"] === "user";
     const update = () => {
       frame = 0;
       if (reduced()) { el.style.transform = "none"; el.style.setProperty("--faq-spread", "0.5"); return; }
@@ -59,7 +59,7 @@ export function FaqSection() {
     const leave = () => { pointerX = 0; pointerY = 0; scroll(); };
     const observer = new IntersectionObserver(([entry]) => {
       visible = entry?.isIntersecting ?? false;
-      root.dataset.faqVisible = String(visible);
+      root.dataset["faqVisible"] = String(visible);
       if (visible) scroll();
     }, { threshold: 0.12 });
     observer.observe(root);
