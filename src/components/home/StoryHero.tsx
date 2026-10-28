@@ -8,7 +8,7 @@
  * Mobile / reduced motion / no WebGL: static poster + the three chapters
  * as ordinary vertical sections, so the story never blocks content.
  */
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ComponentType, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowDown } from "lucide-react";
 
@@ -16,7 +16,7 @@ import houseModern from "@/assets/house-modern.asset.json";
 import solarHipRoof from "@/assets/solar-hip-roof.asset.json";
 import heatpumpUnit from "@/assets/heatpump-unit.asset.json";
 import lounge from "@/assets/lounge.asset.json";
-import type { HotspotId } from "./StoryCanvas";
+import type { HotspotId, StoryCanvasProps } from "./StoryCanvas";
 
 export const HERO_COPY = {
   eyebrow: "Solar • Hot water • Air conditioning",
@@ -96,13 +96,13 @@ export function StoryHero({ children }: { children?: ReactNode }) {
   const chapterRefs = useRef<(HTMLDivElement | null)[]>([]);
   const endRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLSpanElement>(null);
-  const [StoryCanvas, setStoryCanvas] = useState<null | ((props: Record<string, unknown>) => ReactNode)>(null);
+  const [StoryCanvas, setStoryCanvas] = useState<ComponentType<StoryCanvasProps> | null>(null);
 
   useEffect(() => {
     setMounted(true);
     setWebglOk(supportsWebGL());
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const updateReduced = () => setReduced(mq.matches || document.documentElement.dataset.reducedMotion === "user");
+    const updateReduced = () => setReduced(mq.matches || document.documentElement.dataset["reducedMotion"] === "user");
     updateReduced();
     mq.addEventListener("change", updateReduced);
     const mqMobile = window.matchMedia("(max-width: 767px)");
@@ -121,7 +121,7 @@ export function StoryHero({ children }: { children?: ReactNode }) {
     if (!useScene) return;
     let cancelled = false;
     import("./StoryCanvas").then((mod) => {
-      if (!cancelled) setStoryCanvas(() => mod.default as never);
+      if (!cancelled) setStoryCanvas(() => mod.default);
     });
     return () => {
       cancelled = true;
@@ -177,7 +177,7 @@ export function StoryHero({ children }: { children?: ReactNode }) {
   // pause the whole scene when the tab is hidden
   useEffect(() => {
     const onVis = () => {
-      document.documentElement.dataset.storyPaused = document.hidden ? "1" : "0";
+      document.documentElement.dataset["storyPaused"] = document.hidden ? "1" : "0";
     };
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);

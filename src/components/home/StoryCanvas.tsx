@@ -6,7 +6,7 @@
  * One canvas serves the hero AND the three scroll chapters: the parent
  * wrapper owns the scroll progress; this component only reads it.
  */
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, type ComponentType, type MutableRefObject, type RefObject } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
@@ -41,10 +41,10 @@ const v3 = (a: [number, number, number]) => new THREE.Vector3(...a);
 function sampleBeats(p: number) {
   const clamped = Math.min(1, Math.max(0, p));
   let i = 0;
-  while (i < BEAT_T.length - 2 && clamped > BEAT_T[i + 1]) i++;
-  const t = THREE.MathUtils.smoothstep((clamped - BEAT_T[i]) / (BEAT_T[i + 1] - BEAT_T[i]), 0, 1);
-  const a = BEATS[i];
-  const b = BEATS[i + 1];
+  while (i < BEAT_T.length - 2 && BEAT_T[i + 1] !== undefined && clamped > BEAT_T[i + 1]!) i++;
+  const t = THREE.MathUtils.smoothstep((clamped - BEAT_T[i]!) / (BEAT_T[i + 1]! - BEAT_T[i]!), 0, 1);
+  const a = BEATS[i]!;
+  const b = BEATS[i + 1]!;
   return {
     pos: v3(a.pos).lerp(v3(b.pos), t),
     target: v3(a.target).lerp(v3(b.target), t),
@@ -60,7 +60,7 @@ export type BeatSample = ReturnType<typeof sampleBeats>;
 
 /* ------------------------------ scene objects ----------------------------- */
 
-function House({ glowMaterials }: { glowMaterials: React.RefObject<(THREE.MeshStandardMaterial | null)[]> }) {
+function House({ glowMaterials }: { glowMaterials: RefObject<(THREE.MeshStandardMaterial | null)[]> }) {
   const render = useMemo(
     () => new THREE.MeshStandardMaterial({ color: "#ece4d4", roughness: 0.92 }),
     [],
@@ -332,11 +332,11 @@ function EnergyPath({
 }: {
   points: [number, number, number][];
   color: string;
-  progressRef: React.MutableRefObject<number>;
+  progressRef: MutableRefObject<number>;
   window: [number, number];
   speed?: number;
-  materialRef?: React.MutableRefObject<THREE.LineDashedMaterial | null>;
-  externalOpacity?: React.MutableRefObject<number> | number;
+  materialRef?: MutableRefObject<THREE.LineDashedMaterial | null>;
+  externalOpacity?: MutableRefObject<number> | number;
 }) {
   const line = useMemo(() => {
     const curve = new THREE.CatmullRomCurve3(points.map((p) => new THREE.Vector3(...p)));
@@ -356,6 +356,8 @@ function EnergyPath({
     return l;
   }, [points, color, materialRef]);
 
+  const baseDist = useRef<Float32Array | null>(null);
+
   useFrame((state) => {
     const p = progressRef.current;
     const [a, b] = win;
@@ -365,7 +367,20 @@ function EnergyPath({
     const mat = line.material as THREE.LineDashedMaterial;
     mat.opacity = fade * ext * 0.9;
     line.visible = mat.opacity > 0.01;
-    if (line.visible) mat.dashOffset = -(state.clock.elapsedTime * speed) % 1;
+    if (line.visible) {
+      // LineDashedMaterial has no dashOffset uniform — shift the lineDistance
+      // attribute instead so the dashes flow along the path.
+      const attr = line.geometry.getAttribute("lineDistance") as THREE.BufferAttribute | undefined;
+      if (attr) {
+        if (!baseDist.current) baseDist.current = Float32Array.from(attr.array as Float32Array);
+        const base = baseDist.current;
+        const period = mat.dashSize + mat.gapSize;
+        const off = -((state.clock.elapsedTime * speed) % period);
+        const arr = attr.array as Float32Array;
+        for (let k = 0; k < arr.length; k++) arr[k] = base[k]! + off;
+        attr.needsUpdate = true;
+      }
+    }
   });
 
   return <primitive object={line} />;
@@ -431,7 +446,7 @@ function HotspotLabel({
 
 /* ------------------------------ sun and sky ------------------------------- */
 
-function SunAndSky({ beatRef }: { beatRef: React.MutableRefObject<BeatSample> }) {
+function SunAndSky({ beatRef }: { beatRef: MutableRefObject<BeatSample> }) {
   const lightRef = useRef<THREE.DirectionalLight>(null);
   const hemiRef = useRef<THREE.HemisphereLight>(null);
   const sunRef = useRef<THREE.Mesh>(null);
@@ -509,14 +524,14 @@ function CameraRig({
   pointerRef,
   beatRef,
 }: {
-  progressRef: React.MutableRefObject<number>;
-  pointerRef: React.MutableRefObject<{ x: number; y: number }>;
-  beatRef: React.MutableRefObject<BeatSample>;
+  progressRef: MutableRefObject<number>;
+  pointerRef: MutableRefObject<{ x: number; y: number }>;
+  beatRef: MutableRefObject<BeatSample>;
 }) {
   const { camera } = useThree();
   const current = useRef({
-    pos: v3(BEATS[0].pos),
-    target: v3(BEATS[0].target),
+    pos: v3(BEATS[0]!.pos),
+    target: v3(BEATS[0]!.target),
   });
   const offset = useMemo(() => new THREE.Vector3(), []);
 
@@ -540,32 +555,29 @@ function SceneTick({
   progressRef,
   beatRef,
   glowMaterials,
-  solarMatRef,
 }: {
-  progressRef: React.MutableRefObject<number>;
-  beatRef: React.MutableRefObject<BeatSample>;
-  glowMaterials: React.RefObject<(THREE.MeshStandardMaterial | null)[]>;
-  solarMatRef: React.MutableRefObject<THREE.LineDashedMaterial | null>;
+  progressRef: MutableRefObject<number>;
+  beatRef: MutableRefObject<BeatSample>;
+  glowMaterials: RefObject<(THREE.MeshStandardMaterial | null)[]>;
 }) {
   useFrame(() => {
     beatRef.current = sampleBeats(progressRef.current);
     const p = progressRef.current;
     const dusk = THREE.MathUtils.smoothstep(p, 0.72, 0.98);
-    const daylight = 1 - THREE.MathUtils.smoothstep(p, 0.6, 0.88);
     const glows = glowMaterials.current;
     if (glows) {
-      for (const m of glows) if (m) m.emissiveIntensity = dusk * 1.7;
+      for (const m of glows) {
+        if (m) m.emissiveIntensity = dusk * 1.7;
+      }
     }
-    if (solarMatRef.current) solarMatRef.current.opacity = 1; // envelope handled per-frame by EnergyPath
-    void daylight;
   });
   return null;
 }
 
 /* --------------------------------- scene ---------------------------------- */
 
-export type StoryCanvasProps = {
-  progressRef: React.MutableRefObject<number>;
+export type StoryCanvasProps = { // eslint-disable-line 
+  progressRef: MutableRefObject<number>;
   activeHotspot: HotspotId | null;
   onSelectHotspot: (id: HotspotId) => void;
   interactive?: boolean;
@@ -580,7 +592,6 @@ export default function StoryCanvas({
   const pointerRef = useRef({ x: 0, y: 0 });
   const beatRef = useRef<BeatSample>(sampleBeats(0));
   const glowMaterials = useRef<(THREE.MeshStandardMaterial | null)[]>([null, null, null]);
-  const solarMatRef = useRef<THREE.LineDashedMaterial | null>(null);
   const daylightRef = useRef(1);
 
   // daylight envelope for the solar path: fades as the story reaches dusk
@@ -642,12 +653,7 @@ export default function StoryCanvas({
       style={{ position: "absolute", inset: 0 }}
     >
       <fog attach="fog" args={["#f3e4cd", 26, 68]} />
-      <SceneTick
-        progressRef={progressRef}
-        beatRef={beatRef}
-        glowMaterials={glowMaterials}
-        solarMatRef={solarMatRef}
-      />
+      <SceneTick progressRef={progressRef} beatRef={beatRef} glowMaterials={glowMaterials} />
       <SunAndSky beatRef={beatRef} />
       <CameraRig progressRef={progressRef} pointerRef={pointerRef} beatRef={beatRef} />
       <Ground />
@@ -666,7 +672,6 @@ export default function StoryCanvas({
         color="#f4c45b"
         progressRef={progressRef}
         window={[0.06, 0.74]}
-        materialRef={solarMatRef}
         externalOpacity={daylightRef}
       />
       {/* ambient heat into the heat pump: sage, clearly non-electric */}

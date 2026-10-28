@@ -271,3 +271,12 @@ html[data-reduced-motion="user"] *::after {
 html[data-reduced-motion="user"] .drift {
   animation: none;
 }
+
+@keyframes heroRise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

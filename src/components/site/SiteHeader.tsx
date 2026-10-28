@@ -248,7 +248,7 @@ function HeaderLink({ to, hash, label }: { to: string; hash?: string; label: str
   return (
     <Link
       to={to}
-      hash={hash}
+      {...(hash ? { hash } : {})}
       className="rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-charcoal/5"
       activeProps={{ className: "text-forest font-semibold" }}
     >
