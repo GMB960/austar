@@ -181,6 +181,7 @@ const EXPLORER = [
     body: "Solar panels turn daylight into electricity your household can use. What suits your place depends on orientation, shading and how you use power through the day.",
     image: solarTiledRoof.url,
     alt: "Solar panels on a tiled roof",
+    to: "/solar",
   },
   {
     id: "hotwater",
@@ -189,6 +190,7 @@ const EXPLORER = [
     body: "A heat pump warms water using heat drawn from the surrounding air, so it needs less electricity to do the same job as a conventional system.",
     image: heatpumpInstall.url,
     alt: "A heat pump hot water installation",
+    to: "/heat-pumps",
   },
   {
     id: "comfort",
@@ -197,12 +199,13 @@ const EXPLORER = [
     body: "Reverse-cycle systems cool in summer and warm in winter, where the selected product supports it — matched to your rooms and routines.",
     image: acIndoor.url,
     alt: "A wall-mounted split system air conditioner",
+    to: "/air-conditioning",
   },
 ] as const;
 
 export function HomeExplorer() {
   const [active, setActive] = useState<(typeof EXPLORER)[number]["id"]>("solar");
-  const current = EXPLORER.find((e) => e.id === active) ?? EXPLORER[0];
+  const current = EXPLORER.find((e) => e.id === active) ?? EXPLORER[0]!;
 
   return (
     <section className="py-16 md:py-24">
@@ -237,7 +240,7 @@ export function HomeExplorer() {
               <h3 className="font-display text-xl font-extrabold text-charcoal">{current.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{current.body}</p>
               <Link
-                to={current.id === "comfort" ? "/air-conditioning" : `/${current.id}`}
+                to={current.to}
                 className="mt-5 inline-flex items-center gap-2 rounded-full bg-forest px-5 py-2.5 text-xs font-semibold text-ivory transition-colors hover:bg-forest-deep"
               >
                 Explore {current.label.toLowerCase()}
@@ -423,9 +426,9 @@ export function PhotoGallery() {
             <X className="size-5" aria-hidden="true" />
           </button>
           <figure className="max-h-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
-            <img src={GALLERY[open].src} alt={GALLERY[open].caption} className="mask-round max-h-[75vh] w-auto object-contain" />
+            <img src={GALLERY[open]!.src} alt={GALLERY[open]!.caption} className="mask-round max-h-[75vh] w-auto object-contain" />
             <figcaption className="mt-3 flex items-center justify-between text-xs text-ivory/80">
-              {GALLERY[open].caption}
+              {GALLERY[open]!.caption}
               <span>
                 {open + 1} / {GALLERY.length}
               </span>

@@ -214,7 +214,7 @@ export function QuoteForm({ initialServices }: { initialServices?: string[] }) {
               );
             })}
           </div>
-          {errors.services && <FieldError message={errors.services} />}
+          {errors["services"] && <FieldError message={errors["services"]} />}
         </fieldset>
       )}
 
@@ -233,7 +233,7 @@ export function QuoteForm({ initialServices }: { initialServices?: string[] }) {
                 placeholder="e.g. 2170"
                 className="w-full rounded-xl border border-input bg-ivory-bright px-4 py-3 text-sm outline-none focus:border-leaf"
               />
-              {errors.postcode && <FieldError message={errors.postcode} />}
+              {errors["postcode"] && <FieldError message={errors["postcode"]} />}
             </label>
             <label className="block">
               <span className="mb-1.5 block text-xs font-semibold text-charcoal/70">This enquiry is for</span>
@@ -274,7 +274,7 @@ export function QuoteForm({ initialServices }: { initialServices?: string[] }) {
                 onChange={(e) => setData((d) => ({ ...d, name: e.target.value }))}
                 className="w-full rounded-xl border border-input bg-ivory-bright px-4 py-3 text-sm outline-none focus:border-leaf"
               />
-              {errors.name && <FieldError message={errors.name} />}
+              {errors["name"] && <FieldError message={errors["name"]} />}
             </label>
             <label className="block">
               <span className="mb-1.5 block text-xs font-semibold text-charcoal/70">Phone</span>
@@ -285,7 +285,7 @@ export function QuoteForm({ initialServices }: { initialServices?: string[] }) {
                 placeholder="04.. ..."
                 className="w-full rounded-xl border border-input bg-ivory-bright px-4 py-3 text-sm outline-none focus:border-leaf"
               />
-              {errors.phone && <FieldError message={errors.phone} />}
+              {errors["phone"] && <FieldError message={errors["phone"]} />}
             </label>
           </div>
           <label className="block">
@@ -296,7 +296,7 @@ export function QuoteForm({ initialServices }: { initialServices?: string[] }) {
               onChange={(e) => setData((d) => ({ ...d, email: e.target.value }))}
               className="w-full rounded-xl border border-input bg-ivory-bright px-4 py-3 text-sm outline-none focus:border-leaf"
             />
-            {errors.email && <FieldError message={errors.email} />}
+            {errors["email"] && <FieldError message={errors["email"]} />}
           </label>
           <div>
             <span className="mb-1.5 block text-xs font-semibold text-charcoal/70">Preferred contact method</span>
@@ -329,7 +329,7 @@ export function QuoteForm({ initialServices }: { initialServices?: string[] }) {
               enquiry only.
             </span>
           </label>
-          {errors.consent && <FieldError message={errors.consent} />}
+          {errors["consent"] && <FieldError message={errors["consent"]} />}
         </fieldset>
       )}
 

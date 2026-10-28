@@ -356,7 +356,7 @@ export function StoryHero({ children }: { children?: ReactNode }) {
                 />
               </span>
               Follow the energy
-              <Link to="/#choices" className="ml-3 font-semibold text-forest underline underline-offset-2">
+              <Link to="/" hash="choices" className="ml-3 font-semibold text-forest underline underline-offset-2">
                 Skip to solutions
               </Link>
             </span>

@@ -639,7 +639,7 @@ export default function StoryCanvas({
     <Canvas
       shadows
       dpr={[1, 1.75]}
-      camera={{ fov: 38, position: BEATS[0].pos, near: 0.5, far: 130 }}
+      camera={{ fov: 38, position: BEATS[0]!.pos, near: 0.5, far: 130 }}
       onPointerMove={(e) => {
         if (!interactive) return;
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
