@@ -2,8 +2,9 @@
 
 ## Done
 - Bright green panel behind the "Your home. Your possibilities." home introduction
-- Scroll-driven chapter strip in the closing section: five real photos, each with
-  its own writing, sliding sideways as you scroll, ending on the quote invitation
+- Closing section scroll story: five real photos rebuilt as a pinned full-bleed
+  sequence — each scroll step crossfades a full-screen photo with its own
+  writing, ending on the dusk quote invitation (stacked layout on phones)
 
 ## Open
 - None
