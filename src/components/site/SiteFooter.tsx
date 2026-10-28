@@ -20,7 +20,7 @@ export function SiteFooter() {
         <div className="grid gap-10 md:grid-cols-12 md:gap-8">
           <div className="md:col-span-5">
             <span className="inline-flex items-center rounded-lg bg-ivory px-3 py-2">
-              <img src={LOGO_URL} alt={`${SITE.name} logo`} className="h-7 w-auto" width={200} height={74} />
+              <img src={LOGO_URL} alt={`${SITE.name} logo`} className="h-8 w-auto" width={200} height={74} />
             </span>
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-ivory/70">
               Solar, heat pump hot water and air conditioning for homes across Victoria and
