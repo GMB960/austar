@@ -1,10 +1,10 @@
-import { useRef, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
  * Editorial photo frame with gentle scroll parallax inside an overflow-hidden
  * rounded mask. Movement is clamped so the image never exposes empty edges.
- * Disable with `plain` for intentionally still images.
+ * Disable with `parallax={false}` for intentionally still images.
  */
 export function PhotoFrame({
   src,
@@ -28,45 +28,39 @@ export function PhotoFrame({
   children?: ReactNode;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
 
-  const enableParallax = parallax && typeof window !== "undefined";
-
-  const onScroll = () => {
+  useEffect(() => {
+    if (!parallax) return;
     const wrap = wrapRef.current;
-    const img = imgRef.current;
+    const img = wrap?.querySelector("img");
     if (!wrap || !img) return;
-    const rect = wrap.getBoundingClientRect();
-    const vh = window.innerHeight;
-    if (rect.bottom < -80 || rect.top > vh + 80) return;
-    // Normalised progress -1 .. 1 across the viewport
-    const progress = Math.max(-1, Math.min(1, (rect.top + rect.height / 2) / vh - 0.5));
-    const move = progress * 34; // clamp within the oversize crop
-    img.style.transform = `translateY(${move}px) scale(1.12)`;
-  };
 
-  const attachRef = (el: HTMLDivElement | null) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (wrapRef as any).current = el;
-    if (enableParallax && el) {
-      window.addEventListener("scroll", onScroll, { passive: true });
-    }
-  };
+    const onScroll = () => {
+      const rect = wrap.getBoundingClientRect();
+      const vh = window.innerHeight;
+      if (rect.bottom < -80 || rect.top > vh + 80) return;
+      const progress = Math.max(-1, Math.min(1, (rect.top + rect.height / 2) / vh - 0.5));
+      const move = progress * 34; // clamped within the oversize crop
+      (img as HTMLElement).style.transform = `translateY(${move}px) scale(1.12)`;
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [parallax]);
 
   return (
     <figure className={cn("group relative", className)}>
-      <div ref={attachRef} className={cn("mask-round relative", ratio)}>
+      <div ref={wrapRef} className={cn("mask-round relative overflow-hidden", ratio)}>
         <img
-          ref={imgRef}
           src={src}
           alt={alt}
           loading="lazy"
           decoding="async"
           className={cn(
-            "absolute inset-0 h-full w-full object-cover transition-transform duration-700",
-            parallax ? "" : "scale-100",
-            imgClassName,
+            "absolute inset-0 h-full w-full object-cover transition-transform duration-500",
             parallax && "scale-[1.12] will-change-transform",
+            imgClassName,
           )}
         />
         {children}
