@@ -24,3 +24,8 @@
 - Use the geographically sourced state rings in `src/lib/australia-map.json`, derived from rowanhogan/australian-states, instead of hand-drawn state silhouettes.
 - Resolve semantic CSS colors to sRGB inside the mounted scene; Three.js does not parse the site's oklch tokens directly.
 - Default the service-area map to Google Maps Embed satellite view, retaining the atlas as an alternate; load managed-key imagery only on authorized Lovable hosts to respect browser-key restrictions.
+
+## Frequently asked questions
+
+- Keep the homepage FAQ in its own module with topic filters and the shared accessible accordion; animate the real-photo deck with CSS perspective and a scroll rAF, respecting reduced-motion settings.
+- Reuse the shared eligibility and cold-call notices rather than duplicating business-policy wording in expanded answers.

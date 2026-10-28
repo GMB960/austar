@@ -571,61 +571,7 @@ export { ServiceAreas } from "./ServiceAreas";
 
 /* ================================== H. FAQ ================================= */
 
-const FAQS = [
-  {
-    q: "Which services can I enquire about?",
-    a: "Solar installation, heat pump hot water upgrades and air conditioning — for homes, and for business premises too. You can ask about one upgrade or several in the same enquiry.",
-  },
-  {
-    q: "Do you service my postcode?",
-    a: "We work across Victoria and New South Wales, but service availability varies by location and upgrade. Share your postcode and we'll confirm what's available for your area.",
-  },
-  {
-    q: "What information helps with a quote?",
-    a: "Your postcode, property type, the service you're interested in and any details about existing equipment — for example your current hot water system or roof type.",
-  },
-  {
-    q: "Can I ask about more than one upgrade?",
-    a: "Yes. Many households consider solar together with hot water or air conditioning. Mention everything you're considering and we'll cover it in one conversation.",
-  },
-  {
-    q: "How do I find out whether an offer applies?",
-    a: "Available offers and eligibility depend on your location, property, existing system and applicable program conditions. Request an eligibility review and we'll check what applies to you.",
-  },
-  {
-    q: "How can I check whether a caller represents Austar Energy?",
-    a: "Austar Energy does not conduct cold-call marketing. If someone calls claiming to represent us and you're unsure, hang up and check using the contact details published on this site.",
-  },
-];
-
-export function FaqSection() {
-  const ref = useRevealContainer<HTMLElement>();
-  return (
-    <section ref={ref} className="py-16 md:py-24">
-      <div className="mx-auto max-w-[860px] px-5 md:px-8">
-        <RevealLines
-          lines={["A few things you", "may be wondering."]}
-          className="font-display font-extrabold tracking-tight text-charcoal [font-size:clamp(28px,3.6vw,48px)]"
-        />
-        <div className="mt-10 divide-y divide-border">
-          {FAQS.map((f, i) => (
-            <Reveal key={f.q} delay={i * 50}>
-              <details className="group py-5">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-base font-bold text-charcoal">
-                  {f.q}
-                  <span className="shrink-0 text-xl text-stone transition-transform duration-300 group-open:rotate-45" aria-hidden="true">
-                    +
-                  </span>
-                </summary>
-                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-charcoal/70">{f.a}</p>
-              </details>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+export { FaqSection } from "./FaqSection";
 
 /* =============================== I. Final CTA ============================== */
 
