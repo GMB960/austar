@@ -5,6 +5,7 @@ import lounge from "@/assets/lounge.asset.json";
 import acIndoor from "@/assets/ac-indoor.asset.json";
 import acOutdoor from "@/assets/ac-outdoor.asset.json";
 import kitchen from "@/assets/kitchen.asset.json";
+import verandah from "@/assets/verandah.asset.json";
 import { OFFERS_NOTICE } from "@/lib/site";
 
 export const Route = createFileRoute("/air-conditioning")({
@@ -41,18 +42,26 @@ function AirConditioningPage() {
         {
           title: "Which rooms, which routines",
           body: "A bedroom overnight and a living area through a summer afternoon have different needs — the conversation starts there.",
+          image: verandah.url,
+          alt: "A shaded verandah on an Australian home",
         },
         {
           title: "System selection",
           body: "Split systems, multi-heads and ducted options are compared against your rooms, layout and budget, with the trade-offs explained plainly.",
+          image: acOutdoor.url,
+          alt: "An outdoor air conditioning unit mounted beside a wall",
         },
         {
           title: "Cooling and heating",
           body: "Where the selected product supports reverse-cycle operation, one system can cover summer cooling and winter warmth.",
+          image: acIndoor.url,
+          alt: "An indoor air conditioning unit on a room wall",
         },
         {
           title: "Installation and handover",
           body: "Install is scheduled around your household, and we walk you through controls, maintenance and what to expect from the system.",
+          image: lounge.url,
+          alt: "A comfortable living room kept at an even temperature",
         },
       ]}
       faq={[

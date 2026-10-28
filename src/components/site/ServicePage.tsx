@@ -24,7 +24,7 @@ export type ServicePageProps = {
   image: string;
   imageAlt: string;
   imageCaption: string;
-  sections: { title: string; body: string }[];
+  sections: { title: string; body: string; image?: string; alt?: string }[];
   faq: { q: string; a: string }[];
   offersNotice: string;
   highlightsTitle?: string;
@@ -101,7 +101,7 @@ export function ServicePage({
             <div aria-hidden="true" className="absolute left-0 right-0 top-[58px] hidden h-px bg-gradient-to-r from-transparent via-leaf/50 to-transparent lg:block" />
             {sections.map((s, i) => (
               <Reveal key={s.title} delay={i * 120} className="h-full">
-                <TiltCard className="rounded-[28px] p-px [background:linear-gradient(150deg,color-mix(in_oklab,var(--color-leaf)_70%,transparent),color-mix(in_oklab,var(--color-ivory-bright)_8%,transparent)_45%,color-mix(in_oklab,var(--color-leaf)_25%,transparent))] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.55)]">
+                <TiltCard className="group rounded-[28px] p-px [background:linear-gradient(150deg,color-mix(in_oklab,var(--color-leaf)_70%,transparent),color-mix(in_oklab,var(--color-ivory-bright)_8%,transparent)_45%,color-mix(in_oklab,var(--color-leaf)_25%,transparent))] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.55)]">
                   <div className="relative flex h-full flex-col overflow-hidden rounded-[27px] bg-forest-deep/90 p-7 backdrop-blur-xl [transform-style:preserve-3d]">
                     <span aria-hidden="true" className="pointer-events-none absolute -right-3 -top-6 font-display text-[120px] font-extrabold leading-none text-transparent [-webkit-text-stroke:1px_color-mix(in_oklab,var(--color-leaf)_35%,transparent)]">
                       {String(i + 1).padStart(2, "0")}
@@ -109,7 +109,18 @@ export function ServicePage({
                     <span className="relative flex size-12 items-center justify-center rounded-2xl bg-leaf font-display text-base font-extrabold text-charcoal shadow-[0_10px_30px_-6px_color-mix(in_oklab,var(--color-leaf)_70%,transparent)] [transform:translateZ(40px)]">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <h3 className="relative mt-8 font-display text-xl font-bold text-ivory-bright [transform:translateZ(30px)]">{s.title}</h3>
+                    {s.image && (
+                      <span className="relative mt-6 block overflow-hidden rounded-2xl ring-1 ring-ivory-bright/10 [transform:translateZ(24px)]">
+                        <img
+                          src={s.image}
+                          alt={s.alt ?? ""}
+                          loading="lazy"
+                          className="aspect-[16/9] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        />
+                        <span aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-deep/55 via-forest-deep/5 to-forest-deep/15" />
+                      </span>
+                    )}
+                    <h3 className="relative mt-5 font-display text-xl font-bold text-ivory-bright [transform:translateZ(30px)]">{s.title}</h3>
                     <p className="relative mt-3 text-sm leading-relaxed text-ivory-bright/70 [transform:translateZ(18px)]">{s.body}</p>
                     <span aria-hidden="true" className="relative mt-auto block h-1 w-12 rounded-full bg-leaf/60 pt-0 [margin-top:2rem]" />
                   </div>
