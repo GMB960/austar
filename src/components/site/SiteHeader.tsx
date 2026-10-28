@@ -116,7 +116,7 @@ export function SiteHeader() {
         <div
           aria-hidden="true"
           className={cn(
-            "pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-ivory/85 via-ivory/40 to-transparent",
+            "pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-ivory/55 via-ivory/20 to-transparent",
             compact ? "opacity-0" : "opacity-100",
             settle,
           )}
