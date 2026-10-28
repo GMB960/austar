@@ -366,6 +366,48 @@ html[data-reduced-motion="user"] .drift {
 @keyframes faq-copy-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @keyframes faq-expand { from { height: 0; } to { height: var(--radix-accordion-content-height); } }
 @keyframes faq-collapse { from { height: var(--radix-accordion-content-height); } to { height: 0; } }
+/* ============= Home introduction: bright green panel ============= */
+.home-introduction {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(120% 90% at 4% -14%, var(--leaf-bright) 0%, transparent 58%),
+    radial-gradient(95% 75% at 102% 110%, var(--leaf-deep) 0%, transparent 55%),
+    linear-gradient(155deg, var(--leaf-soft) 0%, var(--leaf) 58%, var(--leaf-deep) 100%);
+  color: var(--forest-deep);
+}
+.home-introduction::before {
+  content: "";
+  position: absolute;
+  inset: -30% -20%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(38% 34% at 50% 50%, oklch(0.96 0.055 118 / 55%), transparent 72%);
+  animation: home-intro-glow 17s ease-in-out infinite alternate;
+}
+.home-introduction::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 1px 1px, oklch(0.24 0.04 158 / 20%) 1px, transparent 0);
+  background-size: 26px 26px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+  opacity: 0.45;
+}
+@keyframes home-intro-glow {
+  from { transform: translate3d(-7%, 3%, 0) scale(1); }
+  to { transform: translate3d(9%, -5%, 0) scale(1.14); }
+}
+.home-introduction .home-photo {
+  border-color: var(--ivory-bright);
+  box-shadow:
+    0 28px 52px -24px color-mix(in oklab, var(--forest-deep) 62%, transparent),
+    0 3px 0 color-mix(in oklab, var(--forest-deep) 20%, transparent);
+}
+
 .home-photo-perspective { perspective: 1400px; }
 .home-photo-scene {
   --home-progress: 0.5; --home-tilt-x: 0deg; --home-tilt-y: 0deg;
@@ -396,6 +438,7 @@ html[data-reduced-motion="user"] .drift {
   .home-photo figcaption { bottom: 6px; left: 4px; right: 4px; padding: 5px; font-size: 9px; gap: 4px; max-width: calc(100% - 8px); }
   .home-photo figcaption svg { width: 11px; height: 11px; }
 }
+html[data-reduced-motion="user"] .home-introduction::before { animation: none; }
 html[data-reduced-motion="user"] .home-photo-scene { transform: none; will-change: auto; }
 html[data-reduced-motion="user"] .home-photo img { animation: none; }
 @media (prefers-reduced-motion: reduce) {
