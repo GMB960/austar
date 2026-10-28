@@ -29,3 +29,7 @@
 
 - Keep the homepage FAQ in its own module with topic filters and the shared accessible accordion; use one event-scheduled rAF for scroll/pointer photo depth and CSS for answer transitions, respecting both system and site motion settings to keep animations lightweight and accessible.
 - Reuse the shared eligibility and cold-call notices rather than duplicating business-policy wording in expanded answers.
+
+## Home introduction
+
+- Keep the home introduction in its own module and animate its real-photo collage using CSS depth variables driven by one event-scheduled rAF; this isolates its scroll/pointer motion without loading WebGL or affecting other sections.
