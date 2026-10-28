@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "da47bb25-9e28-41d4-889b-3ce4f875c2fc",
-  "project_id": "ef4e0b66-17f2-412a-95b4-80e02abb5d0f",
-  "url": "/__l5e/assets-v1/da47bb25-9e28-41d4-889b-3ce4f875c2fc/paving-diffuse.jpg",
-  "r2_key": "a/v1/ef4e0b66-17f2-412a-95b4-80e02abb5d0f/da47bb25-9e28-41d4-889b-3ce4f875c2fc/paving-diffuse.jpg",
-  "original_filename": "paving-diffuse.jpg",
-  "size": 649580,
   "content_type": "image/jpeg",
-  "created_at": "2026-10-28T04:44:28Z"
+  "created_at": "2026-10-28T04:44:28Z",
+  "original_filename": "paving-diffuse.jpg",
+  "project_id": "577bdab1-9316-449a-86b0-37ca1ca8f7d3",
+  "r2_key": "a/v1/577bdab1-9316-449a-86b0-37ca1ca8f7d3/da47bb25-9e28-41d4-889b-3ce4f875c2fc/paving-diffuse.jpg",
+  "size": 649580,
+  "url": "/__l5e/assets-v1/da47bb25-9e28-41d4-889b-3ce4f875c2fc/paving-diffuse.jpg",
+  "version": 1
 }

@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "b4371a19-8aab-4521-90af-8f73dc82cfd4",
-  "project_id": "ef4e0b66-17f2-412a-95b4-80e02abb5d0f",
-  "url": "/__l5e/assets-v1/b4371a19-8aab-4521-90af-8f73dc82cfd4/roof-diffuse.jpg",
-  "r2_key": "a/v1/ef4e0b66-17f2-412a-95b4-80e02abb5d0f/b4371a19-8aab-4521-90af-8f73dc82cfd4/roof-diffuse.jpg",
-  "original_filename": "roof-diffuse.jpg",
-  "size": 402212,
   "content_type": "image/jpeg",
-  "created_at": "2026-10-28T04:44:01Z"
+  "created_at": "2026-10-28T04:44:01Z",
+  "original_filename": "roof-diffuse.jpg",
+  "project_id": "577bdab1-9316-449a-86b0-37ca1ca8f7d3",
+  "r2_key": "a/v1/577bdab1-9316-449a-86b0-37ca1ca8f7d3/b4371a19-8aab-4521-90af-8f73dc82cfd4/roof-diffuse.jpg",
+  "size": 402212,
+  "url": "/__l5e/assets-v1/b4371a19-8aab-4521-90af-8f73dc82cfd4/roof-diffuse.jpg",
+  "version": 1
 }

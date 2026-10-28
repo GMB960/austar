@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "ed6d8949-7f1c-481f-b736-524fb03612a4",
-  "project_id": "ef4e0b66-17f2-412a-95b4-80e02abb5d0f",
-  "url": "/__l5e/assets-v1/ed6d8949-7f1c-481f-b736-524fb03612a4/house-cottage.jpg",
-  "r2_key": "a/v1/ef4e0b66-17f2-412a-95b4-80e02abb5d0f/ed6d8949-7f1c-481f-b736-524fb03612a4/house-cottage.jpg",
-  "original_filename": "house-cottage.jpg",
-  "size": 380686,
   "content_type": "image/jpeg",
-  "created_at": "2026-10-28T04:15:06Z"
+  "created_at": "2026-10-28T04:15:06Z",
+  "original_filename": "house-cottage.jpg",
+  "project_id": "577bdab1-9316-449a-86b0-37ca1ca8f7d3",
+  "r2_key": "a/v1/577bdab1-9316-449a-86b0-37ca1ca8f7d3/ed6d8949-7f1c-481f-b736-524fb03612a4/house-cottage.jpg",
+  "size": 380686,
+  "url": "/__l5e/assets-v1/ed6d8949-7f1c-481f-b736-524fb03612a4/house-cottage.jpg",
+  "version": 1
 }

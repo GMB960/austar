@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "ef4f59f8-1c79-4d77-91f8-06cf4a0ceb34",
-  "project_id": "ef4e0b66-17f2-412a-95b4-80e02abb5d0f",
-  "url": "/__l5e/assets-v1/ef4f59f8-1c79-4d77-91f8-06cf4a0ceb34/brick-normal.jpg",
-  "r2_key": "a/v1/ef4e0b66-17f2-412a-95b4-80e02abb5d0f/ef4f59f8-1c79-4d77-91f8-06cf4a0ceb34/brick-normal.jpg",
-  "original_filename": "brick-normal.jpg",
-  "size": 1242175,
   "content_type": "image/jpeg",
-  "created_at": "2026-10-28T04:43:53Z"
+  "created_at": "2026-10-28T04:43:53Z",
+  "original_filename": "brick-normal.jpg",
+  "project_id": "577bdab1-9316-449a-86b0-37ca1ca8f7d3",
+  "r2_key": "a/v1/577bdab1-9316-449a-86b0-37ca1ca8f7d3/ef4f59f8-1c79-4d77-91f8-06cf4a0ceb34/brick-normal.jpg",
+  "size": 1242175,
+  "url": "/__l5e/assets-v1/ef4f59f8-1c79-4d77-91f8-06cf4a0ceb34/brick-normal.jpg",
+  "version": 1
 }

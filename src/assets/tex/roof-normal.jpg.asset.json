@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "cff8e7c7-ebcc-473b-b16e-a6feb7cb56f5",
-  "project_id": "ef4e0b66-17f2-412a-95b4-80e02abb5d0f",
-  "url": "/__l5e/assets-v1/cff8e7c7-ebcc-473b-b16e-a6feb7cb56f5/roof-normal.jpg",
-  "r2_key": "a/v1/ef4e0b66-17f2-412a-95b4-80e02abb5d0f/cff8e7c7-ebcc-473b-b16e-a6feb7cb56f5/roof-normal.jpg",
-  "original_filename": "roof-normal.jpg",
-  "size": 570336,
   "content_type": "image/jpeg",
-  "created_at": "2026-10-28T04:44:06Z"
+  "created_at": "2026-10-28T04:44:06Z",
+  "original_filename": "roof-normal.jpg",
+  "project_id": "577bdab1-9316-449a-86b0-37ca1ca8f7d3",
+  "r2_key": "a/v1/577bdab1-9316-449a-86b0-37ca1ca8f7d3/cff8e7c7-ebcc-473b-b16e-a6feb7cb56f5/roof-normal.jpg",
+  "size": 570336,
+  "url": "/__l5e/assets-v1/cff8e7c7-ebcc-473b-b16e-a6feb7cb56f5/roof-normal.jpg",
+  "version": 1
 }

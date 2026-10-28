@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "9a85b5b2-0db0-43ae-8390-0bf75a428566",
-  "project_id": "ef4e0b66-17f2-412a-95b4-80e02abb5d0f",
-  "url": "/__l5e/assets-v1/9a85b5b2-0db0-43ae-8390-0bf75a428566/stucco-rough.jpg",
-  "r2_key": "a/v1/ef4e0b66-17f2-412a-95b4-80e02abb5d0f/9a85b5b2-0db0-43ae-8390-0bf75a428566/stucco-rough.jpg",
-  "original_filename": "stucco-rough.jpg",
-  "size": 347861,
   "content_type": "image/jpeg",
-  "created_at": "2026-10-28T04:44:48Z"
+  "created_at": "2026-10-28T04:44:48Z",
+  "original_filename": "stucco-rough.jpg",
+  "project_id": "577bdab1-9316-449a-86b0-37ca1ca8f7d3",
+  "r2_key": "a/v1/577bdab1-9316-449a-86b0-37ca1ca8f7d3/9a85b5b2-0db0-43ae-8390-0bf75a428566/stucco-rough.jpg",
+  "size": 347861,
+  "url": "/__l5e/assets-v1/9a85b5b2-0db0-43ae-8390-0bf75a428566/stucco-rough.jpg",
+  "version": 1
 }
