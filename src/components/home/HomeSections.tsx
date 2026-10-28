@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Phone, X } from "lucide-react";
 
@@ -289,54 +289,125 @@ const STEPS = [
 ];
 
 export function ProcessTimeline() {
-  const ref = useRevealContainer<HTMLElement>();
+  const wrapRef = useRef<HTMLElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const imgRefs = useRef<(HTMLImageElement | null)[]>([]);
+  const barRef = useRef<HTMLSpanElement>(null);
+  const [active, setActive] = useState(0);
+  const n = STEPS.length;
+
+  useEffect(() => {
+    let raf = 0;
+    let smooth = 0;
+    let last = -1;
+    const tick = () => {
+      const w = wrapRef.current;
+      if (w) {
+        const r = w.getBoundingClientRect();
+        const total = r.height - window.innerHeight;
+        const target = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
+        smooth += (target - smooth) * 0.1;
+        const pos = smooth * (n - 0.001); // 0..n
+        for (let i = 0; i < n; i++) {
+          const el = cardRefs.current[i];
+          if (!el) continue;
+          const d = pos - i; // <0 upcoming, 0..1 current, >1 gone
+          let ty = 0, tz = 0, rx = 0, ry = 0, op = 1, sc = 1;
+          if (d < 0) {
+            const k = Math.min(-d, 3);
+            ty = k * 34; tz = -k * 90; rx = -k * 4; op = 1 - k * 0.22;
+          } else if (d > 1) {
+            op = 0; ty = -520; rx = 55;
+          } else {
+            const e = Math.max(0, (d - 0.55) / 0.45);
+            const ee = e * e;
+            ty = -ee * 520; tz = ee * 160; rx = ee * 55; ry = (i % 2 ? -1 : 1) * ee * 14; op = 1 - ee; sc = 1 + ee * 0.05;
+            ry += (d - 0.3) * (i % 2 ? 6 : -6) * (1 - e);
+          }
+          el.style.transform = `translate3d(0,${ty}px,${tz}px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${sc})`;
+          el.style.opacity = String(Math.max(0, op));
+          el.style.zIndex = String(100 - i);
+          const txt = el.lastElementChild as HTMLElement | null;
+          if (txt) txt.style.opacity = String(d < 0 ? Math.max(0, 1 + d * 3) : 1);
+          const img = imgRefs.current[i];
+          if (img) img.style.transform = `scale(${1.15 - Math.min(Math.max(d + 1, 0), 2) * 0.05}) translateY(${(d - 0.5) * -12}px)`;
+        }
+        if (barRef.current) barRef.current.style.transform = `scaleY(${smooth})`;
+        const a = Math.min(n - 1, Math.floor(pos));
+        if (a !== last) { last = a; setActive(a); }
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    tick();
+    return () => cancelAnimationFrame(raf);
+  }, [n]);
+
   return (
-    <section ref={ref} id="journey" className="scroll-mt-20 bg-sage/40 py-16 md:py-24">
-      <div className="mx-auto max-w-[1440px] px-5 md:px-8">
-        <RevealLines
-          lines={["From first question", "to installation."]}
-          className="font-display font-extrabold tracking-tight text-charcoal [font-size:clamp(28px,3.6vw,48px)]"
-        />
-        <p className="mt-4 max-w-xl text-sm leading-relaxed text-charcoal/70">
-          Availability, suitability and any offers are confirmed through a proper assessment of your
-          property — these steps set honest expectations rather than promises.
-        </p>
-        <ol className="relative mt-12 space-y-10 md:space-y-0">
-          {/* drawing connector */}
-          <span
-            className="absolute left-[27px] top-0 h-full w-px bg-charcoal/10 md:left-1/2"
-            aria-hidden="true"
-          />
-          <span
-            className="absolute left-[27px] top-0 h-full w-px origin-top scale-y-0 bg-leaf transition-transform duration-1000 [transform:scaleY(var(--grow,1))] md:left-1/2"
-            aria-hidden="true"
-          />
-          {STEPS.map((s, i) => (
-            <Reveal
-              key={s.title}
-              as="li"
-              delay={i * 100}
-              className={cn(
-                "relative grid gap-5 pl-16 md:grid-cols-2 md:gap-12 md:pl-0",
-                i % 2 === 1 && "md:[direction:rtl]",
-              )}
-            >
-              <span
-                className="absolute left-0 top-1 flex size-14 items-center justify-center rounded-full bg-ivory-bright font-display text-sm font-extrabold text-forest shadow-[0_6px_18px_rgba(16,23,19,0.12)] md:left-1/2 md:-translate-x-1/2"
-                aria-hidden="true"
+    <section ref={wrapRef} id="journey" className="relative scroll-mt-20 bg-sage/40" style={{ height: `${n * 90 + 60}vh` }}>
+      <div className="sticky top-0 flex h-[100svh] items-center overflow-hidden">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-40 top-1/4 size-[520px] rounded-full bg-leaf/20 blur-3xl" />
+        <div className="mx-auto grid w-full max-w-[1440px] items-center gap-8 px-5 md:grid-cols-12 md:gap-12 md:px-8">
+          <div className="md:col-span-5">
+            <p className="eyebrow text-forest/80">How it works</p>
+            <h2 className="mt-3 font-display font-extrabold leading-[1.02] tracking-[-0.03em] text-charcoal [font-size:clamp(28px,4vw,56px)]">
+              From first question
+              <br />
+              to installation.
+            </h2>
+            <p className="mt-4 hidden max-w-md text-sm leading-relaxed text-charcoal/70 md:block">
+              Availability, suitability and any offers are confirmed through a proper assessment of your
+              property — these steps set honest expectations rather than promises.
+            </p>
+            <ol className="relative mt-6 hidden space-y-1 pl-6 md:mt-10 md:block">
+              <span className="absolute left-0 top-0 h-full w-px bg-charcoal/15" aria-hidden="true" />
+              <span ref={barRef} className="absolute left-0 top-0 h-full w-px origin-top scale-y-0 bg-leaf" aria-hidden="true" />
+              {STEPS.map((s, i) => (
+                <li
+                  key={s.title}
+                  className={cn(
+                    "flex items-center gap-4 py-2 font-display text-sm font-bold transition-all duration-500",
+                    active === i ? "translate-x-2 text-charcoal" : "text-charcoal/35",
+                  )}
+                >
+                  <span className={cn("text-xs tabular-nums", active === i ? "text-leaf" : "")}>{String(i + 1).padStart(2, "0")}</span>
+                  {s.title}
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div className="relative h-[62svh] md:col-span-7 md:h-[520px]" style={{ perspective: "1400px" }}>
+            {STEPS.map((s, i) => (
+              <div
+                key={s.title}
+                ref={(el) => {
+                  cardRefs.current[i] = el;
+                }}
+                className="absolute inset-0 overflow-hidden rounded-[28px] bg-charcoal shadow-[0_40px_80px_-30px_rgba(16,23,19,0.55)] will-change-transform"
+                style={{ transformOrigin: "50% 100%" }}
               >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div className={cn("md:w-[calc(50%-3rem)] md:[direction:ltr]", i % 2 === 1 ? "md:ml-auto" : "")}>
-                <h3 className="font-display text-lg font-bold text-charcoal">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{s.body}</p>
+                <img
+                  ref={(el) => {
+                    imgRefs.current[i] = el;
+                  }}
+                  src={s.image}
+                  alt=""
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover will-change-transform"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/90 via-charcoal/30 to-transparent" />
+                <span className="absolute right-6 top-4 font-display text-[clamp(64px,9vw,128px)] font-extrabold leading-none tracking-tighter text-ivory/20">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="absolute inset-x-0 bottom-0 p-6 md:p-10">
+                  <p className="eyebrow text-leaf">Step {String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}</p>
+                  <h3 className="mt-2 font-display text-2xl font-extrabold tracking-tight text-ivory md:text-4xl">{s.title}</h3>
+                  <p className="mt-3 max-w-md text-sm leading-relaxed text-ivory/80 md:text-base">{s.body}</p>
+                </div>
               </div>
-              <div className={cn("md:w-[calc(50%-3rem)] md:[direction:ltr]", i % 2 === 0 ? "md:ml-auto" : "")}>
-                <PhotoFrame src={s.image} alt="" ratio="aspect-[16/10]" parallax={false} />
-              </div>
-            </Reveal>
-          ))}
-        </ol>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
