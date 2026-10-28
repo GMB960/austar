@@ -49,7 +49,7 @@ type Beat = {
 const BEATS: Beat[] = [
   { pos: [11.2, 5.0, 12.4], target: [-1.8, 1.5, 0], elevation: 13, azimuth: -55, sunColor: "#ffc37e", sky: "#f3e4cd", ambient: 0.55 },
   { pos: [3.8, 5.8, 8.6], target: [0.5, 3.1, 0.8], elevation: 36, azimuth: -20, sunColor: "#fff2dc", sky: "#eef0e6", ambient: 0.7 },
-  { pos: [-5.4, 2.3, 7.6], target: [-4.2, 1.0, 1.6], elevation: 56, azimuth: 5, sunColor: "#fff8ec", sky: "#eef1e9", ambient: 0.78 },
+  { pos: [-7.8, 2.5, 8.8], target: [-3.8, 0.8, 1.7], elevation: 56, azimuth: 5, sunColor: "#fff8ec", sky: "#eef1e9", ambient: 0.78 },
   { pos: [4.2, 2.1, 6.2], target: [0.9, 1.5, -0.6], elevation: 33, azimuth: 35, sunColor: "#ffe9c4", sky: "#ece9da", ambient: 0.65 },
   { pos: [11.6, 4.2, 12.8], target: [-1.4, 1.6, 0], elevation: 7, azimuth: 60, sunColor: "#ff9d62", sky: "#56516a", ambient: 0.4 },
 ];
@@ -268,8 +268,8 @@ function Window({
       <mesh position={[0, -h / 2 - 0.11, 0.055]} material={mats.trim} castShadow>
         <boxGeometry args={[w + 0.28, 0.07, 0.15]} />
       </mesh>
-      {/* warm interior glow at dusk */}
-      <mesh position={[0, 0, -0.07]}>
+      {/* warm interior glow at dusk — between the reveal and the glass */}
+      <mesh position={[0, 0, 0.002]}>
         <planeGeometry args={[w, h]} />
         <meshStandardMaterial ref={glowSetter} color="#ffd9a0" emissive="#ffb35c" emissiveIntensity={0} toneMapped={false} />
       </mesh>
@@ -323,8 +323,8 @@ function House({ glowMaterials, mats }: { glowMaterials: RefObject<(THREE.MeshSt
       {/* tiled roof */}
       <mesh geometry={roofGeo} position={[0, 2.98, 0]} castShadow receiveShadow material={mats.roof} />
       {/* ridge capping */}
-      <mesh position={[0, 4.81, 0]} material={mats.darkMetal}>
-        <boxGeometry args={[7.2, 0.1, 0.34]} />
+      <mesh position={[0, 4.79, 0]} material={mats.darkMetal}>
+        <boxGeometry args={[7.0, 0.09, 0.3]} />
       </mesh>
       {/* fascia + gutters along both eaves */}
       <mesh position={[0, 2.93, 3.52]} castShadow material={mats.darkMetal}>
