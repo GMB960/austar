@@ -399,7 +399,7 @@ export function StoryHero({ children }: { children?: ReactNode }) {
           {children}
         </div>
       )}
-    </div>
+    </>
   );
 }
 
