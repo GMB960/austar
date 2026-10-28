@@ -43,3 +43,9 @@
 
 - Register a colour in the `@theme` block of `src/styles.css` before using it as a utility class or `var(--color-*)`; an unregistered name compiles to nothing and leaves panels silently transparent.
 - Keep the site logo a single deep-green ink with its thin strokes thickened at source, because hairline strokes antialias away at header/footer sizes; render it on a solid cream panel so it reads over photos and dark sections alike.
+
+## Site header (src/components/site/SiteHeader.tsx)
+
+- Keep the header one full-width fixed band that settles from tall and see-through into a slim, solid, legible panel once the page scrolls, with its logo, menu items and quote button tightening in step; drive both the settle state and the reading-progress rail from one rAF-scheduled scroll listener.
+- Never give the scrolled panel a horizontal inset that leaves page content exposed in a gutter at the screen edge — content peeking beside a floating bar reads as a rendering glitch; round only the bottom corners instead.
+
