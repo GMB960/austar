@@ -461,14 +461,13 @@ html[data-reduced-motion="user"] .faq-questions { opacity: 1 !important; transfo
 
 /* ---------------------------- chapter strip ------------------------------ */
 /* Pinned horizontal filmstrip: scroll drives the track sideways, each panel
-   carries a real photograph and its own writing. */
+   carries a real photograph and its own writing. Depth comes from scale and
+   fade only — no perspective, so a neighbouring panel can never lean over. */
 .chapter-track {
-  perspective: 1500px;
   will-change: transform;
 }
 .chapter-panel {
   backface-visibility: hidden;
-  transform-style: preserve-3d;
   will-change: transform, opacity;
 }
 .chapter-frame {

@@ -184,7 +184,7 @@ export function ChapterStrip() {
             const panel = panelRefs.current[i];
             if (panel) {
               const sink = clamp((a - 0.28) / 0.72);
-              panel.style.transform = `translate3d(0, 0, ${-sink * 170}px) rotateY(${clamp(off, -1.3, 1.3) * -7}deg) scale(${1 - sink * 0.06})`;
+              panel.style.transform = `translate3d(0, ${sink * 16}px, 0) scale(${1 - sink * 0.09})`;
               panel.style.opacity = String(1 - sink * 0.8);
               panel.style.visibility = a > 1.35 ? "hidden" : "visible";
             }
