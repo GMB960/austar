@@ -442,6 +442,7 @@ html[data-reduced-motion="user"] .home-introduction::before { animation: none; }
 html[data-reduced-motion="user"] .home-photo-scene { transform: none; will-change: auto; }
 html[data-reduced-motion="user"] .home-photo img { animation: none; }
 @media (prefers-reduced-motion: reduce) {
+  .home-introduction::before { animation: none; }
   .home-photo-scene { transform: none; will-change: auto; }
   .home-photo img { animation: none; }
 }
