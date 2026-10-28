@@ -1,0 +1,675 @@
+import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight, Phone, X } from "lucide-react";
+
+import { PhotoFrame } from "@/components/site/PhotoFrame";
+import { Reveal, RevealLines, useRevealContainer } from "@/components/site/Reveal";
+import { OFFERS_NOTICE, SITE } from "@/lib/site";
+import { cn } from "@/lib/utils";
+
+import houseModern from "@/assets/house-modern.asset.json";
+import houseDusk from "@/assets/house-dusk.asset.json";
+import solarMacro from "@/assets/solar-macro.asset.json";
+import kitchen from "@/assets/kitchen.asset.json";
+import solarInstaller from "@/assets/solar-installer.asset.json";
+import solarHipRoof from "@/assets/solar-hip-roof.asset.json";
+import solarTiledRoof from "@/assets/solar-tiled-roof.asset.json";
+import heatpumpUnit from "@/assets/heatpump-unit.asset.json";
+import heatpumpInstall from "@/assets/heatpump-install.asset.json";
+import acOutdoor from "@/assets/ac-outdoor.asset.json";
+import acIndoor from "@/assets/ac-indoor.asset.json";
+import bathroom from "@/assets/bathroom.asset.json";
+import lounge from "@/assets/lounge.asset.json";
+import verandah from "@/assets/verandah.asset.json";
+import grevillea from "@/assets/grevillea.asset.json";
+
+/* ============================ A. Editorial bridge ========================== */
+
+export function EditorialBridge() {
+  const ref = useRevealContainer<HTMLElement>();
+  return (
+    <section ref={ref} id="approach" className="relative py-20 md:py-32">
+      <div className="mx-auto max-w-[1440px] px-5 md:px-8">
+        <div className="grid gap-12 md:grid-cols-12">
+          <div className="md:col-span-7">
+            <RevealLines
+              lines={["Better energy starts with", "understanding your home."]}
+              className="font-display font-extrabold leading-[1.04] tracking-[-0.03em] text-charcoal [font-size:clamp(32px,4.6vw,64px)]"
+            />
+            <Reveal className="mt-7 max-w-xl text-base leading-relaxed text-charcoal/75 md:text-lg">
+              Your roof, your hot water system and the rooms you use every day all shape the right
+              upgrade. Explore the possibilities with Austar Energy and take the next step with a
+              quote tailored to your property.
+            </Reveal>
+          </div>
+          <div className="flex flex-col gap-5 md:col-span-5">
+            <Reveal delay={120}>
+              <PhotoFrame
+                src={houseModern.url}
+                alt="A contemporary Australian home exterior"
+                ratio="aspect-[16/10]"
+                disclaimer="Illustrative photography"
+              />
+            </Reveal>
+            <div className="grid grid-cols-2 gap-5">
+              <Reveal delay={200}>
+                <PhotoFrame src={solarMacro.url} alt="Close-up of solar panel cells" ratio="aspect-square" parallax={false} />
+              </Reveal>
+              <Reveal delay={280} className="mt-8">
+                <PhotoFrame src={grevillea.url} alt="Native grevillea in flower" ratio="aspect-square" parallax={false} />
+              </Reveal>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================== B. Service cards =========================== */
+
+const CARDS = [
+  {
+    to: "/solar",
+    num: "01",
+    title: "Solar",
+    copy: "Put your roof to work. Explore solar installation shaped around your property and energy needs.",
+    image: solarHipRoof.url,
+    alt: "Solar panels on the tiled roof of a home",
+    className: "md:col-span-7",
+    ratio: "aspect-[16/9]",
+  },
+  {
+    to: "/heat-pumps",
+    num: "02",
+    title: "Heat pumps",
+    copy: "Rethink everyday hot water. Discover an efficient upgrade suited to your household.",
+    image: heatpumpUnit.url,
+    alt: "Heat pump hot water unit beside a home",
+    className: "md:col-span-5",
+    ratio: "aspect-[4/5] md:aspect-[3/4]",
+  },
+  {
+    to: "/air-conditioning",
+    num: "03",
+    title: "Air conditioning",
+    copy: "Comfort for the spaces you live in. Explore installation options for your home or business.",
+    image: lounge.url,
+    alt: "A comfortable living room interior",
+    className: "md:col-span-9",
+    ratio: "aspect-[16/9]",
+  },
+];
+
+export function ServiceCards() {
+  return (
+    <section id="choices" className="scroll-mt-20 py-10 md:py-16">
+      <div className="mx-auto max-w-[1440px] px-5 md:px-8">
+        <RevealLines
+          lines={["Choose where your upgrade begins."]}
+          className="max-w-2xl font-display font-extrabold tracking-tight text-charcoal [font-size:clamp(28px,3.6vw,48px)]"
+        />
+        <div className="mt-10 grid gap-6 md:grid-cols-12">
+          {CARDS.map((c) => (
+            <Reveal key={c.to} className={c.className}>
+              <Link
+                to={c.to}
+                className="group relative block overflow-hidden rounded-3xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(16,23,19,0.18)]"
+              >
+                <div className={cn("relative overflow-hidden", c.ratio)}>
+                  <img
+                    src={c.image}
+                    alt={c.alt}
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.035]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent" />
+                  {/* moving highlight */}
+                  <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <div className="absolute -inset-x-1/2 top-0 h-full w-1/2 rotate-12 bg-gradient-to-r from-transparent via-ivory/10 to-transparent" />
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
+                    <p className="eyebrow text-amber">Chapter {c.num}</p>
+                    <h3 className="mt-2 font-display text-2xl font-extrabold text-ivory md:text-3xl">{c.title}</h3>
+                    <p className="mt-2 max-w-md text-sm leading-relaxed text-ivory/80">{c.copy}</p>
+                    <span className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-leaf-soft">
+                      Explore
+                      <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </Reveal>
+          ))}
+          <Reveal className="md:col-span-3" delay={120}>
+            <Link
+              to="/contact"
+              className="flex h-full min-h-[220px] flex-col justify-between rounded-3xl bg-forest p-7 text-ivory transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(23,61,43,0.35)]"
+            >
+              <p className="eyebrow text-leaf-soft">Not sure where to start?</p>
+              <div>
+                <h3 className="font-display text-xl font-extrabold">Let's talk.</h3>
+                <p className="mt-2 text-sm text-ivory/75">
+                  Tell us about your home and we'll help you find the sensible first step.
+                </p>
+                <span className="mt-4 inline-flex items-center gap-2 text-xs font-semibold text-amber">
+                  Start a conversation
+                  <ArrowRight className="size-3.5" aria-hidden="true" />
+                </span>
+              </div>
+            </Link>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =========================== C. Interactive explorer ======================= */
+
+const CLAY_ICONS: Record<string, string> = {
+  solar: "M12 3v4M5.6 5.6l2.8 2.8M3 12h4M18.4 5.6l-2.8 2.8M17 12h4",
+  hotwater: "M12 3c3.5 4.2 6 7.2 6 10a6 6 0 1 1-12 0c0-2.8 2.5-5.8 6-10Z",
+  comfort: "M3 8h10a4 4 0 1 0-4-4M3 13h14a4 4 0 1 1-4 4M3 18h9",
+};
+
+const EXPLORER = [
+  {
+    id: "solar",
+    label: "Solar",
+    title: "Your roof, working for you.",
+    body: "Solar panels turn daylight into electricity your household can use. What suits your place depends on orientation, shading and how you use power through the day.",
+    image: solarTiledRoof.url,
+    alt: "Solar panels on a tiled roof",
+    to: "/solar",
+  },
+  {
+    id: "hotwater",
+    label: "Hot water",
+    title: "An everyday essential, rethought.",
+    body: "A heat pump warms water using heat drawn from the surrounding air, so it needs less electricity to do the same job as a conventional system.",
+    image: heatpumpInstall.url,
+    alt: "A heat pump hot water installation",
+    to: "/heat-pumps",
+  },
+  {
+    id: "comfort",
+    label: "Air conditioning",
+    title: "Comfort for the rooms you live in.",
+    body: "Reverse-cycle systems cool in summer and warm in winter, where the selected product supports it — matched to your rooms and routines.",
+    image: acIndoor.url,
+    alt: "A wall-mounted split system air conditioner",
+    to: "/air-conditioning",
+  },
+] as const;
+
+export function HomeExplorer() {
+  const [active, setActive] = useState<(typeof EXPLORER)[number]["id"]>("solar");
+  const current = EXPLORER.find((e) => e.id === active) ?? EXPLORER[0]!;
+
+  return (
+    <section className="py-16 md:py-24">
+      <div className="mx-auto max-w-[1440px] px-5 md:px-8">
+        <div className="grid items-center gap-10 md:grid-cols-12">
+          <div className="md:col-span-5">
+            <p className="eyebrow text-forest/80">One home, three possibilities</p>
+            <RevealLines
+              lines={["Where would you begin?"]}
+              className="mt-4 font-display font-extrabold tracking-tight text-charcoal [font-size:clamp(28px,3.4vw,44px)]"
+            />
+            <div className="mt-8 flex gap-3">
+              {EXPLORER.map((e) => (
+                <button
+                  key={e.id}
+                  type="button"
+                  onClick={() => setActive(e.id)}
+                  aria-pressed={active === e.id}
+                  className={cn(
+                    "neu-press flex flex-1 flex-col items-center gap-2 rounded-2xl px-3 py-4 text-xs font-semibold transition-all",
+                    active === e.id ? "text-forest ring-2 ring-leaf" : "text-charcoal/60",
+                  )}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" strokeWidth={2.2} strokeLinecap="round" className="clay size-9 text-leaf" aria-hidden="true">
+                    <path d={CLAY_ICONS[e.id]} stroke="currentColor" />
+                  </svg>
+                  {e.label}
+                </button>
+              ))}
+            </div>
+            <Reveal className="mt-6">
+              <h3 className="font-display text-xl font-extrabold text-charcoal">{current.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{current.body}</p>
+              <Link
+                to={current.to}
+                className="mt-5 inline-flex items-center gap-2 rounded-full bg-forest px-5 py-2.5 text-xs font-semibold text-ivory transition-colors hover:bg-forest-deep"
+              >
+                Explore {current.label.toLowerCase()}
+                <ArrowRight className="size-3.5" aria-hidden="true" />
+              </Link>
+            </Reveal>
+          </div>
+          <Reveal className="md:col-span-7" delay={120}>
+            <PhotoFrame
+              key={active}
+              src={current.image}
+              alt={current.alt}
+              ratio="aspect-[16/11]"
+              caption="Illustrative photography"
+            />
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================= D. Journey timeline ========================= */
+
+const STEPS = [
+  {
+    title: "Tell us about your property",
+    body: "A short conversation about where you are, what you have and what you'd like to improve.",
+    image: kitchen.url,
+  },
+  {
+    title: "Discuss suitable options",
+    body: "We talk through what genuinely suits your property — with the trade-offs explained plainly.",
+    image: acOutdoor.url,
+  },
+  {
+    title: "Confirm your quote and installation scope",
+    body: "A clear quote, a clear scope, and time to decide. No pressure and no surprises.",
+    image: bathroom.url,
+  },
+  {
+    title: "Arrange installation and next steps",
+    body: "We schedule the work around your household and stay available for questions afterwards.",
+    image: solarInstaller.url,
+  },
+];
+
+export function ProcessTimeline() {
+  const ref = useRevealContainer<HTMLElement>();
+  return (
+    <section ref={ref} id="journey" className="scroll-mt-20 bg-sage/40 py-16 md:py-24">
+      <div className="mx-auto max-w-[1440px] px-5 md:px-8">
+        <RevealLines
+          lines={["From first question", "to installation."]}
+          className="font-display font-extrabold tracking-tight text-charcoal [font-size:clamp(28px,3.6vw,48px)]"
+        />
+        <p className="mt-4 max-w-xl text-sm leading-relaxed text-charcoal/70">
+          Availability, suitability and any offers are confirmed through a proper assessment of your
+          property — these steps set honest expectations rather than promises.
+        </p>
+        <ol className="relative mt-12 space-y-10 md:space-y-0">
+          {/* drawing connector */}
+          <span
+            className="absolute left-[27px] top-0 h-full w-px bg-charcoal/10 md:left-1/2"
+            aria-hidden="true"
+          />
+          <span
+            className="absolute left-[27px] top-0 h-full w-px origin-top scale-y-0 bg-leaf transition-transform duration-1000 [transform:scaleY(var(--grow,1))] md:left-1/2"
+            aria-hidden="true"
+          />
+          {STEPS.map((s, i) => (
+            <Reveal
+              key={s.title}
+              as="li"
+              delay={i * 100}
+              className={cn(
+                "relative grid gap-5 pl-16 md:grid-cols-2 md:gap-12 md:pl-0",
+                i % 2 === 1 && "md:[direction:rtl]",
+              )}
+            >
+              <span
+                className="absolute left-0 top-1 flex size-14 items-center justify-center rounded-full bg-ivory-bright font-display text-sm font-extrabold text-forest shadow-[0_6px_18px_rgba(16,23,19,0.12)] md:left-1/2 md:-translate-x-1/2"
+                aria-hidden="true"
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className={cn("md:w-[calc(50%-3rem)] md:[direction:ltr]", i % 2 === 1 ? "md:ml-auto" : "")}>
+                <h3 className="font-display text-lg font-bold text-charcoal">{s.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{s.body}</p>
+              </div>
+              <div className={cn("md:w-[calc(50%-3rem)] md:[direction:ltr]", i % 2 === 0 ? "md:ml-auto" : "")}>
+                <PhotoFrame src={s.image} alt="" ratio="aspect-[16/10]" parallax={false} />
+              </div>
+            </Reveal>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/* ================================= E. Gallery ============================== */
+
+const GALLERY = [
+  { src: solarHipRoof.url, caption: "Rooftop solar on a family home" },
+  { src: heatpumpUnit.url, caption: "Heat pump hot water unit" },
+  { src: lounge.url, caption: "A comfortable living space" },
+  { src: solarInstaller.url, caption: "Panel installation in progress" },
+  { src: bathroom.url, caption: "Morning light, warm water ready" },
+  { src: verandah.url, caption: "Indoor-outdoor living" },
+  { src: acOutdoor.url, caption: "Split system outdoor unit" },
+  { src: kitchen.url, caption: "A kitchen beginning its day" },
+];
+
+export function PhotoGallery() {
+  const [open, setOpen] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (open === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(null);
+      if (e.key === "ArrowRight") setOpen((o) => (o === null ? null : (o + 1) % GALLERY.length));
+      if (e.key === "ArrowLeft") setOpen((o) => (o === null ? null : (o - 1 + GALLERY.length) % GALLERY.length));
+    };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  return (
+    <section className="py-16 md:py-24">
+      <div className="mx-auto max-w-[1440px] px-5 md:px-8">
+        <RevealLines
+          lines={["Real spaces. Everyday possibilities."]}
+          className="font-display font-extrabold tracking-tight text-charcoal [font-size:clamp(28px,3.6vw,48px)]"
+        />
+        <div className="mt-10 columns-2 gap-4 md:columns-4 [&>figure]:mb-4">
+          {GALLERY.map((g, i) => (
+            <Reveal key={g.src} delay={i * 50}>
+              <button
+                type="button"
+                onClick={() => setOpen(i)}
+                className="group relative block w-full overflow-hidden rounded-2xl"
+                aria-label={`View photo: ${g.caption}`}
+              >
+                <img
+                  src={g.src}
+                  alt={g.caption}
+                  loading="lazy"
+                  className="w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  style={{ aspectRatio: i % 3 === 0 ? "4/5" : "4/3" }}
+                />
+                <span className="absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-charcoal/70 to-transparent p-3 pt-8 text-left text-[11px] font-medium text-ivory opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                  {g.caption}
+                </span>
+              </button>
+            </Reveal>
+          ))}
+        </div>
+        <p className="mt-4 text-[11px] text-muted-foreground">
+          Illustrative photography — images show typical equipment and homes, not documented Austar
+          installations, unless stated otherwise.
+        </p>
+      </div>
+
+      {open !== null && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Photo viewer"
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-charcoal/90 p-6 backdrop-blur-sm"
+          onClick={() => setOpen(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setOpen(null)}
+            aria-label="Close"
+            className="absolute right-5 top-5 flex size-11 items-center justify-center rounded-full bg-ivory/10 text-ivory"
+          >
+            <X className="size-5" aria-hidden="true" />
+          </button>
+          <figure className="max-h-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
+            <img src={GALLERY[open]!.src} alt={GALLERY[open]!.caption} className="mask-round max-h-[75vh] w-auto object-contain" />
+            <figcaption className="mt-3 flex items-center justify-between text-xs text-ivory/80">
+              {GALLERY[open]!.caption}
+              <span>
+                {open + 1} / {GALLERY.length}
+              </span>
+            </figcaption>
+          </figure>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* ============================ F. Eligibility panel ========================= */
+
+export function EligibilityPanel() {
+  return (
+    <section className="py-16 md:py-24">
+      <div className="mx-auto max-w-[1200px] px-5 md:px-8">
+        <div className="neu-raise grid overflow-hidden md:grid-cols-12">
+          <div className="p-8 md:col-span-7 md:p-12">
+            <p className="eyebrow text-forest/80">Incentives &amp; eligibility</p>
+            <RevealLines
+              lines={["A clearer path to", "your next upgrade."]}
+              className="mt-4 font-display font-extrabold tracking-tight text-charcoal [font-size:clamp(26px,3vw,40px)]"
+            />
+            <Reveal className="mt-5 max-w-lg text-sm leading-relaxed text-charcoal/70">
+              Government programs and offers change over time, and what applies to your property
+              depends on your location, your existing system and the upgrade itself. Rather than
+              promising numbers, we review your situation and tell you honestly what's available.
+            </Reveal>
+            <Reveal delay={120} className="mt-7">
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 rounded-full bg-leaf px-7 py-3.5 text-sm font-semibold text-charcoal transition-all hover:bg-leaf-soft"
+              >
+                Request an eligibility review
+                <ArrowRight className="size-4" aria-hidden="true" />
+              </Link>
+            </Reveal>
+          </div>
+          <div className="bg-forest p-8 text-ivory md:col-span-5 md:p-12">
+            <p className="eyebrow text-leaf-soft">What we check</p>
+            <ul className="mt-5 space-y-4 text-sm">
+              {[
+                "Your location and service availability",
+                "Your property type and existing systems",
+                "The upgrade or combination you're considering",
+                "Programs and conditions that may apply",
+              ].map((t) => (
+                <li key={t} className="flex gap-3">
+                  <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-amber" aria-hidden="true" />
+                  {t}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-8 rounded-2xl border border-ivory/15 bg-ivory/5 p-4 text-[11px] leading-relaxed text-ivory/70">
+              {OFFERS_NOTICE}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================== G. Service areas =========================== */
+
+/** Simplified editorial map: eastern Australia with VIC and NSW highlighted. */
+export function ServiceAreas() {
+  return (
+    <section className="bg-charcoal py-16 text-ivory md:py-24">
+      <div className="mx-auto grid max-w-[1440px] items-center gap-12 px-5 md:grid-cols-2 md:px-8">
+        <div>
+          <p className="eyebrow text-leaf-soft">Where we work</p>
+          <RevealLines
+            lines={["Here for homes across", "Victoria and NSW."]}
+            className="mt-4 font-display font-extrabold tracking-tight text-ivory [font-size:clamp(28px,3.6vw,48px)]"
+          />
+          <Reveal className="mt-6 space-y-4 text-sm leading-relaxed text-ivory/75">
+            <p>
+              Austar Energy lists Victoria and New South Wales as its service regions, with teams and
+              contact points in both states.
+            </p>
+            <p className="text-ivory/60">Service availability varies by location and upgrade.</p>
+          </Reveal>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2">
+            {[
+              { state: "NSW", addr: SITE.addresses.nsw },
+              { state: "VIC", addr: SITE.addresses.vic },
+            ].map((a) => (
+              <Reveal key={a.state} className="rounded-2xl border border-ivory/10 bg-ivory/5 p-5">
+                <p className="eyebrow text-amber">{a.state}</p>
+                <p className="mt-2 text-xs leading-relaxed text-ivory/75">{a.addr}</p>
+              </Reveal>
+            ))}
+          </div>
+          <Reveal delay={150} className="mt-6 flex flex-wrap gap-3">
+            <a
+              href={SITE.phoneHref}
+              className="inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-charcoal"
+            >
+              <Phone className="size-4" aria-hidden="true" />
+              {SITE.phoneDisplay}
+            </a>
+            <Link
+              to="/contact"
+              className="inline-flex items-center rounded-full border border-ivory/25 px-6 py-3 text-sm font-semibold text-ivory"
+            >
+              Get a free quote
+            </Link>
+          </Reveal>
+        </div>
+        <Reveal delay={120}>
+          <svg viewBox="0 0 400 460" className="mx-auto w-full max-w-md" role="img" aria-label="Map of Australia with Victoria and New South Wales highlighted">
+            {/* mainland (simplified) */}
+            <path
+              d="M60 96 L120 70 L188 58 L252 62 L306 84 L342 118 L352 168 L340 214 L316 252 L300 300 L272 330 L252 356 L232 380 L214 396 L196 380 L184 344 L170 320 L142 306 L116 318 L96 306 L84 272 L76 232 L60 196 L48 156 Z"
+              fill="#2c3a31"
+              stroke="#4a5c4e"
+              strokeWidth="1.5"
+            />
+            {/* NSW */}
+            <path
+              d="M196 380 L214 396 L232 380 L252 356 L272 330 L300 300 L316 252 L310 236 L262 238 L212 246 L176 258 L160 286 L170 320 L184 344 Z"
+              fill="#68a943"
+              opacity="0.9"
+            />
+            {/* VIC */}
+            <path
+              d="M170 320 L160 286 L144 300 L124 312 L112 328 L128 342 L152 352 L176 344 L184 344 Z"
+              fill="#f4c45b"
+              opacity="0.9"
+            />
+            {/* Tasmania hint */}
+            <path d="M218 420 L240 416 L246 434 L228 444 L214 434 Z" fill="#2c3a31" stroke="#4a5c4e" strokeWidth="1.2" />
+            <text x="238" y="300" fill="#101713" fontSize="13" fontWeight="700" transform="rotate(-8 238 300)">
+              NSW
+            </text>
+            <text x="138" y="336" fill="#101713" fontSize="11" fontWeight="700">
+              VIC
+            </text>
+          </svg>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ================================== H. FAQ ================================= */
+
+const FAQS = [
+  {
+    q: "Which services can I enquire about?",
+    a: "Solar installation, heat pump hot water upgrades and air conditioning — for homes, and for business premises too. You can ask about one upgrade or several in the same enquiry.",
+  },
+  {
+    q: "Do you service my postcode?",
+    a: "We work across Victoria and New South Wales, but service availability varies by location and upgrade. Share your postcode and we'll confirm what's available for your area.",
+  },
+  {
+    q: "What information helps with a quote?",
+    a: "Your postcode, property type, the service you're interested in and any details about existing equipment — for example your current hot water system or roof type.",
+  },
+  {
+    q: "Can I ask about more than one upgrade?",
+    a: "Yes. Many households consider solar together with hot water or air conditioning. Mention everything you're considering and we'll cover it in one conversation.",
+  },
+  {
+    q: "How do I find out whether an offer applies?",
+    a: "Available offers and eligibility depend on your location, property, existing system and applicable program conditions. Request an eligibility review and we'll check what applies to you.",
+  },
+  {
+    q: "How can I check whether a caller represents Austar Energy?",
+    a: "Austar Energy does not conduct cold-call marketing. If someone calls claiming to represent us and you're unsure, hang up and check using the contact details published on this site.",
+  },
+];
+
+export function FaqSection() {
+  const ref = useRevealContainer<HTMLElement>();
+  return (
+    <section ref={ref} className="py-16 md:py-24">
+      <div className="mx-auto max-w-[860px] px-5 md:px-8">
+        <RevealLines
+          lines={["A few things you", "may be wondering."]}
+          className="font-display font-extrabold tracking-tight text-charcoal [font-size:clamp(28px,3.6vw,48px)]"
+        />
+        <div className="mt-10 divide-y divide-border">
+          {FAQS.map((f, i) => (
+            <Reveal key={f.q} delay={i * 50}>
+              <details className="group py-5">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-base font-bold text-charcoal">
+                  {f.q}
+                  <span className="shrink-0 text-xl text-stone transition-transform duration-300 group-open:rotate-45" aria-hidden="true">
+                    +
+                  </span>
+                </summary>
+                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-charcoal/70">{f.a}</p>
+              </details>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* =============================== I. Final CTA ============================== */
+
+export function FinalCta() {
+  return (
+    <section className="relative overflow-hidden">
+      <img
+        src={houseDusk.url}
+        alt="A home glowing warmly at dusk"
+        loading="lazy"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-charcoal/60 via-charcoal/40 to-charcoal/80" />
+      <div className="relative mx-auto max-w-[1440px] px-5 py-28 text-center md:px-8 md:py-40">
+        <RevealLines
+          lines={["Your home. A brighter", "next chapter."]}
+          className="font-display font-extrabold tracking-tight text-ivory [font-size:clamp(34px,5vw,72px)]"
+        />
+        <Reveal className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-ivory/80">
+          Tell us what you're planning. Let's explore the right next step — one upgrade or several.
+        </Reveal>
+        <Reveal delay={120} className="mt-9 flex flex-wrap justify-center gap-3">
+          <Link
+            to="/contact"
+            className="inline-flex items-center rounded-full bg-leaf px-8 py-4 text-sm font-semibold text-charcoal transition-all hover:bg-leaf-soft hover:shadow-[0_12px_40px_rgba(104,169,67,0.45)]"
+          >
+            Get my personalised quote
+          </Link>
+          <a
+            href={SITE.phoneHref}
+            className="inline-flex items-center gap-2 rounded-full border border-ivory/30 bg-ivory/5 px-8 py-4 text-sm font-semibold text-ivory backdrop-blur transition-colors hover:bg-ivory/15"
+          >
+            <Phone className="size-4" aria-hidden="true" />
+            Call {SITE.phoneDisplay}
+          </a>
+        </Reveal>
+      </div>
+    </section>
+  );
+}

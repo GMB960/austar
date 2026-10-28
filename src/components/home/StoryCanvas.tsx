@@ -6,7 +6,7 @@
  * One canvas serves the hero AND the three scroll chapters: the parent
  * wrapper owns the scroll progress; this component only reads it.
  */
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, type ComponentType, type MutableRefObject, type RefObject } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
@@ -27,11 +27,11 @@ type Beat = {
 
 // hero(dawn) → solar(morning) → hotwater(midday) → comfort(afternoon) → end(dusk)
 const BEATS: Beat[] = [
-  { pos: [8.6, 4.6, 10.2], target: [-0.9, 1.3, 0], elevation: 13, azimuth: -55, sunColor: "#ffc37e", sky: "#f3e4cd", ambient: 0.55 },
-  { pos: [3.4, 4.9, 7.0], target: [0.4, 3.0, 0.6], elevation: 36, azimuth: -20, sunColor: "#fff2dc", sky: "#eef0e6", ambient: 0.7 },
-  { pos: [-4.6, 2.1, 7.2], target: [-4.0, 0.9, 1.6], elevation: 56, azimuth: 5, sunColor: "#fff8ec", sky: "#eef1e9", ambient: 0.78 },
-  { pos: [3.6, 1.9, 5.6], target: [0.9, 1.5, -0.6], elevation: 33, azimuth: 35, sunColor: "#ffe9c4", sky: "#ece9da", ambient: 0.65 },
-  { pos: [9.4, 3.6, 11.0], target: [-0.6, 1.5, 0], elevation: 7, azimuth: 60, sunColor: "#ff9d62", sky: "#56516a", ambient: 0.4 },
+  { pos: [11.2, 5.0, 12.4], target: [-1.8, 1.5, 0], elevation: 13, azimuth: -55, sunColor: "#ffc37e", sky: "#f3e4cd", ambient: 0.55 },
+  { pos: [3.8, 5.8, 8.6], target: [0.5, 3.1, 0.8], elevation: 36, azimuth: -20, sunColor: "#fff2dc", sky: "#eef0e6", ambient: 0.7 },
+  { pos: [-5.4, 2.3, 7.6], target: [-4.2, 1.0, 1.6], elevation: 56, azimuth: 5, sunColor: "#fff8ec", sky: "#eef1e9", ambient: 0.78 },
+  { pos: [4.2, 2.1, 6.2], target: [0.9, 1.5, -0.6], elevation: 33, azimuth: 35, sunColor: "#ffe9c4", sky: "#ece9da", ambient: 0.65 },
+  { pos: [11.6, 4.2, 12.8], target: [-1.4, 1.6, 0], elevation: 7, azimuth: 60, sunColor: "#ff9d62", sky: "#56516a", ambient: 0.4 },
 ];
 
 const BEAT_T = [0, 0.24, 0.49, 0.74, 1]; // progress stops for the beats
@@ -41,10 +41,10 @@ const v3 = (a: [number, number, number]) => new THREE.Vector3(...a);
 function sampleBeats(p: number) {
   const clamped = Math.min(1, Math.max(0, p));
   let i = 0;
-  while (i < BEAT_T.length - 2 && clamped > BEAT_T[i + 1]) i++;
-  const t = THREE.MathUtils.smoothstep((clamped - BEAT_T[i]) / (BEAT_T[i + 1] - BEAT_T[i]), 0, 1);
-  const a = BEATS[i];
-  const b = BEATS[i + 1];
+  while (i < BEAT_T.length - 2 && BEAT_T[i + 1] !== undefined && clamped > BEAT_T[i + 1]!) i++;
+  const t = THREE.MathUtils.smoothstep((clamped - BEAT_T[i]!) / (BEAT_T[i + 1]! - BEAT_T[i]!), 0, 1);
+  const a = BEATS[i]!;
+  const b = BEATS[i + 1]!;
   return {
     pos: v3(a.pos).lerp(v3(b.pos), t),
     target: v3(a.target).lerp(v3(b.target), t),
@@ -60,7 +60,7 @@ export type BeatSample = ReturnType<typeof sampleBeats>;
 
 /* ------------------------------ scene objects ----------------------------- */
 
-function House({ glowMaterials }: { glowMaterials: React.RefObject<(THREE.MeshStandardMaterial | null)[]> }) {
+function House({ glowMaterials }: { glowMaterials: RefObject<(THREE.MeshStandardMaterial | null)[]> }) {
   const render = useMemo(
     () => new THREE.MeshStandardMaterial({ color: "#ece4d4", roughness: 0.92 }),
     [],
@@ -84,8 +84,19 @@ function House({ glowMaterials }: { glowMaterials: React.RefObject<(THREE.MeshSt
   );
   const frameMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#2b322d", roughness: 0.5 }), []);
 
-  const roofAngle = Math.atan2(1.7, 3.1);
-  const roofLen = Math.sqrt(1.7 * 1.7 + 3.1 * 3.1);
+  // Gable roof as one triangular prism: cross-section in the z/y plane,
+  // extruded along x. Clean apex, no crossing planes.
+  const roofGeo = useMemo(() => {
+    const shape = new THREE.Shape();
+    shape.moveTo(-3.45, 0);
+    shape.lineTo(3.45, 0);
+    shape.lineTo(0, 1.8);
+    shape.closePath();
+    const geo = new THREE.ExtrudeGeometry(shape, { depth: 7.1, bevelEnabled: false });
+    geo.rotateY(-Math.PI / 2);
+    geo.translate(3.55, 0, 0);
+    return geo;
+  }, []);
 
   const glowSetter = (i: number) => (m: THREE.MeshStandardMaterial | null) => {
     const arr = glowMaterials.current;
@@ -102,23 +113,11 @@ function House({ glowMaterials }: { glowMaterials: React.RefObject<(THREE.MeshSt
       <mesh position={[0, 0.09, 0]} material={dark}>
         <boxGeometry args={[6.7, 0.18, 6.5]} />
       </mesh>
-      {/* gable roof: ridge along x, slopes facing ±z */}
-      <group position={[0, 3.95, 0]}>
-        <mesh rotation={[roofAngle, 0, 0]} castShadow material={roofMat}>
-          <boxGeometry args={[7.0, 0.14, roofLen + 0.4]} />
-        </mesh>
-        <mesh position={[0, 0, 0]} rotation={[-roofAngle, 0, 0]} castShadow material={roofMat}>
-          <boxGeometry args={[7.0, 0.14, roofLen + 0.4]} />
-        </mesh>
-        <mesh position={[0, 0.68, 0]} material={roofMat}>
-          <boxGeometry args={[7.1, 0.12, 0.26]} />
-        </mesh>
-      </group>
-      {/* gable ends (triangles) */}
-      <GableEnds material={render} />
+      {/* roof */}
+      <mesh geometry={roofGeo} position={[0, 2.98, 0]} castShadow material={roofMat} />
       {/* chimney */}
-      <mesh position={[2.3, 4.4, -1.4]} castShadow material={render}>
-        <boxGeometry args={[0.5, 1.1, 0.5]} />
+      <mesh position={[2.3, 4.3, -1.3]} castShadow material={render}>
+        <boxGeometry args={[0.5, 1.0, 0.5]} />
       </mesh>
       {/* door */}
       <mesh position={[-0.1, 1.06, 3.12]} material={timber}>
@@ -169,25 +168,6 @@ function House({ glowMaterials }: { glowMaterials: React.RefObject<(THREE.MeshSt
   );
 }
 
-function GableEnds({ material }: { material: THREE.Material }) {
-  const geo = useMemo(() => {
-    const s = new THREE.Shape();
-    s.moveTo(-3.1, 0);
-    s.lineTo(3.1, 0);
-    s.lineTo(3.1, 0.9);
-    s.lineTo(0, 2.0);
-    s.lineTo(-3.1, 0.9);
-    s.closePath();
-    return new THREE.ExtrudeGeometry(s, { depth: 0.16, bevelEnabled: false });
-  }, []);
-  return (
-    <>
-      <mesh position={[-3.28, 3.0, -3.07]} material={material} geometry={geo} />
-      <mesh position={[3.12, 3.0, -3.07]} material={material} geometry={geo} />
-    </>
-  );
-}
-
 function SolarArray() {
   const panelMat = useMemo(
     () => new THREE.MeshStandardMaterial({ color: "#0e1c2e", roughness: 0.18, metalness: 0.7 }),
@@ -197,14 +177,14 @@ function SolarArray() {
     () => new THREE.MeshStandardMaterial({ color: "#8d9295", roughness: 0.4, metalness: 0.6 }),
     [],
   );
-  const roofAngle = Math.atan2(1.7, 3.1);
+  const roofAngle = Math.atan2(1.8, 3.45);
   const panels = [];
   for (let row = 0; row < 2; row++) {
     for (let col = 0; col < 4; col++) {
       panels.push(
         <group
           key={`${row}-${col}`}
-          position={[-1.95 + col * 1.28, 0.16, -0.45 + row * 1.5]}
+          position={[-1.95 + col * 1.28, 0.16, -0.75 + row * 1.55]}
           rotation={[roofAngle, 0, 0]}
         >
           <mesh castShadow material={frameMat}>
@@ -217,7 +197,11 @@ function SolarArray() {
       );
     }
   }
-  return <group position={[0, 4.0, 1.05]}>{panels}</group>;
+  return (
+    <group position={[0, 3.62, 1.35]} rotation={[roofAngle, 0, 0]}>
+      {panels}
+    </group>
+  );
 }
 
 function HeatPumpUnit() {
@@ -332,11 +316,11 @@ function EnergyPath({
 }: {
   points: [number, number, number][];
   color: string;
-  progressRef: React.MutableRefObject<number>;
+  progressRef: MutableRefObject<number>;
   window: [number, number];
   speed?: number;
-  materialRef?: React.MutableRefObject<THREE.LineDashedMaterial | null>;
-  externalOpacity?: React.MutableRefObject<number> | number;
+  materialRef?: MutableRefObject<THREE.LineDashedMaterial | null>;
+  externalOpacity?: MutableRefObject<number> | number;
 }) {
   const line = useMemo(() => {
     const curve = new THREE.CatmullRomCurve3(points.map((p) => new THREE.Vector3(...p)));
@@ -356,6 +340,8 @@ function EnergyPath({
     return l;
   }, [points, color, materialRef]);
 
+  const baseDist = useRef<Float32Array | null>(null);
+
   useFrame((state) => {
     const p = progressRef.current;
     const [a, b] = win;
@@ -365,7 +351,20 @@ function EnergyPath({
     const mat = line.material as THREE.LineDashedMaterial;
     mat.opacity = fade * ext * 0.9;
     line.visible = mat.opacity > 0.01;
-    if (line.visible) mat.dashOffset = -(state.clock.elapsedTime * speed) % 1;
+    if (line.visible) {
+      // LineDashedMaterial has no dashOffset uniform — shift the lineDistance
+      // attribute instead so the dashes flow along the path.
+      const attr = line.geometry.getAttribute("lineDistance") as THREE.BufferAttribute | undefined;
+      if (attr) {
+        if (!baseDist.current) baseDist.current = Float32Array.from(attr.array as Float32Array);
+        const base = baseDist.current;
+        const period = mat.dashSize + mat.gapSize;
+        const off = -((state.clock.elapsedTime * speed) % period);
+        const arr = attr.array as Float32Array;
+        for (let k = 0; k < arr.length; k++) arr[k] = base[k]! + off;
+        attr.needsUpdate = true;
+      }
+    }
   });
 
   return <primitive object={line} />;
@@ -431,7 +430,7 @@ function HotspotLabel({
 
 /* ------------------------------ sun and sky ------------------------------- */
 
-function SunAndSky({ beatRef }: { beatRef: React.MutableRefObject<BeatSample> }) {
+function SunAndSky({ beatRef }: { beatRef: MutableRefObject<BeatSample> }) {
   const lightRef = useRef<THREE.DirectionalLight>(null);
   const hemiRef = useRef<THREE.HemisphereLight>(null);
   const sunRef = useRef<THREE.Mesh>(null);
@@ -509,14 +508,14 @@ function CameraRig({
   pointerRef,
   beatRef,
 }: {
-  progressRef: React.MutableRefObject<number>;
-  pointerRef: React.MutableRefObject<{ x: number; y: number }>;
-  beatRef: React.MutableRefObject<BeatSample>;
+  progressRef: MutableRefObject<number>;
+  pointerRef: MutableRefObject<{ x: number; y: number }>;
+  beatRef: MutableRefObject<BeatSample>;
 }) {
   const { camera } = useThree();
   const current = useRef({
-    pos: v3(BEATS[0].pos),
-    target: v3(BEATS[0].target),
+    pos: v3(BEATS[0]!.pos),
+    target: v3(BEATS[0]!.target),
   });
   const offset = useMemo(() => new THREE.Vector3(), []);
 
@@ -540,32 +539,29 @@ function SceneTick({
   progressRef,
   beatRef,
   glowMaterials,
-  solarMatRef,
 }: {
-  progressRef: React.MutableRefObject<number>;
-  beatRef: React.MutableRefObject<BeatSample>;
-  glowMaterials: React.RefObject<(THREE.MeshStandardMaterial | null)[]>;
-  solarMatRef: React.MutableRefObject<THREE.LineDashedMaterial | null>;
+  progressRef: MutableRefObject<number>;
+  beatRef: MutableRefObject<BeatSample>;
+  glowMaterials: RefObject<(THREE.MeshStandardMaterial | null)[]>;
 }) {
   useFrame(() => {
     beatRef.current = sampleBeats(progressRef.current);
     const p = progressRef.current;
     const dusk = THREE.MathUtils.smoothstep(p, 0.72, 0.98);
-    const daylight = 1 - THREE.MathUtils.smoothstep(p, 0.6, 0.88);
     const glows = glowMaterials.current;
     if (glows) {
-      for (const m of glows) if (m) m.emissiveIntensity = dusk * 1.7;
+      for (const m of glows) {
+        if (m) m.emissiveIntensity = dusk * 1.7;
+      }
     }
-    if (solarMatRef.current) solarMatRef.current.opacity = 1; // envelope handled per-frame by EnergyPath
-    void daylight;
   });
   return null;
 }
 
 /* --------------------------------- scene ---------------------------------- */
 
-export type StoryCanvasProps = {
-  progressRef: React.MutableRefObject<number>;
+export type StoryCanvasProps = { // eslint-disable-line 
+  progressRef: MutableRefObject<number>;
   activeHotspot: HotspotId | null;
   onSelectHotspot: (id: HotspotId) => void;
   interactive?: boolean;
@@ -580,7 +576,6 @@ export default function StoryCanvas({
   const pointerRef = useRef({ x: 0, y: 0 });
   const beatRef = useRef<BeatSample>(sampleBeats(0));
   const glowMaterials = useRef<(THREE.MeshStandardMaterial | null)[]>([null, null, null]);
-  const solarMatRef = useRef<THREE.LineDashedMaterial | null>(null);
   const daylightRef = useRef(1);
 
   // daylight envelope for the solar path: fades as the story reaches dusk
@@ -628,7 +623,7 @@ export default function StoryCanvas({
     <Canvas
       shadows
       dpr={[1, 1.75]}
-      camera={{ fov: 38, position: BEATS[0].pos, near: 0.5, far: 130 }}
+      camera={{ fov: 38, position: BEATS[0]!.pos, near: 0.5, far: 130 }}
       onPointerMove={(e) => {
         if (!interactive) return;
         const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
@@ -642,12 +637,7 @@ export default function StoryCanvas({
       style={{ position: "absolute", inset: 0 }}
     >
       <fog attach="fog" args={["#f3e4cd", 26, 68]} />
-      <SceneTick
-        progressRef={progressRef}
-        beatRef={beatRef}
-        glowMaterials={glowMaterials}
-        solarMatRef={solarMatRef}
-      />
+      <SceneTick progressRef={progressRef} beatRef={beatRef} glowMaterials={glowMaterials} />
       <SunAndSky beatRef={beatRef} />
       <CameraRig progressRef={progressRef} pointerRef={pointerRef} beatRef={beatRef} />
       <Ground />
@@ -655,10 +645,10 @@ export default function StoryCanvas({
       <SolarArray />
       <HeatPumpUnit />
       <AcUnit />
-      <Tree position={[-7.2, 0, -2.4]} scale={1.25} />
-      <Tree position={[7.4, 0, -1.2]} scale={1.05} />
-      <Tree position={[6.6, 0, 4.6]} scale={0.85} />
-      <Tree position={[-7.8, 0, 4.2]} scale={0.9} />
+      <Tree position={[-8.6, 0, -3.0]} scale={1.05} />
+      <Tree position={[8.8, 0, -2.0]} scale={0.9} />
+      <Tree position={[7.8, 0, 5.6]} scale={0.7} />
+      <Tree position={[-9.2, 0, 5.0]} scale={0.75} />
 
       {/* solar electricity: amber; solar generation fades as daylight ends */}
       <EnergyPath
@@ -666,7 +656,6 @@ export default function StoryCanvas({
         color="#f4c45b"
         progressRef={progressRef}
         window={[0.06, 0.74]}
-        materialRef={solarMatRef}
         externalOpacity={daylightRef}
       />
       {/* ambient heat into the heat pump: sage, clearly non-electric */}
@@ -676,7 +665,7 @@ export default function StoryCanvas({
 
       <HotspotLabel
         id="solar"
-        position={[0, 5.45, 1.0]}
+        position={[0, 4.9, 1.2]}
         label="Solar"
         active={activeHotspot === "solar"}
         onSelect={onSelectHotspot}
