@@ -178,17 +178,19 @@ export function ChapterStrip() {
             const panel = panelRefs.current[i];
             if (panel) {
               const sink = clamp(a, 0, 1);
-              panel.style.transform = `translate3d(${clamp(off, -1.4, 1.4) * 26}px, 0, ${-sink * 190}px) rotateY(${clamp(off, -1.4, 1.4) * -9}deg) scale(${1 - sink * 0.07})`;
-              panel.style.opacity = String(1 - sink * 0.72);
-              panel.style.visibility = a > 1.7 ? "hidden" : "visible";
+              // no sideways shift: each panel stays in its own slot so an
+              // incoming photo can never land on top of a neighbour's copy
+              panel.style.transform = `translate3d(0, 0, ${-sink * 170}px) rotateY(${clamp(off, -1.3, 1.3) * -7}deg) scale(${1 - sink * 0.06})`;
+              panel.style.opacity = String(1 - sink * 0.78);
+              panel.style.visibility = a > 1.6 ? "hidden" : "visible";
             }
             const photo = photoRefs.current[i];
             if (photo) {
-              photo.style.transform = `translate3d(${clamp(off, -1.6, 1.6) * -7}%, 0, 0) scale(${1.14 - clamp(a, 0, 1) * 0.06})`;
+              photo.style.transform = `translate3d(${clamp(off, -1.5, 1.5) * -3.5}%, 0, 0) scale(${1.14 - clamp(a, 0, 1) * 0.05})`;
             }
             const text = textRefs.current[i];
             if (text) {
-              const f = clamp(1 - a * 1.7);
+              const f = clamp(1 - a * 2.4);
               text.style.opacity = String(f);
               text.style.transform = `translate3d(0, ${(1 - f) * 42}px, 0)`;
               text.style.pointerEvents = f > 0.55 ? "auto" : "none";
