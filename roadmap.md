@@ -2,6 +2,8 @@
 
 ## Done
 - Bright green panel behind the "Your home. Your possibilities." home introduction
+- Scroll-driven chapter strip in the closing section: five real photos, each with
+  its own writing, sliding sideways as you scroll, ending on the quote invitation
 
 ## Open
-- Scroll-driven story (4-5 image + text beats, modern animation) in the section shown in image-6: "Your home. A brighter next chapter."
+- None
