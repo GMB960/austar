@@ -30,19 +30,47 @@ const SOLUTIONS = [
   },
 ];
 
+const SETTLE = "transition-all duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]";
+
+/**
+ * The header opens tall and see-through over the first photograph, then settles
+ * into a slim, solid panel the moment you scroll — so it stays legible over
+ * every section without ever covering the story underneath it.
+ */
 export function SiteHeader() {
-  const [scrolled, setScrolled] = useState(false);
+  const [compact, setCompact] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuPanelRef = useRef<HTMLDivElement>(null);
+  const railRef = useRef<HTMLDivElement>(null);
 
+  // One scroll listener drives both the compact state and the reading rail.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
+    let frame = 0;
+
+    const sync = () => {
+      frame = 0;
+      const doc = document.documentElement;
+      const room = doc.scrollHeight - window.innerHeight;
+      const ratio = room > 0 ? Math.min(1, Math.max(0, window.scrollY / room)) : 0;
+      if (railRef.current) railRef.current.style.transform = `scaleX(${ratio})`;
+      setCompact(window.scrollY > 24);
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(sync);
+    };
+
+    sync();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
   }, []);
 
   // Close menus on route change
@@ -71,107 +99,167 @@ export function SiteHeader() {
 
   return (
     <>
-      <header
-        className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-300",
-          scrolled ? "glass shadow-[0_2px_24px_rgba(16,23,19,0.08)]" : "bg-transparent",
-        )}
-      >
-        <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-5 md:h-[72px] md:px-8">
-          <Link to="/" className="flex items-center gap-3" aria-label={`${SITE.name} home`}>
-            <span className="flex items-center rounded-lg bg-ivory-bright px-2.5 py-1.5 ring-1 ring-charcoal/10">
-              <img
-                src={LOGO_URL}
-                alt={`${SITE.name} logo`}
-                className="h-8 w-auto md:h-9"
-                width={200}
-                height={74}
-              />
-            </span>
-          </Link>
+      <header className="fixed inset-x-0 top-0 z-50">
+        {/* Soft scrim keeps the nav legible over a bright or busy photograph */}
+        <div
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-ivory/55 via-ivory/20 to-transparent transition-opacity duration-[520ms]",
+            compact ? "opacity-0" : "opacity-100",
+          )}
+        />
 
-          {/* Desktop nav */}
-          <nav aria-label="Primary" className="hidden items-center gap-1 md:flex">
-            <div
-              className="relative"
-              onMouseEnter={() => setSolutionsOpen(true)}
-              onMouseLeave={() => setSolutionsOpen(false)}
-            >
-              <button
-                type="button"
-                aria-expanded={solutionsOpen}
-                aria-haspopup="true"
-                onClick={() => setSolutionsOpen((v) => !v)}
+        <div
+          className={cn(
+            "relative flex items-stretch border-b",
+            SETTLE,
+            compact
+              ? "h-[50px] rounded-b-[20px] border-charcoal/10 bg-ivory-bright/95 shadow-[0_12px_30px_rgba(16,23,19,0.10)] backdrop-blur-xl md:h-[54px]"
+              : "h-16 rounded-b-none border-transparent bg-transparent md:h-[72px]",
+          )}
+        >
+          <div
+            className={cn(
+              "mx-auto flex w-full max-w-[1440px] items-center justify-between",
+              SETTLE,
+              compact ? "px-4 md:px-6" : "px-5 md:px-8",
+            )}
+          >
+            <Link to="/" className="flex shrink-0 items-center" aria-label={`${SITE.name} home`}>
+              <span
                 className={cn(
-                  "flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors",
-                  "hover:bg-charcoal/5",
+                  "flex items-center ring-1 ring-charcoal/10",
+                  SETTLE,
+                  compact
+                    ? "rounded-lg bg-ivory-bright px-2 py-1"
+                    : "rounded-xl bg-ivory-bright px-2.5 py-1.5 shadow-[0_4px_14px_rgba(16,23,19,0.07)]",
                 )}
               >
-                Solutions
-                <ChevronDown
-                  className={cn("size-4 transition-transform", solutionsOpen && "rotate-180")}
-                  aria-hidden="true"
+                <img
+                  src={LOGO_URL}
+                  alt={`${SITE.name} logo`}
+                  className={cn("w-auto", SETTLE, compact ? "h-[22px] md:h-6" : "h-8 md:h-9")}
+                  width={200}
+                  height={74}
                 />
-              </button>
+              </span>
+            </Link>
+
+            {/* Desktop nav */}
+            <nav aria-label="Primary" className="hidden items-center md:flex">
               <div
-                className={cn(
-                  "absolute left-1/2 top-full w-[560px] -translate-x-1/2 pt-3 transition-all duration-200",
-                  solutionsOpen
-                    ? "pointer-events-auto translate-y-0 opacity-100"
-                    : "pointer-events-none translate-y-1 opacity-0",
-                )}
+                className="relative"
+                onMouseEnter={() => setSolutionsOpen(true)}
+                onMouseLeave={() => setSolutionsOpen(false)}
               >
-                <div className="glass rounded-2xl p-2 shadow-[0_16px_48px_rgba(16,23,19,0.14)]">
-                  {SOLUTIONS.map((s) => (
-                    <Link
-                      key={s.to}
-                      to={s.to}
-                      className="group flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-charcoal/5"
-                    >
-                      <span className="mask-round h-14 w-20 shrink-0 bg-sage">
-                        <img
-                          src={s.image}
-                          alt=""
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                          width={80}
-                          height={56}
-                        />
-                      </span>
-                      <span>
-                        <span className="block text-sm font-semibold text-foreground">{s.title}</span>
-                        <span className="block text-xs text-muted-foreground">{s.blurb}</span>
-                      </span>
-                    </Link>
-                  ))}
+                <button
+                  type="button"
+                  aria-expanded={solutionsOpen}
+                  aria-haspopup="true"
+                  onClick={() => setSolutionsOpen((v) => !v)}
+                  className={cn(
+                    "flex items-center gap-1 rounded-full text-sm font-medium transition-colors hover:bg-charcoal/5",
+                    compact ? "px-3 py-1.5" : "px-4 py-2",
+                  )}
+                >
+                  Solutions
+                  <ChevronDown
+                    className={cn("size-4 transition-transform", solutionsOpen && "rotate-180")}
+                    aria-hidden="true"
+                  />
+                </button>
+                <div
+                  className={cn(
+                    "absolute left-1/2 top-full w-[560px] -translate-x-1/2 pt-3 transition-all duration-200",
+                    solutionsOpen
+                      ? "pointer-events-auto translate-y-0 opacity-100"
+                      : "pointer-events-none translate-y-1 opacity-0",
+                  )}
+                >
+                  <div className="glass rounded-2xl p-2 shadow-[0_16px_48px_rgba(16,23,19,0.14)]">
+                    {SOLUTIONS.map((s) => (
+                      <Link
+                        key={s.to}
+                        to={s.to}
+                        className="group flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-charcoal/5"
+                      >
+                        <span className="mask-round h-14 w-20 shrink-0 bg-sage">
+                          <img
+                            src={s.image}
+                            alt=""
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                            width={80}
+                            height={56}
+                          />
+                        </span>
+                        <span>
+                          <span className="block text-sm font-semibold text-foreground">
+                            {s.title}
+                          </span>
+                          <span className="block text-xs text-muted-foreground">{s.blurb}</span>
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <HeaderLink to="/" hash="journey" label="Our approach" />
-            <HeaderLink to="/about" label="About" />
-            <HeaderLink to="/contact" label="Contact" />
+              <HeaderLink to="/" hash="journey" label="Our approach" compact={compact} />
+              <HeaderLink to="/about" label="About" compact={compact} />
+              <HeaderLink to="/contact" label="Contact" compact={compact} />
 
-            <Link
-              to="/contact"
-              className="ml-3 inline-flex items-center gap-2 rounded-full bg-leaf px-5 py-2.5 text-sm font-semibold text-charcoal transition-all duration-200 hover:bg-leaf-soft hover:shadow-[0_6px_20px_rgba(104,169,67,0.35)]"
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "mx-1 h-5 w-px bg-charcoal/12 transition-opacity duration-500",
+                  compact ? "opacity-100" : "opacity-0",
+                )}
+              />
+
+              <Link
+                to="/contact"
+                className={cn(
+                  "ml-2 inline-flex items-center gap-2 rounded-full bg-leaf font-semibold text-charcoal transition-all duration-200 hover:bg-leaf-soft hover:shadow-[0_6px_20px_rgba(104,169,67,0.35)]",
+                  compact ? "px-4 py-1.5 text-[13px]" : "px-5 py-2.5 text-sm",
+                )}
+              >
+                Get a free quote
+              </Link>
+            </nav>
+
+            {/* Mobile trigger */}
+            <button
+              ref={menuButtonRef}
+              type="button"
+              className={cn(
+                "inline-flex items-center justify-center rounded-full",
+                SETTLE,
+                compact ? "size-9 bg-ivory-bright ring-1 ring-charcoal/10" : "glass size-11",
+              )}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              onClick={() => setMenuOpen((v) => !v)}
             >
-              Get a free quote
-            </Link>
-          </nav>
+              {menuOpen ? (
+                <X className="size-5" aria-hidden="true" />
+              ) : (
+                <Menu className="size-5" aria-hidden="true" />
+              )}
+            </button>
+          </div>
 
-          {/* Mobile trigger */}
-          <button
-            ref={menuButtonRef}
-            type="button"
-            className="glass inline-flex size-11 items-center justify-center rounded-full md:hidden"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-menu"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMenuOpen((v) => !v)}
+          {/* Reading rail: how far through the page you are */}
+          <div
+            aria-hidden="true"
+            className={cn(
+              "pointer-events-none absolute inset-x-6 bottom-0 h-[2px] overflow-hidden rounded-full bg-charcoal/8 transition-opacity duration-[520ms]",
+              compact ? "opacity-100" : "opacity-0",
+            )}
           >
-            {menuOpen ? <X className="size-5" aria-hidden="true" /> : <Menu className="size-5" aria-hidden="true" />}
-          </button>
+            <div ref={railRef} className="h-full origin-left scale-x-0 bg-leaf" />
+          </div>
         </div>
       </header>
 
@@ -244,12 +332,25 @@ export function SiteHeader() {
   );
 }
 
-function HeaderLink({ to, hash, label }: { to: string; hash?: string; label: string }) {
+function HeaderLink({
+  to,
+  hash,
+  label,
+  compact,
+}: {
+  to: string;
+  hash?: string;
+  label: string;
+  compact: boolean;
+}) {
   return (
     <Link
       to={to}
       {...(hash ? { hash } : {})}
-      className="rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-charcoal/5"
+      className={cn(
+        "rounded-full text-sm font-medium transition-colors hover:bg-charcoal/5",
+        compact ? "px-3 py-1.5" : "px-4 py-2",
+      )}
       activeProps={{ className: "text-forest font-semibold" }}
     >
       {label}
