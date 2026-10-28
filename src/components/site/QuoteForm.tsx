@@ -87,16 +87,16 @@ export function QuoteForm({ initialServices }: { initialServices?: string[] }) {
   const validateStep = (s: number): boolean => {
     const next: Record<string, string> = {};
     if (s === 0 && data.services.length === 0) {
-      next.services = "Choose at least one option, or select guidance.";
+      next["services"] = "Choose at least one option, or select guidance.";
     }
     if (s === 1) {
-      if (!isValidPostcode(data.postcode)) next.postcode = "Enter a four-digit Australian postcode.";
+      if (!isValidPostcode(data.postcode)) next["postcode"] = "Enter a four-digit Australian postcode.";
     }
     if (s === 2) {
-      if (!data.name.trim()) next.name = "Enter your name.";
-      if (!isValidAuPhone(data.phone)) next.phone = "Enter a valid Australian phone number.";
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) next.email = "Enter a valid email address.";
-      if (!data.consent) next.consent = "We need your consent to respond to this enquiry.";
+      if (!data.name.trim()) next["name"] = "Enter your name.";
+      if (!isValidAuPhone(data.phone)) next["phone"] = "Enter a valid Australian phone number.";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) next["email"] = "Enter a valid email address.";
+      if (!data.consent) next["consent"] = "We need your consent to respond to this enquiry.";
     }
     setErrors(next);
     return Object.keys(next).length === 0;
