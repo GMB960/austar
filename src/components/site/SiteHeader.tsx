@@ -148,7 +148,7 @@ export function SiteHeader() {
               </div>
             </div>
 
-            <HeaderLink to="/#journey" label="Our approach" />
+            <HeaderLink to="/" hash="journey" label="Our approach" />
             <HeaderLink to="/about" label="About" />
             <HeaderLink to="/contact" label="Contact" />
 
@@ -205,7 +205,8 @@ export function SiteHeader() {
                 Home
               </Link>
               <Link
-                to="/#journey"
+                to="/"
+                hash="journey"
                 className="block rounded-2xl px-5 py-4 text-lg font-semibold text-foreground"
               >
                 Our approach
@@ -243,10 +244,11 @@ export function SiteHeader() {
   );
 }
 
-function HeaderLink({ to, label }: { to: string; label: string }) {
+function HeaderLink({ to, hash, label }: { to: string; hash?: string; label: string }) {
   return (
     <Link
       to={to}
+      hash={hash}
       className="rounded-full px-4 py-2 text-sm font-medium transition-colors hover:bg-charcoal/5"
       activeProps={{ className: "text-forest font-semibold" }}
     >
