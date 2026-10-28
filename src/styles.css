@@ -462,7 +462,6 @@ html[data-reduced-motion="user"] .faq-questions { opacity: 1 !important; transfo
 /* ---------------------------- chapter strip ------------------------------ */
 /* Pinned horizontal filmstrip: scroll drives the track sideways, each panel
    carries a real photograph and its own writing. */
-.chapter-stage { position: relative; }
 .chapter-track {
   perspective: 1500px;
   will-change: transform;
