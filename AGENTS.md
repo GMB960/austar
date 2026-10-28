@@ -36,8 +36,8 @@
 
 ## Closing chapter strip (src/components/home/ChapterStrip.tsx)
 
-- Keep the closing section's chapters as one pinned horizontal filmstrip driven by a single rAF loop, each chapter holding centred before it slides; avoid perspective/rotateY on the panels, because 3D lean pulls a neighbouring photo across the reading text.
-- Drive the narrow-screen and reduced-motion stacking from CSS overrides on `chapter-section`/`chapter-wrapper`/`chapter-stage` rather than from React state, so a server-rendered or stale pinned layout can never leave chapters sideways or invisible.
+- Keep the closing section's chapters as one pinned, full-bleed scroll story driven by a single rAF loop: scroll crossfades full-screen real photographs, each scene carrying its own centred writing that fades/lifts as the next photo takes over; depth comes from Ken Burns push-in and drift only, never perspective/rotateY, so text always sits clean over the photo.
+- Decide the stacked fallback for narrow screens and reduced-motion visitors in JS via matchMedia (not CSS overrides), so a server-rendered or stale pinned layout can never leave chapters sideways or invisible.
 
 ## Brand mark and palette tokens
 

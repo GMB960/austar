@@ -461,32 +461,27 @@ html[data-reduced-motion="user"] .faq-questions { opacity: 1 !important; transfo
 }
 
 /* ---------------------------- chapter strip ------------------------------ */
-/* Pinned horizontal filmstrip: scroll drives the track sideways, each panel
-   carries a real photograph and its own writing. Depth comes from scale and
-   fade only — no perspective, so a neighbouring panel can never lean over. */
-.chapter-track {
+/* Full-bleed scroll story: scroll crossfades full-screen photographs, each
+   carrying its own centred writing. Depth comes from Ken Burns push-in and
+   drift only — no perspective, so text always sits clean over the photo. */
+.chapter-scene {
+  will-change: opacity;
+}
+.chapter-scene-img {
   will-change: transform;
 }
-.chapter-panel {
-  backface-visibility: hidden;
+.chapter-text {
   will-change: transform, opacity;
 }
 .chapter-frame {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4 / 3;
-  border: 3px solid var(--ivory-bright);
-  border-radius: 10px;
-  box-shadow:
-    0 46px 80px -34px rgb(0 0 0 / 70%),
-    0 3px 0 rgb(255 255 255 / 12%);
+  aspect-ratio: 16 / 10;
 }
 .chapter-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1.14);
-  will-change: transform;
 }
 .chapter-num {
   position: absolute;
@@ -510,64 +505,12 @@ html[data-reduced-motion="user"] .faq-questions { opacity: 1 !important; transfo
   color: var(--leaf);
   white-space: nowrap;
 }
-.chapter-text { will-change: transform, opacity; }
 .chapter-rail {
   position: absolute;
   inset: auto 20px 26px;
   z-index: 20;
 }
-/* Fallback: narrow screens and reduced-motion visitors get the same
-   chapters stacked vertically instead of pinned sideways. */
-@media (max-width: 767px), (prefers-reduced-motion: reduce) {
-  .chapter-section,
-  .chapter-wrapper { height: auto !important; }
-  .chapter-stage {
-    position: static !important;
-    height: auto !important;
-    overflow: visible !important;
-  }
-  .chapter-track {
-    flex-direction: column !important;
-    transform: none !important;
-  }
-  .chapter-panel {
-    width: 100% !important;
-    height: auto !important;
-    transform: none !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-  .chapter-text {
-    transform: none !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-  .chapter-frame { aspect-ratio: 16 / 10; }
-}
-/* keep the last chapter clear of the floating mobile action bar */
+/* keep the invitation clear of the floating mobile action bar */
 @media (max-width: 767px) {
   .chapter-section { padding-bottom: 132px; }
-}
-html[data-reduced-motion="user"] .chapter-section,
-html[data-reduced-motion="user"] .chapter-wrapper { height: auto !important; }
-html[data-reduced-motion="user"] .chapter-stage {
-  position: static !important;
-  height: auto !important;
-  overflow: visible !important;
-}
-html[data-reduced-motion="user"] .chapter-track {
-  flex-direction: column !important;
-  transform: none !important;
-}
-html[data-reduced-motion="user"] .chapter-panel {
-  width: 100% !important;
-  height: auto !important;
-  transform: none !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-html[data-reduced-motion="user"] .chapter-text {
-  transform: none !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
 }
