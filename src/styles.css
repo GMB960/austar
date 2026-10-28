@@ -543,6 +543,10 @@ html[data-reduced-motion="user"] .faq-questions { opacity: 1 !important; transfo
   }
   .chapter-frame { aspect-ratio: 16 / 10; }
 }
+/* keep the last chapter clear of the floating mobile action bar */
+@media (max-width: 767px) {
+  .chapter-section { padding-bottom: 132px; }
+}
 html[data-reduced-motion="user"] .chapter-section,
 html[data-reduced-motion="user"] .chapter-wrapper { height: auto !important; }
 html[data-reduced-motion="user"] .chapter-stage {
