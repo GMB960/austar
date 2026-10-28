@@ -168,8 +168,14 @@ export function ChapterStrip() {
           smooth += (target - smooth) * 0.11;
           if (Math.abs(target - smooth) < 0.0002) smooth = target;
 
-          const width = stage.clientWidth;
-          const p = smooth * (PANELS - 1);
+          const width = panelRefs.current[0]?.offsetWidth || stage.clientWidth;
+          // hold each chapter centred for most of its scroll, then slide to the next
+          const seg = 1 / (PANELS - 1);
+          const idx = Math.min(PANELS - 2, Math.floor(smooth / seg));
+          const local = clamp((smooth - idx * seg) / seg);
+          const slide = clamp((local - 0.42) / 0.58);
+          const eased = slide < 0.5 ? 4 * slide ** 3 : 1 - (-2 * slide + 2) ** 3 / 2;
+          const p = idx + eased;
           track.style.transform = `translate3d(${-p * width}px, 0, 0)`;
 
           for (let i = 0; i < PANELS; i++) {
@@ -177,20 +183,18 @@ export function ChapterStrip() {
             const a = Math.abs(off);
             const panel = panelRefs.current[i];
             if (panel) {
-              const sink = clamp(a, 0, 1);
-              // no sideways shift: each panel stays in its own slot so an
-              // incoming photo can never land on top of a neighbour's copy
+              const sink = clamp((a - 0.28) / 0.72);
               panel.style.transform = `translate3d(0, 0, ${-sink * 170}px) rotateY(${clamp(off, -1.3, 1.3) * -7}deg) scale(${1 - sink * 0.06})`;
-              panel.style.opacity = String(1 - sink * 0.78);
-              panel.style.visibility = a > 1.6 ? "hidden" : "visible";
+              panel.style.opacity = String(1 - sink * 0.8);
+              panel.style.visibility = a > 1.35 ? "hidden" : "visible";
             }
             const photo = photoRefs.current[i];
             if (photo) {
-              photo.style.transform = `translate3d(${clamp(off, -1.5, 1.5) * -3.5}%, 0, 0) scale(${1.14 - clamp(a, 0, 1) * 0.05})`;
+              photo.style.transform = `translate3d(${clamp(off, -1.4, 1.4) * -3.5}%, 0, 0) scale(${1.14 - clamp(a, 0, 1) * 0.05})`;
             }
             const text = textRefs.current[i];
             if (text) {
-              const f = clamp(1 - a * 2.4);
+              const f = clamp(1 - Math.max(0, a - 0.3) / 0.45);
               text.style.opacity = String(f);
               text.style.transform = `translate3d(0, ${(1 - f) * 42}px, 0)`;
               text.style.pointerEvents = f > 0.55 ? "auto" : "none";
