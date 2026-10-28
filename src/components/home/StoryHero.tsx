@@ -169,7 +169,7 @@ export function StoryHero({ children }: { children?: ReactNode }) {
         <section className="relative h-[92svh] min-h-[560px] overflow-hidden">
           <img src={houseModern.url} alt="Modern Australian home" className="absolute inset-0 h-full w-full object-cover" fetchPriority="high" />
           <div className="absolute inset-0 bg-gradient-to-r from-ivory/90 via-ivory/50 to-transparent" />
-          <div className="relative z-10 flex h-full items-center">
+          <div className="relative z-10 flex h-full items-center pt-16 pb-6 md:pt-20">
             <HeroCopy />
           </div>
         </section>
@@ -224,7 +224,7 @@ export function StoryHero({ children }: { children?: ReactNode }) {
             ref={(el) => {
               copyRefs.current[0] = el;
             }}
-            className="absolute inset-0 z-10 flex items-center"
+            className="absolute inset-0 z-10 flex items-center pt-16 pb-6 md:pt-20"
           >
             <HeroCopy />
           </div>
@@ -344,9 +344,9 @@ export function StoryHero({ children }: { children?: ReactNode }) {
 function HeroCopy() {
   return (
     <div className="mx-auto w-full max-w-[1440px] px-5 md:px-8">
-      <div className="max-w-[620px]">
+      <div className="max-w-[860px]">
         <p className="eyebrow text-forest/80">{HERO_COPY.eyebrow}</p>
-        <h1 className="mt-5 font-display font-extrabold leading-[0.98] tracking-[-0.035em] text-charcoal [font-size:clamp(42px,10vw,60px)] md:[font-size:clamp(64px,7.5vw,120px)]">
+        <h1 className="mt-5 font-display font-extrabold leading-[0.98] tracking-[-0.035em] text-charcoal [font-size:clamp(42px,9vw,60px)] md:[font-size:clamp(60px,6.6vw,96px)]">
           {HERO_COPY.headline.map((line) => (
             <span key={line} className="block overflow-hidden">
               <span className="block [transform:translateY(110%)] animate-[heroRise_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards]">{line}</span>
