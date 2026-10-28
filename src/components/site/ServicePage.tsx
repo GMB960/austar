@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Phone } from "lucide-react";
 
+import { TiltCard } from "@/components/site/TiltCard";
 import { PhotoFrame } from "@/components/site/PhotoFrame";
 import { Reveal, RevealLines, useRevealContainer } from "@/components/site/Reveal";
 import { SITE } from "@/lib/site";
@@ -86,22 +87,37 @@ export function ServicePage({
       </section>
 
       {/* what the journey covers */}
-      <section className="bg-sage/40 py-16 md:py-24">
-        <div className="mx-auto max-w-[1440px] px-5 md:px-8">
+      <section className="relative overflow-hidden bg-forest-deep py-20 md:py-28">
+        <div aria-hidden="true" className="pointer-events-none absolute -left-40 top-10 size-[520px] rounded-full bg-leaf/20 blur-[120px]" />
+        <div aria-hidden="true" className="pointer-events-none absolute -right-32 bottom-0 size-[460px] rounded-full bg-leaf-bright/10 blur-[120px]" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.07] [background-image:radial-gradient(var(--color-ivory-bright)_1px,transparent_1px)] [background-size:22px_22px]" />
+        <div className="relative mx-auto max-w-[1440px] px-5 md:px-8">
+          <p className="eyebrow text-leaf-soft">Step by step</p>
           <RevealLines
             lines={["What the conversation covers."]}
-            className="font-display text-3xl font-extrabold tracking-tight text-charcoal md:text-5xl"
+            className="mt-4 font-display text-3xl font-extrabold tracking-tight text-ivory-bright md:text-5xl"
           />
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="relative mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div aria-hidden="true" className="absolute left-0 right-0 top-[58px] hidden h-px bg-gradient-to-r from-transparent via-leaf/50 to-transparent lg:block" />
             {sections.map((s, i) => (
-              <Reveal key={s.title} delay={i * 80} className="rounded-3xl bg-ivory-bright p-6 shadow-[0_10px_36px_rgba(16,23,19,0.06)]">
-                <p className="font-display text-3xl font-extrabold text-leaf">{String(i + 1).padStart(2, "0")}</p>
-                <h3 className="mt-3 font-display text-lg font-bold text-charcoal">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{s.body}</p>
+              <Reveal key={s.title} delay={i * 120} className="h-full">
+                <TiltCard className="rounded-[28px] p-px [background:linear-gradient(150deg,color-mix(in_oklab,var(--color-leaf)_70%,transparent),color-mix(in_oklab,var(--color-ivory-bright)_8%,transparent)_45%,color-mix(in_oklab,var(--color-leaf)_25%,transparent))] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.55)]">
+                  <div className="relative flex h-full flex-col overflow-hidden rounded-[27px] bg-forest-deep/90 p-7 backdrop-blur-xl [transform-style:preserve-3d]">
+                    <span aria-hidden="true" className="pointer-events-none absolute -right-3 -top-6 font-display text-[120px] font-extrabold leading-none text-transparent [-webkit-text-stroke:1px_color-mix(in_oklab,var(--color-leaf)_35%,transparent)]">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="relative flex size-12 items-center justify-center rounded-2xl bg-leaf font-display text-base font-extrabold text-charcoal shadow-[0_10px_30px_-6px_color-mix(in_oklab,var(--color-leaf)_70%,transparent)] [transform:translateZ(40px)]">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="relative mt-8 font-display text-xl font-bold text-ivory-bright [transform:translateZ(30px)]">{s.title}</h3>
+                    <p className="relative mt-3 text-sm leading-relaxed text-ivory-bright/70 [transform:translateZ(18px)]">{s.body}</p>
+                    <span aria-hidden="true" className="relative mt-auto block h-1 w-12 rounded-full bg-leaf/60 pt-0 [margin-top:2rem]" />
+                  </div>
+                </TiltCard>
               </Reveal>
             ))}
           </div>
-          <Reveal className="mt-8 max-w-2xl text-xs leading-relaxed text-muted-foreground">{offersNotice}</Reveal>
+          <Reveal className="mt-10 max-w-2xl text-xs leading-relaxed text-ivory-bright/55">{offersNotice}</Reveal>
         </div>
       </section>
 
@@ -115,7 +131,8 @@ export function ServicePage({
             />
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {highlights.map((h, i) => (
-                <Reveal key={h.title} delay={i * 90} className="group overflow-hidden rounded-3xl bg-ivory-bright shadow-[0_10px_36px_rgba(16,23,19,0.07)]">
+                <Reveal key={h.title} delay={i * 90} className="h-full">
+                <TiltCard max={7} className="group overflow-hidden rounded-3xl bg-ivory-bright ring-1 ring-charcoal/5 shadow-[0_24px_50px_-18px_rgba(16,23,19,0.25)]">
                   <div className="aspect-[4/3] overflow-hidden bg-sage">
                     <img src={h.image} alt={h.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   </div>
@@ -123,6 +140,7 @@ export function ServicePage({
                     <h3 className="font-display text-xl font-bold text-charcoal">{h.title}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{h.body}</p>
                   </div>
+                </TiltCard>
                 </Reveal>
               ))}
             </div>
