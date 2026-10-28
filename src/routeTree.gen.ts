@@ -10,33 +10,92 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AirConditioningRouteImport } from './routes/air-conditioning'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as HeatPumpsRouteImport } from './routes/heat-pumps'
+import { Route as SolarRouteImport } from './routes/solar'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AirConditioningRoute = AirConditioningRouteImport.update({
+  id: '/air-conditioning',
+  path: '/air-conditioning',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HeatPumpsRoute = HeatPumpsRouteImport.update({
+  id: '/heat-pumps',
+  path: '/heat-pumps',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SolarRoute = SolarRouteImport.update({
+  id: '/solar',
+  path: '/solar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/air-conditioning': typeof AirConditioningRoute
+  '/contact': typeof ContactRoute
+  '/heat-pumps': typeof HeatPumpsRoute
+  '/solar': typeof SolarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/air-conditioning': typeof AirConditioningRoute
+  '/contact': typeof ContactRoute
+  '/heat-pumps': typeof HeatPumpsRoute
+  '/solar': typeof SolarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/air-conditioning': typeof AirConditioningRoute
+  '/contact': typeof ContactRoute
+  '/heat-pumps': typeof HeatPumpsRoute
+  '/solar': typeof SolarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/about' | '/air-conditioning' | '/contact' | '/heat-pumps' | '/solar'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    '/' | '/about' | '/air-conditioning' | '/contact' | '/heat-pumps' | '/solar'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/air-conditioning'
+    | '/contact'
+    | '/heat-pumps'
+    | '/solar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AirConditioningRoute: typeof AirConditioningRoute
+  ContactRoute: typeof ContactRoute
+  HeatPumpsRoute: typeof HeatPumpsRoute
+  SolarRoute: typeof SolarRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +107,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/air-conditioning': {
+      id: '/air-conditioning'
+      path: '/air-conditioning'
+      fullPath: '/air-conditioning'
+      preLoaderRoute: typeof AirConditioningRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/heat-pumps': {
+      id: '/heat-pumps'
+      path: '/heat-pumps'
+      fullPath: '/heat-pumps'
+      preLoaderRoute: typeof HeatPumpsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/solar': {
+      id: '/solar'
+      path: '/solar'
+      fullPath: '/solar'
+      preLoaderRoute: typeof SolarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AirConditioningRoute: AirConditioningRoute,
+  ContactRoute: ContactRoute,
+  HeatPumpsRoute: HeatPumpsRoute,
+  SolarRoute: SolarRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
