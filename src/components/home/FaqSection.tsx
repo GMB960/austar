@@ -31,44 +31,80 @@ export function FaqSection() {
     if (!el || !root) return;
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
+    let visible = false;
+    let pointerX = 0;
+    let pointerY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    const reduced = () => motion.matches || document.documentElement.dataset.reducedMotion === "user";
     const update = () => {
       frame = 0;
-      if (motion.matches) { el.style.transform = "none"; return; }
+      if (reduced()) { el.style.transform = "none"; el.style.setProperty("--faq-spread", "0.5"); return; }
       const rect = root.getBoundingClientRect();
       const p = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
-      el.style.transform = `perspective(1100px) rotateX(${10 - p * 16}deg) rotateY(${-13 + p * 22}deg) translateY(${24 - p * 40}px)`;
+      currentX += (pointerX - currentX) * 0.12;
+      currentY += (pointerY - currentY) * 0.12;
+      el.style.transform = `rotateX(${9 - p * 14 - currentY * 6}deg) rotateY(${-12 + p * 20 + currentX * 10}deg) translateY(${28 - p * 48}px)`;
+      el.style.setProperty("--faq-spread", String(p));
+      if (visible && (Math.abs(pointerX - currentX) > 0.005 || Math.abs(pointerY - currentY) > 0.005)) frame = requestAnimationFrame(update);
     };
     const scroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const move = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse" || reduced()) return;
+      const rect = el.getBoundingClientRect();
+      pointerX = Math.max(-1, Math.min(1, (event.clientX - rect.left) / rect.width * 2 - 1));
+      pointerY = Math.max(-1, Math.min(1, (event.clientY - rect.top) / rect.height * 2 - 1));
+      scroll();
+    };
+    const leave = () => { pointerX = 0; pointerY = 0; scroll(); };
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry?.isIntersecting ?? false;
+      root.dataset.faqVisible = String(visible);
+      if (visible) scroll();
+    }, { threshold: 0.12 });
+    observer.observe(root);
+    const preferenceObserver = new MutationObserver(scroll);
+    preferenceObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-reduced-motion"] });
     update();
     window.addEventListener("scroll", scroll, { passive: true });
+    window.addEventListener("resize", scroll);
+    el.addEventListener("pointermove", move);
+    el.addEventListener("pointerleave", leave);
     motion.addEventListener("change", scroll);
-    return () => { window.removeEventListener("scroll", scroll); motion.removeEventListener("change", scroll); cancelAnimationFrame(frame); };
+    return () => {
+      observer.disconnect(); preferenceObserver.disconnect();
+      window.removeEventListener("scroll", scroll); window.removeEventListener("resize", scroll);
+      el.removeEventListener("pointermove", move); el.removeEventListener("pointerleave", leave);
+      motion.removeEventListener("change", scroll); cancelAnimationFrame(frame);
+    };
   }, []);
   const shown = questions.filter(q => topic === "All questions" || q.topic === topic);
-  return <section ref={section} id="questions" className="overflow-hidden border-t border-border bg-background py-20 md:py-28">
+  return <section ref={section} id="questions" className="faq-section overflow-hidden border-t border-border bg-background py-20 md:py-28">
     <div className="mx-auto max-w-[1440px] px-5 md:px-8">
       <div className="mb-12 flex items-center justify-between border-b border-border pb-5"><p className="eyebrow text-primary">A little clarity</p><span className="text-xs text-muted-foreground">Before your next upgrade</span></div>
       <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
-        <div>
+        <div className="faq-intro">
           <h2 className="font-display text-4xl font-extrabold leading-[1.1] tracking-normal md:text-5xl">Good questions.<br /><span className="text-primary">Clearer possibilities.</span></h2>
           <p className="mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground">From choosing an upgrade to checking eligibility — the details that help you take the next step with confidence.</p>
-          <div ref={deck} className="faq-photo-deck relative mx-auto mt-10 h-[270px] w-full max-w-[410px]">
+          <div className="faq-photo-stage relative mx-auto mt-10 w-full max-w-[410px]">
+          <div ref={deck} className="faq-photo-deck relative h-[290px] w-full">
             <figure className="faq-photo faq-photo-back"><img src={hotwater.url} alt="Heat pump hot water equipment installed beside a home" loading="lazy" /><figcaption><Droplets className="size-4" />Hot water</figcaption></figure>
             <figure className="faq-photo faq-photo-middle"><img src={comfort.url} alt="Comfortable modern living room" loading="lazy" /><figcaption><Wind className="size-4" />Indoor comfort</figcaption></figure>
             <figure className="faq-photo faq-photo-front"><img src={solar.url} alt="Real solar panels on a residential roof" loading="lazy" /><figcaption><Sun className="size-4" />Solar</figcaption></figure>
+          </div>
           </div>
           <p className="mt-2 text-center text-[10px] text-muted-foreground">Illustrative photography</p>
           <div className="mt-8 flex items-start gap-3 border-t border-border pt-6"><ShieldCheck className="mt-1 size-5 shrink-0 text-primary" /><div><p className="text-sm font-semibold">Advice specific to your home.</p><p className="mt-1 max-w-sm text-xs leading-relaxed text-muted-foreground">Your location, property and existing system all matter. Ask us to review your circumstances.</p></div></div>
           <Button asChild variant="link" className="mt-3 h-10 px-0"><Link to="/contact">Ask your own question<ArrowUpRight /></Link></Button>
         </div>
-        <div className="min-w-0">
+        <div className="faq-questions min-w-0">
           <div role="group" aria-label="Question topics" className="mb-6 flex flex-wrap gap-2">
             {topics.map(t => <Button key={t} variant={topic === t ? "default" : "outline"} aria-pressed={topic === t} onClick={() => { setTopic(t); setOpen(questions.find(q => t === "All questions" || q.topic === t)?.id ?? ""); }} className="h-10 px-4">{t}</Button>)}
           </div>
-          <Accordion type="single" collapsible value={open} onValueChange={setOpen}>
+          <Accordion key={topic} type="single" collapsible value={open} onValueChange={setOpen} className="faq-accordion">
             {shown.map(q => <AccordionItem key={q.id} value={q.id} className="faq-answer border-border data-[state=open]:border-primary/30">
               <AccordionTrigger className="gap-4 py-6 font-display text-base font-semibold leading-relaxed hover:no-underline data-[state=open]:text-primary"><span className="flex items-start gap-4"><span className="pt-1 font-sans text-[10px] font-normal text-muted-foreground">{String(questions.indexOf(q) + 1).padStart(2, "0")}</span>{q.q}</span></AccordionTrigger>
-              <AccordionContent className="pl-7 pr-4 pb-6"><p className="max-w-xl text-sm leading-relaxed text-muted-foreground">{q.a}</p><ul className="mt-4 space-y-2.5">{q.points.map(point => <li key={point} className="flex items-start gap-2.5 text-xs leading-relaxed text-foreground"><Check className="mt-0.5 size-3.5 shrink-0 text-primary" />{point}</li>)}</ul></AccordionContent>
+              <AccordionContent className="faq-answer-body pl-7 pr-4 pb-6"><p className="max-w-xl text-sm leading-relaxed text-muted-foreground">{q.a}</p><ul className="mt-4 space-y-2.5">{q.points.map(point => <li key={point} className="flex items-start gap-2.5 text-xs leading-relaxed text-foreground"><Check className="mt-0.5 size-3.5 shrink-0 text-primary" />{point}</li>)}</ul></AccordionContent>
             </AccordionItem>)}
           </Accordion>
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-5"><p className="text-xs text-muted-foreground">Prefer a conversation?</p><Button asChild variant="link" className="px-0"><a href={SITE.phoneHref}><Phone />{SITE.phoneDisplay}</a></Button></div>
