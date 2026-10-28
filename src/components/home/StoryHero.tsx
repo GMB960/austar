@@ -186,6 +186,7 @@ export function StoryHero({ children }: { children?: ReactNode }) {
   const desktop = useScene && !isMobile;
 
   return (
+    <>
     <div ref={wrapperRef} className={desktop ? "relative h-[430vh]" : "relative"} aria-label="Austar Energy story">
       <div
         ref={viewportRef}
@@ -363,6 +364,7 @@ export function StoryHero({ children }: { children?: ReactNode }) {
           </div>
         )}
       </div>
+    </div>
 
       {/* Accessible hotspot equivalents */}
       {useScene && (
