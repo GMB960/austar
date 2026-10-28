@@ -85,8 +85,9 @@ function Atlas({ selected, onSelect, progress }: Props) {
     const p = progress.current;
     const dt = Math.min(delta, 0.05);
     const lerp = 1 - Math.exp(-5 * dt);
-    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, reduced.current ? -0.12 : -0.22 + p * 0.36, lerp);
-    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, reduced.current ? 0 : -0.18 + p * 0.32 + state.pointer.x * 0.07, lerp);
+    state.camera.position.z = Math.max(17, 6.4 / (Math.tan(Math.PI / 9) * (state.size.width / state.size.height)));
+    group.current.rotation.x = THREE.MathUtils.lerp(group.current.rotation.x, reduced.current ? 0.22 : 0.08 + p * 0.48, lerp);
+    group.current.rotation.y = THREE.MathUtils.lerp(group.current.rotation.y, reduced.current ? -0.12 : -0.38 + p * 0.32 + state.pointer.x * 0.07, lerp);
     group.current.rotation.z = THREE.MathUtils.lerp(group.current.rotation.z, reduced.current ? 0 : -0.06 + p * 0.12, lerp);
     if (!ready.current) {
       state.gl.domElement.closest("[data-map-scene]")?.setAttribute("data-scene-ready", "true");
