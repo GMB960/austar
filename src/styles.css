@@ -70,6 +70,8 @@
   --amber-soft: oklch(0.906 0.075 84);
   --sage: oklch(0.918 0.016 131);
   --stone: oklch(0.573 0.021 141);
+  --map-land: oklch(0.43 0.035 155);
+  --map-edge: oklch(0.76 0.035 140);
 
   --background: var(--ivory);
   --foreground: var(--charcoal);
@@ -280,3 +282,31 @@ html[data-reduced-motion="user"] .drift {
     transform: translateY(0);
   }
 }
+
+/* Unframed, illuminated geographical atlas. */
+.atlas-canvas { isolation: isolate; }
+.atlas-canvas::before {
+  content: "";
+  position: absolute;
+  inset: 10% 0;
+  pointer-events: none;
+  background-image: linear-gradient(color-mix(in oklab, var(--ivory) 4%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--ivory) 4%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse, var(--charcoal) 20%, transparent 70%);
+}
+.atlas-pin {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 9px;
+  border-radius: 4px;
+  border: 1px solid color-mix(in oklab, var(--ivory) 18%, transparent);
+  background: color-mix(in oklab, var(--charcoal) 90%, transparent);
+  color: var(--ivory);
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 6px 18px color-mix(in oklab, var(--charcoal) 35%, transparent);
+}
+.atlas-pin-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--leaf); }
+.atlas-pin-vic .atlas-pin-dot { background: var(--amber); }

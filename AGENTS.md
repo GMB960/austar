@@ -17,3 +17,9 @@
   `StoryCanvas.tsx` is no longer used.
 - Use Tailwind `[transform:...]` rather than `translate-*` utilities on elements
   animated with keyframes that set `transform` (v4 `translate` stacks and hides them).
+
+## Service-area atlas
+
+- Keep the service-area WebGL scene lazy-loaded after the section approaches the viewport; this preserves SSR and avoids loading 3D for the photographic hero.
+- Use the geographically sourced state rings in `src/lib/australia-map.json`, derived from rowanhogan/australian-states, instead of hand-drawn state silhouettes.
+- Resolve semantic CSS colors to sRGB inside the mounted scene; Three.js does not parse the site's oklch tokens directly.
