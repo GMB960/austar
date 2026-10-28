@@ -371,9 +371,9 @@ html[data-reduced-motion="user"] .drift {
   position: relative;
   isolation: isolate;
   background:
-    radial-gradient(120% 90% at 4% -14%, var(--leaf-bright) 0%, transparent 58%),
-    radial-gradient(95% 75% at 102% 110%, var(--leaf-deep) 0%, transparent 55%),
-    linear-gradient(155deg, var(--leaf-soft) 0%, var(--leaf) 58%, var(--leaf-deep) 100%);
+    radial-gradient(115% 85% at 0% -10%, var(--leaf-bright) 0%, transparent 60%),
+    radial-gradient(90% 70% at 100% 108%, var(--leaf) 0%, transparent 60%),
+    linear-gradient(158deg, oklch(0.9 0.055 128) 0%, var(--leaf-soft) 55%, var(--leaf) 100%);
   color: var(--forest-deep);
 }
 .home-introduction::before {
@@ -391,11 +391,11 @@ html[data-reduced-motion="user"] .drift {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background-image: radial-gradient(circle at 1px 1px, oklch(0.24 0.04 158 / 20%) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, oklch(0.3 0.05 150 / 16%) 1px, transparent 0);
   background-size: 26px 26px;
   -webkit-mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
   mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
-  opacity: 0.45;
+  opacity: 0.4;
 }
 @keyframes home-intro-glow {
   from { transform: translate3d(-7%, 3%, 0) scale(1); }
