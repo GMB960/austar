@@ -84,7 +84,7 @@ function Atlas({ selected, onSelect, progress }: Props) {
         const elevation = id ? (id === selected ? 0.48 : 0.2) : 0;
         return <group key={`${g.name}-${i}`} position={[0, 0, elevation]}>
           <mesh geometry={g.geometry} material={id === "NSW" ? materials.nsw : id === "VIC" ? materials.vic : materials.land}
-            onClick={id ? () => onSelect(id) : undefined} />
+            onClick={() => { if (id) onSelect(id); }} />
           <lineSegments geometry={g.edges} material={materials.border} />
         </group>;
       })}
