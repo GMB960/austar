@@ -15,7 +15,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Check, Phone } from "lucide-react";
 
-import { Reveal, RevealLines } from "@/components/site/Reveal";
 import { SITE } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -344,7 +343,7 @@ export function ChapterStrip() {
           </div>
 
           {/* progress rail + jump labels */}
-          <div className="chapter-rail" aria-hidden="true">
+          <div className={cn("chapter-rail", reduced ? "hidden" : "hidden md:block")} aria-hidden="true">
             <div className="relative h-px w-full bg-ivory/15">
               <span
                 ref={railRef}
@@ -372,64 +371,6 @@ export function ChapterStrip() {
         </div>
       </div>
 
-      {/* Narrow screens / reduced motion: the same chapters, stacked */}
-      <div className="md:hidden">
-        {CHAPTERS.map((c) => (
-          <div key={c.id} className="border-t border-ivory/10 px-5 py-14">
-            <Reveal>
-              <figure className="overflow-hidden rounded-2xl border border-ivory/15">
-                <img src={c.image} alt={c.imageAlt} loading="lazy" className="h-56 w-full object-cover" />
-              </figure>
-              <div className="mt-6 flex items-baseline gap-3">
-                <span className="chapter-kicker">{c.kicker}</span>
-                <span className="h-px flex-1 bg-ivory/20" />
-                <span className="font-display text-xs font-bold tracking-[0.28em] text-ivory/40">{c.num}</span>
-              </div>
-              <h3 className="mt-4 font-display text-2xl font-extrabold tracking-tight text-ivory">{c.title}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-ivory/75">{c.copy}</p>
-              <ul className="mt-5 space-y-2.5">
-                {c.points.map((point) => (
-                  <li key={point} className="flex items-start gap-2.5 text-sm text-ivory/80">
-                    <Check className="mt-0.5 size-4 shrink-0 text-leaf" aria-hidden="true" />
-                    {point}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to={c.to}
-                className="mt-6 inline-flex items-center gap-2 border-b border-ivory/25 pb-1 text-sm font-semibold text-ivory hover:border-leaf hover:text-leaf"
-              >
-                {c.cta}
-                <ArrowRight className="size-4" aria-hidden="true" />
-              </Link>
-            </Reveal>
-          </div>
-        ))}
-        <div className="border-t border-ivory/10 px-5 py-16 text-center">
-          <RevealLines
-            lines={["Your home. A brighter", "next chapter."]}
-            className="font-display font-extrabold tracking-tight text-ivory [font-size:clamp(30px,9vw,44px)]"
-          />
-          <Reveal className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-ivory/75">
-            Tell us what you're planning. Let's explore the right next step — one upgrade or several.
-          </Reveal>
-          <Reveal delay={120} className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              to="/contact"
-              className="inline-flex items-center rounded-full bg-leaf px-7 py-3.5 text-sm font-semibold text-charcoal"
-            >
-              Get my personalised quote
-            </Link>
-            <a
-              href={SITE.phoneHref}
-              className="inline-flex items-center gap-2 rounded-full border border-ivory/30 bg-ivory/5 px-7 py-3.5 text-sm font-semibold text-ivory"
-            >
-              <Phone className="size-4" aria-hidden="true" />
-              Call {SITE.phoneDisplay}
-            </a>
-          </Reveal>
-        </div>
-      </div>
     </section>
   );
 }
