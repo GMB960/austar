@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, Menu, Phone, X } from "lucide-react";
 
+import solarThumb from "@/assets/solar-hip-roof.asset.json";
+import heatpumpThumb from "@/assets/heatpump-unit.asset.json";
+import loungeThumb from "@/assets/lounge.asset.json";
 import { LOGO_URL } from "@/lib/brand";
 import { SITE } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -11,27 +14,21 @@ const SOLUTIONS = [
     to: "/solar" as const,
     title: "Solar",
     blurb: "Put your roof to work with a system planned around your property.",
-    image: "solar-hip-roof",
+    image: solarThumb.url,
   },
   {
     to: "/heat-pumps" as const,
     title: "Heat pump hot water",
     blurb: "An efficient everyday upgrade for one of your home's essentials.",
-    image: "heatpump-unit",
+    image: heatpumpThumb.url,
   },
   {
     to: "/air-conditioning" as const,
     title: "Air conditioning",
     blurb: "Comfort for the rooms you live in, through every season.",
-    image: "lounge",
+    image: loungeThumb.url,
   },
 ];
-
-const SOLUTION_IMAGES: Record<string, string> = {
-  "solar-hip-roof": "",
-  "heatpump-unit": "",
-  lounge: "",
-};
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -133,7 +130,7 @@ export function SiteHeader() {
                     >
                       <span className="mask-round h-14 w-20 shrink-0 bg-sage">
                         <img
-                          src={SOLUTION_IMAGES[s.image]}
+                          src={s.image}
                           alt=""
                           className="h-full w-full object-cover"
                           loading="lazy"
