@@ -53,6 +53,8 @@
   --color-amber-soft: var(--amber-soft);
   --color-sage: var(--sage);
   --color-stone: var(--stone);
+  --color-leaf-bright: var(--leaf-bright);
+  --color-leaf-deep: var(--leaf-deep);
   --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
@@ -70,6 +72,8 @@
   --amber-soft: oklch(0.906 0.075 84);
   --sage: oklch(0.918 0.016 131);
   --stone: oklch(0.573 0.021 141);
+  --leaf-bright: oklch(0.855 0.072 126);
+  --leaf-deep: oklch(0.575 0.125 148);
   --map-land: oklch(0.43 0.035 155);
   --map-edge: oklch(0.76 0.035 140);
 
@@ -362,6 +366,48 @@ html[data-reduced-motion="user"] .drift {
 @keyframes faq-copy-enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @keyframes faq-expand { from { height: 0; } to { height: var(--radix-accordion-content-height); } }
 @keyframes faq-collapse { from { height: var(--radix-accordion-content-height); } to { height: 0; } }
+/* ============= Home introduction: bright green panel ============= */
+.home-introduction {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(115% 85% at 0% -10%, var(--leaf-bright) 0%, transparent 60%),
+    radial-gradient(90% 70% at 100% 108%, var(--leaf) 0%, transparent 60%),
+    linear-gradient(158deg, oklch(0.9 0.055 128) 0%, var(--leaf-soft) 55%, var(--leaf) 100%);
+  color: var(--forest-deep);
+}
+.home-introduction::before {
+  content: "";
+  position: absolute;
+  inset: -30% -20%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(38% 34% at 50% 50%, oklch(0.96 0.055 118 / 55%), transparent 72%);
+  animation: home-intro-glow 17s ease-in-out infinite alternate;
+}
+.home-introduction::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 1px 1px, oklch(0.3 0.05 150 / 16%) 1px, transparent 0);
+  background-size: 26px 26px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 18%, black 82%, transparent);
+  opacity: 0.4;
+}
+@keyframes home-intro-glow {
+  from { transform: translate3d(-7%, 3%, 0) scale(1); }
+  to { transform: translate3d(9%, -5%, 0) scale(1.14); }
+}
+.home-introduction .home-photo {
+  border-color: var(--ivory-bright);
+  box-shadow:
+    0 28px 52px -24px color-mix(in oklab, var(--forest-deep) 62%, transparent),
+    0 3px 0 color-mix(in oklab, var(--forest-deep) 20%, transparent);
+}
+
 .home-photo-perspective { perspective: 1400px; }
 .home-photo-scene {
   --home-progress: 0.5; --home-tilt-x: 0deg; --home-tilt-y: 0deg;
@@ -392,9 +438,11 @@ html[data-reduced-motion="user"] .drift {
   .home-photo figcaption { bottom: 6px; left: 4px; right: 4px; padding: 5px; font-size: 9px; gap: 4px; max-width: calc(100% - 8px); }
   .home-photo figcaption svg { width: 11px; height: 11px; }
 }
+html[data-reduced-motion="user"] .home-introduction::before { animation: none; }
 html[data-reduced-motion="user"] .home-photo-scene { transform: none; will-change: auto; }
 html[data-reduced-motion="user"] .home-photo img { animation: none; }
 @media (prefers-reduced-motion: reduce) {
+  .home-introduction::before { animation: none; }
   .home-photo-scene { transform: none; will-change: auto; }
   .home-photo img { animation: none; }
 }
@@ -409,4 +457,116 @@ html[data-reduced-motion="user"] .faq-questions { opacity: 1 !important; transfo
   .faq-section *, .faq-section *::before { animation: none !important; transition: none !important; }
   .faq-section .faq-intro, .faq-section .faq-questions { opacity: 1 !important; transform: none !important; }
   .faq-answer[data-state] { transform: none; }
+}
+
+/* ---------------------------- chapter strip ------------------------------ */
+/* Pinned horizontal filmstrip: scroll drives the track sideways, each panel
+   carries a real photograph and its own writing. Depth comes from scale and
+   fade only — no perspective, so a neighbouring panel can never lean over. */
+.chapter-track {
+  will-change: transform;
+}
+.chapter-panel {
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+.chapter-frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 3px solid var(--ivory-bright);
+  border-radius: 10px;
+  box-shadow:
+    0 46px 80px -34px rgb(0 0 0 / 70%),
+    0 3px 0 rgb(255 255 255 / 12%);
+}
+.chapter-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.14);
+  will-change: transform;
+}
+.chapter-num {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: rgb(7 16 11 / 62%);
+  backdrop-filter: blur(6px);
+  color: var(--ivory);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+}
+.chapter-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--leaf);
+  white-space: nowrap;
+}
+.chapter-text { will-change: transform, opacity; }
+.chapter-rail {
+  position: absolute;
+  inset: auto 20px 26px;
+  z-index: 20;
+}
+/* Fallback: narrow screens and reduced-motion visitors get the same
+   chapters stacked vertically instead of pinned sideways. */
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .chapter-section,
+  .chapter-wrapper { height: auto !important; }
+  .chapter-stage {
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .chapter-track {
+    flex-direction: column !important;
+    transform: none !important;
+  }
+  .chapter-panel {
+    width: 100% !important;
+    height: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  .chapter-text {
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+  .chapter-frame { aspect-ratio: 16 / 10; }
+}
+/* keep the last chapter clear of the floating mobile action bar */
+@media (max-width: 767px) {
+  .chapter-section { padding-bottom: 132px; }
+}
+html[data-reduced-motion="user"] .chapter-section,
+html[data-reduced-motion="user"] .chapter-wrapper { height: auto !important; }
+html[data-reduced-motion="user"] .chapter-stage {
+  position: static !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+html[data-reduced-motion="user"] .chapter-track {
+  flex-direction: column !important;
+  transform: none !important;
+}
+html[data-reduced-motion="user"] .chapter-panel {
+  width: 100% !important;
+  height: auto !important;
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+html[data-reduced-motion="user"] .chapter-text {
+  transform: none !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }

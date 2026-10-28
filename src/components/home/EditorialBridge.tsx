@@ -68,22 +68,22 @@ export function EditorialBridge() {
     };
   }, []);
 
-  return <section ref={section} id="approach" className="home-introduction relative overflow-hidden border-b border-border py-20 md:py-28">
-    <div className="mx-auto max-w-[1440px] px-5 md:px-8">
-      <div className="mb-12 flex items-center justify-between gap-4 border-b border-border pb-5">
-        <p className="eyebrow text-primary">Your home. Your possibilities.</p>
-        <span className="text-xs text-muted-foreground">A considered approach</span>
+  return <section ref={section} id="approach" className="home-introduction relative overflow-hidden border-b border-forest-deep/15 py-20 md:py-28">
+    <div className="relative z-10 mx-auto max-w-[1440px] px-5 md:px-8">
+      <div className="mb-12 flex items-center justify-between gap-4 border-b border-forest-deep/15 pb-5">
+        <p className="eyebrow text-forest-deep">Your home. Your possibilities.</p>
+        <span className="text-xs text-forest-deep/70">A considered approach</span>
       </div>
       <div className="grid items-center gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">
         <div className="relative z-10">
-          <RevealLines lines={["Better energy starts", "with understanding", "your home."]} className="font-display text-4xl font-extrabold leading-[1.1] tracking-normal text-foreground md:text-5xl xl:text-6xl" />
-          <Reveal className="mt-7 max-w-lg text-base leading-relaxed text-muted-foreground md:text-lg">
+          <RevealLines lines={["Better energy starts", "with understanding", "your home."]} className="font-display text-4xl font-extrabold leading-[1.1] tracking-normal text-forest-deep md:text-5xl xl:text-6xl" />
+          <Reveal className="mt-7 max-w-lg text-base leading-relaxed text-forest-deep md:text-lg">
             Your roof, your hot water system and the rooms you use every day all shape the right upgrade. Explore the possibilities with Austar Energy and take the next step with a quote tailored to your property.
           </Reveal>
-          <Reveal className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-border pt-5">
-            <Button asChild variant="link" className="px-0"><Link to="/solar"><Sun />Solar<ArrowUpRight /></Link></Button>
-            <Button asChild variant="link" className="px-0"><Link to="/heat-pumps"><Droplets />Hot water<ArrowUpRight /></Link></Button>
-            <Button asChild variant="link" className="px-0"><Link to="/air-conditioning"><Wind />Comfort<ArrowUpRight /></Link></Button>
+          <Reveal className="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-forest-deep/20 pt-5">
+            <Button asChild variant="link" className="px-0 font-semibold text-forest-deep hover:text-charcoal"><Link to="/solar"><Sun />Solar<ArrowUpRight /></Link></Button>
+            <Button asChild variant="link" className="px-0 font-semibold text-forest-deep hover:text-charcoal"><Link to="/heat-pumps"><Droplets />Hot water<ArrowUpRight /></Link></Button>
+            <Button asChild variant="link" className="px-0 font-semibold text-forest-deep hover:text-charcoal"><Link to="/air-conditioning"><Wind />Comfort<ArrowUpRight /></Link></Button>
           </Reveal>
         </div>
         <div className="home-photo-perspective min-w-0">
@@ -93,7 +93,7 @@ export function EditorialBridge() {
             <figure className="home-photo home-photo-water"><img src={hotwater.url} alt="Heat pump hot water equipment beside a home" loading="lazy" decoding="async" /><figcaption><Droplets />Hot water</figcaption></figure>
             <figure className="home-photo home-photo-comfort"><img src={comfort.url} alt="A comfortable modern living room" loading="lazy" decoding="async" /><figcaption><Wind />Indoor comfort</figcaption></figure>
           </div>
-          <p className="mt-4 text-center text-[11px] text-muted-foreground">Illustrative photography</p>
+          <p className="mt-4 text-center text-[11px] text-forest-deep/60">Illustrative photography</p>
         </div>
       </div>
     </div>

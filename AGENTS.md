@@ -33,3 +33,8 @@
 ## Home introduction
 
 - Keep the home introduction in its own module and animate its real-photo collage using CSS depth variables driven by one event-scheduled rAF; this isolates its scroll/pointer motion without loading WebGL or affecting other sections.
+
+## Closing chapter strip (src/components/home/ChapterStrip.tsx)
+
+- Keep the closing section's chapters as one pinned horizontal filmstrip driven by a single rAF loop, each chapter holding centred before it slides; avoid perspective/rotateY on the panels, because 3D lean pulls a neighbouring photo across the reading text.
+- Drive the narrow-screen and reduced-motion stacking from CSS overrides on `chapter-section`/`chapter-wrapper`/`chapter-stage` rather than from React state, so a server-rendered or stale pinned layout can never leave chapters sideways or invisible.

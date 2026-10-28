@@ -536,40 +536,4 @@ export { FaqSection } from "./FaqSection";
 
 /* =============================== I. Final CTA ============================== */
 
-export function FinalCta() {
-  return (
-    <section className="relative overflow-hidden">
-      <img
-        src={houseDusk.url}
-        alt="A home glowing warmly at dusk"
-        loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-charcoal/60 via-charcoal/40 to-charcoal/80" />
-      <div className="relative mx-auto max-w-[1440px] px-5 py-28 text-center md:px-8 md:py-40">
-        <RevealLines
-          lines={["Your home. A brighter", "next chapter."]}
-          className="font-display font-extrabold tracking-tight text-ivory [font-size:clamp(34px,5vw,72px)]"
-        />
-        <Reveal className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-ivory/80">
-          Tell us what you're planning. Let's explore the right next step — one upgrade or several.
-        </Reveal>
-        <Reveal delay={120} className="mt-9 flex flex-wrap justify-center gap-3">
-          <Link
-            to="/contact"
-            className="inline-flex items-center rounded-full bg-leaf px-8 py-4 text-sm font-semibold text-charcoal transition-all hover:bg-leaf-soft hover:shadow-[0_12px_40px_rgba(104,169,67,0.45)]"
-          >
-            Get my personalised quote
-          </Link>
-          <a
-            href={SITE.phoneHref}
-            className="inline-flex items-center gap-2 rounded-full border border-ivory/30 bg-ivory/5 px-8 py-4 text-sm font-semibold text-ivory backdrop-blur transition-colors hover:bg-ivory/15"
-          >
-            <Phone className="size-4" aria-hidden="true" />
-            Call {SITE.phoneDisplay}
-          </a>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
+export { ChapterStrip as FinalCta } from "./ChapterStrip";
