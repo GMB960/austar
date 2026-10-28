@@ -49,7 +49,7 @@ type Beat = {
 const BEATS: Beat[] = [
   { pos: [11.2, 5.0, 12.4], target: [-1.8, 1.5, 0], elevation: 13, azimuth: -55, sunColor: "#ffc37e", sky: "#f3e4cd", ambient: 0.55 },
   { pos: [3.8, 5.8, 8.6], target: [0.5, 3.1, 0.8], elevation: 36, azimuth: -20, sunColor: "#fff2dc", sky: "#eef0e6", ambient: 0.7 },
-  { pos: [-7.8, 2.5, 8.8], target: [-3.8, 0.8, 1.7], elevation: 56, azimuth: 5, sunColor: "#fff8ec", sky: "#eef1e9", ambient: 0.78 },
+  { pos: [-8.8, 2.4, 9.8], target: [-5.6, 0.8, 1.4], elevation: 56, azimuth: 5, sunColor: "#fff8ec", sky: "#eef1e9", ambient: 0.78 },
   { pos: [4.2, 2.1, 6.2], target: [0.9, 1.5, -0.6], elevation: 33, azimuth: 35, sunColor: "#ffe9c4", sky: "#ece9da", ambient: 0.65 },
   { pos: [11.6, 4.2, 12.8], target: [-1.4, 1.6, 0], elevation: 7, azimuth: 60, sunColor: "#ff9d62", sky: "#56516a", ambient: 0.4 },
 ];
@@ -271,7 +271,7 @@ function Window({
       {/* warm interior glow at dusk — between the reveal and the glass */}
       <mesh position={[0, 0, 0.002]}>
         <planeGeometry args={[w, h]} />
-        <meshStandardMaterial ref={glowSetter} color="#ffd9a0" emissive="#ffb35c" emissiveIntensity={0} toneMapped={false} />
+        <meshStandardMaterial ref={glowSetter} color="#37302a" emissive="#ffb35c" emissiveIntensity={0} toneMapped={false} />
       </mesh>
     </group>
   );
