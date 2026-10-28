@@ -2,6 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { ServicePage } from "@/components/site/ServicePage";
 import solarHipRoof from "@/assets/solar-hip-roof.asset.json";
+import solarMacro from "@/assets/solar-macro.asset.json";
+import solarInstaller from "@/assets/solar-installer.asset.json";
+import solarTiled from "@/assets/solar-tiled-roof.asset.json";
 import { OFFERS_NOTICE } from "@/lib/site";
 
 export const Route = createFileRoute("/solar")({
@@ -69,6 +72,13 @@ function SolarPage() {
           q: "Can I also ask about hot water or air conditioning?",
           a: "Absolutely — many enquiries cover more than one upgrade. Mention everything you're considering and we'll address it in the same conversation.",
         },
+      ]}
+      current="/solar"
+      highlightsTitle="What shapes a good solar system."
+      highlights={[
+        { title: "Panels and orientation", body: "North-facing roof planes usually collect the most daytime sun, while east and west planes can spread generation across morning and afternoon. Shading from trees or neighbouring buildings matters just as much.", image: solarMacro.url, alt: "Close-up of solar panel cells" },
+        { title: "Inverters and monitoring", body: "The inverter converts panel output into power your home can use. Many systems include monitoring so you can see generation and usage through the day.", image: solarTiled.url, alt: "Solar panels on a tiled roof" },
+        { title: "Careful installation", body: "Mounting, cabling and switchboard work are carried out to suit your roof type, with the finished system explained to you at handover.", image: solarInstaller.url, alt: "Installer fitting solar panels on a roof" },
       ]}
       offersNotice={OFFERS_NOTICE}
     />

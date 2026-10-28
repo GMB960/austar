@@ -2,6 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { ServicePage } from "@/components/site/ServicePage";
 import heatpumpUnit from "@/assets/heatpump-unit.asset.json";
+import heatpumpInstall from "@/assets/heatpump-install.asset.json";
+import heatpumpUnit2 from "@/assets/heatpump-unit-2.asset.json";
+import bathroom from "@/assets/bathroom.asset.json";
 import { OFFERS_NOTICE } from "@/lib/site";
 
 export const Route = createFileRoute("/heat-pumps")({
@@ -69,6 +72,13 @@ function HeatPumpsPage() {
           q: "Could an offer apply to my upgrade?",
           a: "Available offers and eligibility depend on your location, property, existing system and applicable program conditions. We can review what applies to your property.",
         },
+      ]}
+      current="/heat-pumps"
+      highlightsTitle="Why households make the switch."
+      highlights={[
+        { title: "Less energy for the same job", body: "Because most of the heat is drawn from the air, a heat pump typically uses considerably less electricity than a conventional electric storage system to heat the same water.", image: heatpumpUnit2.url, alt: "Heat pump hot water unit outside a home" },
+        { title: "Sized for your household", body: "Tank size is matched to how many people live in the home and when you use hot water, so mornings and evenings are covered comfortably.", image: bathroom.url, alt: "Modern bathroom with shower" },
+        { title: "A tidy replacement", body: "Units are usually installed near your existing hot water service, with the old system removed and the new one commissioned and explained.", image: heatpumpInstall.url, alt: "Heat pump hot water installation" },
       ]}
       offersNotice={OFFERS_NOTICE}
     />

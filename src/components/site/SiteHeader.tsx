@@ -233,7 +233,7 @@ export function SiteHeader() {
               ref={menuButtonRef}
               type="button"
               className={cn(
-                "inline-flex items-center justify-center rounded-full",
+                "inline-flex items-center justify-center rounded-full md:hidden",
                 SETTLE,
                 compact ? "size-9 bg-ivory-bright ring-1 ring-charcoal/10" : "glass size-11",
               )}

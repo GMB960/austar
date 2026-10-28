@@ -2,6 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { ServicePage } from "@/components/site/ServicePage";
 import lounge from "@/assets/lounge.asset.json";
+import acIndoor from "@/assets/ac-indoor.asset.json";
+import acOutdoor from "@/assets/ac-outdoor.asset.json";
+import kitchen from "@/assets/kitchen.asset.json";
 import { OFFERS_NOTICE } from "@/lib/site";
 
 export const Route = createFileRoute("/air-conditioning")({
@@ -69,6 +72,13 @@ function AirConditioningPage() {
           q: "Do you install for business premises?",
           a: "We take enquiries for business premises as well as homes. Mention your property type when you get in touch.",
         },
+      ]}
+      current="/air-conditioning"
+      highlightsTitle="Comfort, planned room by room."
+      highlights={[
+        { title: "Indoor units that fit the room", body: "Wall-mounted split systems suit individual rooms, while ducted systems serve the whole home through discreet ceiling vents.", image: acIndoor.url, alt: "Wall-mounted indoor air conditioning unit" },
+        { title: "Outdoor units placed with care", body: "Outdoor units are positioned for airflow, servicing access and minimal noise near bedrooms and neighbours.", image: acOutdoor.url, alt: "Outdoor air conditioning unit beside a home" },
+        { title: "Open-plan living", body: "Kitchens and living areas often need more capacity. We size systems to the space and how sunlight and layout affect it.", image: kitchen.url, alt: "Bright open-plan kitchen and living area" },
       ]}
       offersNotice={OFFERS_NOTICE}
     />

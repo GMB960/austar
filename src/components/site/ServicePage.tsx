@@ -4,6 +4,17 @@ import { ArrowRight, Phone } from "lucide-react";
 import { PhotoFrame } from "@/components/site/PhotoFrame";
 import { Reveal, RevealLines, useRevealContainer } from "@/components/site/Reveal";
 import { SITE } from "@/lib/site";
+import solarThumb from "@/assets/solar-hip-roof.asset.json";
+import heatpumpThumb from "@/assets/heatpump-unit.asset.json";
+import loungeThumb from "@/assets/lounge.asset.json";
+
+const ALL_SOLUTIONS = [
+  { to: "/solar" as const, title: "Solar", blurb: "Put your roof to work with a system planned around your property.", image: solarThumb.url },
+  { to: "/heat-pumps" as const, title: "Heat pump hot water", blurb: "An efficient everyday upgrade for one of your home's essentials.", image: heatpumpThumb.url },
+  { to: "/air-conditioning" as const, title: "Air conditioning", blurb: "Comfort for the rooms you live in, through every season.", image: loungeThumb.url },
+];
+
+export type Highlight = { title: string; body: string; image: string; alt: string };
 
 export type ServicePageProps = {
   eyebrow: string;
@@ -15,6 +26,9 @@ export type ServicePageProps = {
   sections: { title: string; body: string }[];
   faq: { q: string; a: string }[];
   offersNotice: string;
+  highlightsTitle?: string;
+  highlights?: Highlight[];
+  current?: "/solar" | "/heat-pumps" | "/air-conditioning";
 };
 
 export function ServicePage({
@@ -27,6 +41,9 @@ export function ServicePage({
   sections,
   faq,
   offersNotice,
+  highlightsTitle = "What to know before you decide.",
+  highlights = [],
+  current,
 }: ServicePageProps) {
   const ref = useRevealContainer<HTMLElement>();
 
@@ -88,6 +105,32 @@ export function ServicePage({
         </div>
       </section>
 
+      {/* highlights with real photography */}
+      {highlights.length > 0 && (
+        <section className="py-16 md:py-24">
+          <div className="mx-auto max-w-[1440px] px-5 md:px-8">
+            <RevealLines
+              lines={[highlightsTitle]}
+              className="font-display text-3xl font-extrabold tracking-tight text-charcoal md:text-5xl"
+            />
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {highlights.map((h, i) => (
+                <Reveal key={h.title} delay={i * 90} className="group overflow-hidden rounded-3xl bg-ivory-bright shadow-[0_10px_36px_rgba(16,23,19,0.07)]">
+                  <div className="aspect-[4/3] overflow-hidden bg-sage">
+                    <img src={h.image} alt={h.alt} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-display text-xl font-bold text-charcoal">{h.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-charcoal/70">{h.body}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground">Illustrative photography</p>
+          </div>
+        </section>
+      )}
+
       {/* FAQ */}
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-[860px] px-5 md:px-8">
@@ -107,6 +150,32 @@ export function ServicePage({
                   </summary>
                   <p className="mt-3 text-sm leading-relaxed text-charcoal/70">{f.a}</p>
                 </details>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* other solutions */}
+      <section className="bg-sage/40 py-16 md:py-24">
+        <div className="mx-auto max-w-[1440px] px-5 md:px-8">
+          <RevealLines
+            lines={["Explore other solutions."]}
+            className="font-display text-2xl font-extrabold tracking-tight text-charcoal md:text-4xl"
+          />
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {ALL_SOLUTIONS.filter((s) => s.to !== current).map((s, i) => (
+              <Reveal key={s.to} delay={i * 80}>
+                <Link to={s.to} className="group flex items-center gap-5 rounded-3xl bg-ivory-bright p-4 shadow-[0_10px_36px_rgba(16,23,19,0.06)] transition-transform hover:-translate-y-1">
+                  <span className="mask-round h-24 w-32 shrink-0 overflow-hidden bg-sage">
+                    <img src={s.image} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  </span>
+                  <span className="flex-1">
+                    <span className="block font-display text-lg font-bold text-charcoal">{s.title}</span>
+                    <span className="mt-1 block text-sm text-charcoal/70">{s.blurb}</span>
+                  </span>
+                  <ArrowRight className="size-5 shrink-0 text-forest transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                </Link>
               </Reveal>
             ))}
           </div>
