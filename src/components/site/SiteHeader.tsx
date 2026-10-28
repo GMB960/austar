@@ -79,11 +79,11 @@ export function SiteHeader() {
       >
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-5 md:h-[72px] md:px-8">
           <Link to="/" className="flex items-center gap-3" aria-label={`${SITE.name} home`}>
-            <span className="flex items-center rounded-lg bg-ivory-bright/90 px-2.5 py-1.5">
+            <span className="flex items-center rounded-lg bg-ivory-bright px-2.5 py-1.5 ring-1 ring-charcoal/10">
               <img
                 src={LOGO_URL}
                 alt={`${SITE.name} logo`}
-                className="h-6 w-auto md:h-7"
+                className="h-8 w-auto md:h-9"
                 width={200}
                 height={74}
               />

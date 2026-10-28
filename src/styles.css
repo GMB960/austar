@@ -44,6 +44,7 @@
   --color-ring: var(--ring);
   /* Extended Austar palette */
   --color-ivory: var(--ivory);
+  --color-ivory-bright: var(--ivory-bright);
   --color-charcoal: var(--charcoal);
   --color-forest: var(--forest);
   --color-forest-deep: var(--forest-deep);

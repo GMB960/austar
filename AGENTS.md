@@ -38,3 +38,8 @@
 
 - Keep the closing section's chapters as one pinned horizontal filmstrip driven by a single rAF loop, each chapter holding centred before it slides; avoid perspective/rotateY on the panels, because 3D lean pulls a neighbouring photo across the reading text.
 - Drive the narrow-screen and reduced-motion stacking from CSS overrides on `chapter-section`/`chapter-wrapper`/`chapter-stage` rather than from React state, so a server-rendered or stale pinned layout can never leave chapters sideways or invisible.
+
+## Brand mark and palette tokens
+
+- Register a colour in the `@theme` block of `src/styles.css` before using it as a utility class or `var(--color-*)`; an unregistered name compiles to nothing and leaves panels silently transparent.
+- Keep the site logo a single deep-green ink with its thin strokes thickened at source, because hairline strokes antialias away at header/footer sizes; render it on a solid cream panel so it reads over photos and dark sections alike.
