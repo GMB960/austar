@@ -27,11 +27,11 @@ type Beat = {
 
 // hero(dawn) → solar(morning) → hotwater(midday) → comfort(afternoon) → end(dusk)
 const BEATS: Beat[] = [
-  { pos: [8.6, 4.6, 10.2], target: [-0.9, 1.3, 0], elevation: 13, azimuth: -55, sunColor: "#ffc37e", sky: "#f3e4cd", ambient: 0.55 },
-  { pos: [3.4, 4.9, 7.0], target: [0.4, 3.0, 0.6], elevation: 36, azimuth: -20, sunColor: "#fff2dc", sky: "#eef0e6", ambient: 0.7 },
-  { pos: [-4.6, 2.1, 7.2], target: [-4.0, 0.9, 1.6], elevation: 56, azimuth: 5, sunColor: "#fff8ec", sky: "#eef1e9", ambient: 0.78 },
-  { pos: [3.6, 1.9, 5.6], target: [0.9, 1.5, -0.6], elevation: 33, azimuth: 35, sunColor: "#ffe9c4", sky: "#ece9da", ambient: 0.65 },
-  { pos: [9.4, 3.6, 11.0], target: [-0.6, 1.5, 0], elevation: 7, azimuth: 60, sunColor: "#ff9d62", sky: "#56516a", ambient: 0.4 },
+  { pos: [11.2, 5.0, 12.4], target: [-1.8, 1.5, 0], elevation: 13, azimuth: -55, sunColor: "#ffc37e", sky: "#f3e4cd", ambient: 0.55 },
+  { pos: [3.8, 5.8, 8.6], target: [0.5, 3.1, 0.8], elevation: 36, azimuth: -20, sunColor: "#fff2dc", sky: "#eef0e6", ambient: 0.7 },
+  { pos: [-5.4, 2.3, 7.6], target: [-4.2, 1.0, 1.6], elevation: 56, azimuth: 5, sunColor: "#fff8ec", sky: "#eef1e9", ambient: 0.78 },
+  { pos: [4.2, 2.1, 6.2], target: [0.9, 1.5, -0.6], elevation: 33, azimuth: 35, sunColor: "#ffe9c4", sky: "#ece9da", ambient: 0.65 },
+  { pos: [11.6, 4.2, 12.8], target: [-1.4, 1.6, 0], elevation: 7, azimuth: 60, sunColor: "#ff9d62", sky: "#56516a", ambient: 0.4 },
 ];
 
 const BEAT_T = [0, 0.24, 0.49, 0.74, 1]; // progress stops for the beats
@@ -84,8 +84,19 @@ function House({ glowMaterials }: { glowMaterials: RefObject<(THREE.MeshStandard
   );
   const frameMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#2b322d", roughness: 0.5 }), []);
 
-  const roofAngle = Math.atan2(1.7, 3.1);
-  const roofLen = Math.sqrt(1.7 * 1.7 + 3.1 * 3.1);
+  // Gable roof as one triangular prism: cross-section in the z/y plane,
+  // extruded along x. Clean apex, no crossing planes.
+  const roofGeo = useMemo(() => {
+    const shape = new THREE.Shape();
+    shape.moveTo(-3.45, 0);
+    shape.lineTo(3.45, 0);
+    shape.lineTo(0, 1.8);
+    shape.closePath();
+    const geo = new THREE.ExtrudeGeometry(shape, { depth: 7.1, bevelEnabled: false });
+    geo.rotateY(-Math.PI / 2);
+    geo.translate(3.55, 0, 0);
+    return geo;
+  }, []);
 
   const glowSetter = (i: number) => (m: THREE.MeshStandardMaterial | null) => {
     const arr = glowMaterials.current;
@@ -102,23 +113,11 @@ function House({ glowMaterials }: { glowMaterials: RefObject<(THREE.MeshStandard
       <mesh position={[0, 0.09, 0]} material={dark}>
         <boxGeometry args={[6.7, 0.18, 6.5]} />
       </mesh>
-      {/* gable roof: ridge along x, slopes facing ±z */}
-      <group position={[0, 3.95, 0]}>
-        <mesh rotation={[roofAngle, 0, 0]} castShadow material={roofMat}>
-          <boxGeometry args={[7.0, 0.14, roofLen + 0.4]} />
-        </mesh>
-        <mesh position={[0, 0, 0]} rotation={[-roofAngle, 0, 0]} castShadow material={roofMat}>
-          <boxGeometry args={[7.0, 0.14, roofLen + 0.4]} />
-        </mesh>
-        <mesh position={[0, 0.68, 0]} material={roofMat}>
-          <boxGeometry args={[7.1, 0.12, 0.26]} />
-        </mesh>
-      </group>
-      {/* gable ends (triangles) */}
-      <GableEnds material={render} />
+      {/* roof */}
+      <mesh geometry={roofGeo} position={[0, 2.98, 0]} castShadow material={roofMat} />
       {/* chimney */}
-      <mesh position={[2.3, 4.4, -1.4]} castShadow material={render}>
-        <boxGeometry args={[0.5, 1.1, 0.5]} />
+      <mesh position={[2.3, 4.3, -1.3]} castShadow material={render}>
+        <boxGeometry args={[0.5, 1.0, 0.5]} />
       </mesh>
       {/* door */}
       <mesh position={[-0.1, 1.06, 3.12]} material={timber}>
@@ -169,25 +168,6 @@ function House({ glowMaterials }: { glowMaterials: RefObject<(THREE.MeshStandard
   );
 }
 
-function GableEnds({ material }: { material: THREE.Material }) {
-  const geo = useMemo(() => {
-    const s = new THREE.Shape();
-    s.moveTo(-3.1, 0);
-    s.lineTo(3.1, 0);
-    s.lineTo(3.1, 0.9);
-    s.lineTo(0, 2.0);
-    s.lineTo(-3.1, 0.9);
-    s.closePath();
-    return new THREE.ExtrudeGeometry(s, { depth: 0.16, bevelEnabled: false });
-  }, []);
-  return (
-    <>
-      <mesh position={[-3.28, 3.0, -3.07]} material={material} geometry={geo} />
-      <mesh position={[3.12, 3.0, -3.07]} material={material} geometry={geo} />
-    </>
-  );
-}
-
 function SolarArray() {
   const panelMat = useMemo(
     () => new THREE.MeshStandardMaterial({ color: "#0e1c2e", roughness: 0.18, metalness: 0.7 }),
@@ -197,14 +177,14 @@ function SolarArray() {
     () => new THREE.MeshStandardMaterial({ color: "#8d9295", roughness: 0.4, metalness: 0.6 }),
     [],
   );
-  const roofAngle = Math.atan2(1.7, 3.1);
+  const roofAngle = Math.atan2(1.8, 3.45);
   const panels = [];
   for (let row = 0; row < 2; row++) {
     for (let col = 0; col < 4; col++) {
       panels.push(
         <group
           key={`${row}-${col}`}
-          position={[-1.95 + col * 1.28, 0.16, -0.45 + row * 1.5]}
+          position={[-1.95 + col * 1.28, 0.16, -0.75 + row * 1.55]}
           rotation={[roofAngle, 0, 0]}
         >
           <mesh castShadow material={frameMat}>
@@ -217,7 +197,11 @@ function SolarArray() {
       );
     }
   }
-  return <group position={[0, 4.0, 1.05]}>{panels}</group>;
+  return (
+    <group position={[0, 3.62, 1.35]} rotation={[roofAngle, 0, 0]}>
+      {panels}
+    </group>
+  );
 }
 
 function HeatPumpUnit() {
@@ -661,10 +645,10 @@ export default function StoryCanvas({
       <SolarArray />
       <HeatPumpUnit />
       <AcUnit />
-      <Tree position={[-7.2, 0, -2.4]} scale={1.25} />
-      <Tree position={[7.4, 0, -1.2]} scale={1.05} />
-      <Tree position={[6.6, 0, 4.6]} scale={0.85} />
-      <Tree position={[-7.8, 0, 4.2]} scale={0.9} />
+      <Tree position={[-8.6, 0, -3.0]} scale={1.05} />
+      <Tree position={[8.8, 0, -2.0]} scale={0.9} />
+      <Tree position={[7.8, 0, 5.6]} scale={0.7} />
+      <Tree position={[-9.2, 0, 5.0]} scale={0.75} />
 
       {/* solar electricity: amber; solar generation fades as daylight ends */}
       <EnergyPath
@@ -681,7 +665,7 @@ export default function StoryCanvas({
 
       <HotspotLabel
         id="solar"
-        position={[0, 5.45, 1.0]}
+        position={[0, 4.9, 1.2]}
         label="Solar"
         active={activeHotspot === "solar"}
         onSelect={onSelectHotspot}
