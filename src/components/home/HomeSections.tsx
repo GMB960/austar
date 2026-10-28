@@ -327,6 +327,8 @@ export function ProcessTimeline() {
           el.style.transform = `translate3d(0,${ty}px,${tz}px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${sc})`;
           el.style.opacity = String(Math.max(0, op));
           el.style.zIndex = String(100 - i);
+          const txt = el.lastElementChild as HTMLElement | null;
+          if (txt) txt.style.opacity = String(d < 0 ? Math.max(0, 1 + d * 3) : 1);
           const img = imgRefs.current[i];
           if (img) img.style.transform = `scale(${1.15 - Math.min(Math.max(d + 1, 0), 2) * 0.05}) translateY(${(d - 0.5) * -12}px)`;
         }
