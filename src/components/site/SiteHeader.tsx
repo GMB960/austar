@@ -30,10 +30,12 @@ const SOLUTIONS = [
   },
 ];
 
+const SETTLE = "transition-all duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]";
+
 /**
- * The header starts full height and flush with the page edge, then settles into
- * a shorter, inset capsule once the visitor scrolls — so it keeps its place at
- * the top of the screen without ever covering the story underneath it.
+ * The header opens tall and see-through over the first photograph, then settles
+ * into a slim, solid panel the moment you scroll — so it stays legible over
+ * every section without ever covering the story underneath it.
  */
 export function SiteHeader() {
   const [compact, setCompact] = useState(false);
@@ -95,50 +97,39 @@ export function SiteHeader() {
     };
   }, [menuOpen]);
 
-  const settle = "transition duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]";
-
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50">
-        {/* Reading rail: shows how far through the page you are */}
-        <div
-          aria-hidden="true"
-          className={cn(
-            "pointer-events-none absolute inset-x-0 top-0 h-[2px] overflow-hidden",
-            compact ? "opacity-100" : "opacity-0",
-            settle,
-          )}
-        >
-          <div ref={railRef} className="h-full origin-left scale-x-0 bg-leaf" />
-        </div>
-
         {/* Soft scrim keeps the nav legible over a bright or busy photograph */}
         <div
           aria-hidden="true"
           className={cn(
-            "pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-ivory/55 via-ivory/20 to-transparent",
+            "pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-ivory/55 via-ivory/20 to-transparent transition-opacity duration-[520ms]",
             compact ? "opacity-0" : "opacity-100",
-            settle,
           )}
         />
 
-        <div className={cn("mx-auto max-w-[1440px]", compact ? "px-3 md:px-5" : "px-0", settle)}>
+        <div
+          className={cn(
+            "relative flex items-stretch border-b",
+            SETTLE,
+            compact
+              ? "h-[50px] rounded-b-[20px] border-charcoal/10 bg-ivory-bright/95 shadow-[0_12px_30px_rgba(16,23,19,0.10)] backdrop-blur-xl md:h-[54px]"
+              : "h-16 rounded-b-none border-transparent bg-transparent md:h-[72px]",
+          )}
+        >
           <div
             className={cn(
-              "flex items-center justify-between border transition duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-              compact
-                ? "h-[52px] rounded-full border-charcoal/10 bg-ivory-bright/90 px-2.5 shadow-[0_10px_34px_rgba(16,23,19,0.12)] backdrop-blur-xl md:h-[54px] md:px-3"
-                : "h-16 rounded-none border-transparent bg-transparent px-5 md:h-[72px] md:px-8",
+              "mx-auto flex w-full max-w-[1440px] items-center justify-between",
+              SETTLE,
+              compact ? "px-4 md:px-6" : "px-5 md:px-8",
             )}
           >
-            <Link
-              to="/"
-              className="flex shrink-0 items-center"
-              aria-label={`${SITE.name} home`}
-            >
+            <Link to="/" className="flex shrink-0 items-center" aria-label={`${SITE.name} home`}>
               <span
                 className={cn(
-                  "flex items-center ring-1 ring-charcoal/10 transition duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+                  "flex items-center ring-1 ring-charcoal/10",
+                  SETTLE,
                   compact
                     ? "rounded-lg bg-ivory-bright px-2 py-1"
                     : "rounded-xl bg-ivory-bright px-2.5 py-1.5 shadow-[0_4px_14px_rgba(16,23,19,0.07)]",
@@ -147,10 +138,7 @@ export function SiteHeader() {
                 <img
                   src={LOGO_URL}
                   alt={`${SITE.name} logo`}
-                  className={cn(
-                    "w-auto transition duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-                    compact ? "h-[22px] md:h-6" : "h-8 md:h-9",
-                  )}
+                  className={cn("w-auto", SETTLE, compact ? "h-[22px] md:h-6" : "h-8 md:h-9")}
                   width={200}
                   height={74}
                 />
@@ -233,9 +221,7 @@ export function SiteHeader() {
                 to="/contact"
                 className={cn(
                   "ml-2 inline-flex items-center gap-2 rounded-full bg-leaf font-semibold text-charcoal transition-all duration-200 hover:bg-leaf-soft hover:shadow-[0_6px_20px_rgba(104,169,67,0.35)]",
-                  compact
-                    ? "px-4 py-1.5 text-[13px]"
-                    : "px-5 py-2.5 text-sm",
+                  compact ? "px-4 py-1.5 text-[13px]" : "px-5 py-2.5 text-sm",
                 )}
               >
                 Get a free quote
@@ -247,7 +233,8 @@ export function SiteHeader() {
               ref={menuButtonRef}
               type="button"
               className={cn(
-                "inline-flex items-center justify-center rounded-full transition duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)] md:hidden",
+                "inline-flex items-center justify-center rounded-full",
+                SETTLE,
                 compact ? "size-9 bg-ivory-bright ring-1 ring-charcoal/10" : "glass size-11",
               )}
               aria-expanded={menuOpen}
@@ -261,6 +248,17 @@ export function SiteHeader() {
                 <Menu className="size-5" aria-hidden="true" />
               )}
             </button>
+          </div>
+
+          {/* Reading rail: how far through the page you are */}
+          <div
+            aria-hidden="true"
+            className={cn(
+              "pointer-events-none absolute inset-x-6 bottom-0 h-[2px] overflow-hidden rounded-full bg-charcoal/8 transition-opacity duration-[520ms]",
+              compact ? "opacity-100" : "opacity-0",
+            )}
+          >
+            <div ref={railRef} className="h-full origin-left scale-x-0 bg-leaf" />
           </div>
         </div>
       </header>
