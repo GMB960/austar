@@ -25,46 +25,7 @@ import grevillea from "@/assets/grevillea.asset.json";
 
 /* ============================ A. Editorial bridge ========================== */
 
-export function EditorialBridge() {
-  const ref = useRevealContainer<HTMLElement>();
-  return (
-    <section ref={ref} id="approach" className="relative py-20 md:py-32">
-      <div className="mx-auto max-w-[1440px] px-5 md:px-8">
-        <div className="grid gap-12 md:grid-cols-12">
-          <div className="md:col-span-7">
-            <RevealLines
-              lines={["Better energy starts with", "understanding your home."]}
-              className="font-display font-extrabold leading-[1.04] tracking-[-0.03em] text-charcoal [font-size:clamp(32px,4.6vw,64px)]"
-            />
-            <Reveal className="mt-7 max-w-xl text-base leading-relaxed text-charcoal/75 md:text-lg">
-              Your roof, your hot water system and the rooms you use every day all shape the right
-              upgrade. Explore the possibilities with Austar Energy and take the next step with a
-              quote tailored to your property.
-            </Reveal>
-          </div>
-          <div className="flex flex-col gap-5 md:col-span-5">
-            <Reveal delay={120}>
-              <PhotoFrame
-                src={houseModern.url}
-                alt="A contemporary Australian home exterior"
-                ratio="aspect-[16/10]"
-                disclaimer="Illustrative photography"
-              />
-            </Reveal>
-            <div className="grid grid-cols-2 gap-5">
-              <Reveal delay={200}>
-                <PhotoFrame src={solarMacro.url} alt="Close-up of solar panel cells" ratio="aspect-square" parallax={false} />
-              </Reveal>
-              <Reveal delay={280} className="mt-8">
-                <PhotoFrame src={grevillea.url} alt="Native grevillea in flower" ratio="aspect-square" parallax={false} />
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+export { EditorialBridge } from "./EditorialBridge";
 
 /* ============================== B. Service cards =========================== */
 
