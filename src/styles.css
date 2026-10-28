@@ -458,3 +458,84 @@ html[data-reduced-motion="user"] .faq-questions { opacity: 1 !important; transfo
   .faq-section .faq-intro, .faq-section .faq-questions { opacity: 1 !important; transform: none !important; }
   .faq-answer[data-state] { transform: none; }
 }
+
+/* ---------------------------- chapter strip ------------------------------ */
+/* Pinned horizontal filmstrip: scroll drives the track sideways, each panel
+   carries a real photograph and its own writing. */
+.chapter-stage { position: relative; }
+.chapter-track {
+  perspective: 1500px;
+  will-change: transform;
+}
+.chapter-panel {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+.chapter-frame {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 3px solid var(--ivory-bright);
+  border-radius: 10px;
+  box-shadow:
+    0 46px 80px -34px rgb(0 0 0 / 70%),
+    0 3px 0 rgb(255 255 255 / 12%);
+}
+.chapter-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.14);
+  will-change: transform;
+}
+.chapter-num {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: rgb(7 16 11 / 62%);
+  backdrop-filter: blur(6px);
+  color: var(--ivory);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+}
+.chapter-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--leaf);
+  white-space: nowrap;
+}
+.chapter-text { will-change: transform, opacity; }
+.chapter-rail {
+  position: absolute;
+  inset: auto 20px 26px;
+  z-index: 20;
+}
+@media (max-width: 767px) {
+  .chapter-frame { aspect-ratio: 16 / 10; }
+  .chapter-track { perspective: none; }
+  .chapter-panel { transform: none !important; opacity: 1 !important; visibility: visible !important; }
+  .chapter-text { transform: none !important; opacity: 1 !important; }
+}
+html[data-reduced-motion="user"] .chapter-track { transform: none !important; }
+html[data-reduced-motion="user"] .chapter-panel,
+html[data-reduced-motion="user"] .chapter-text {
+  transform: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chapter-track { transform: none !important; }
+  .chapter-panel,
+  .chapter-text {
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
