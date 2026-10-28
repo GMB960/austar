@@ -416,10 +416,10 @@ function HeatPumpUnit({ mats, grille }: { mats: Mats; grille: THREE.Texture }) {
       <mesh position={[0, 0.75, 0]} castShadow material={bodyMat}>
         <boxGeometry args={[1.0, 1.25, 0.62]} />
       </mesh>
-      <mesh position={[0.52, 0.85, 0]} rotation={[0, Math.PI / 2, 0]} material={mats.darkMetal}>
+      <mesh position={[-0.52, 0.85, 0]} rotation={[0, Math.PI / 2, 0]} material={mats.darkMetal}>
         <cylinderGeometry args={[0.3, 0.3, 0.06, 24]} />
       </mesh>
-      <mesh position={[0.556, 0.85, 0]} rotation={[0, Math.PI / 2, 0]}>
+      <mesh position={[-0.556, 0.85, 0]} rotation={[0, -Math.PI / 2, 0]}>
         <planeGeometry args={[0.58, 0.58]} />
         <meshStandardMaterial map={grille} transparent roughness={0.6} />
       </mesh>
@@ -440,10 +440,10 @@ function AcUnit({ mats, grille }: { mats: Mats; grille: THREE.Texture }) {
       <mesh position={[0, 0.34, 0]} castShadow material={bodyMat}>
         <boxGeometry args={[0.9, 0.68, 0.36]} />
       </mesh>
-      <mesh position={[-0.46, 0.34, 0]} rotation={[0, Math.PI / 2, 0]} material={mats.darkMetal}>
+      <mesh position={[0.46, 0.34, 0]} rotation={[0, Math.PI / 2, 0]} material={mats.darkMetal}>
         <cylinderGeometry args={[0.27, 0.27, 0.03, 24]} />
       </mesh>
-      <mesh position={[-0.478, 0.34, 0]} rotation={[0, -Math.PI / 2, 0]}>
+      <mesh position={[0.478, 0.34, 0]} rotation={[0, Math.PI / 2, 0]}>
         <planeGeometry args={[0.52, 0.52]} />
         <meshStandardMaterial map={grille} transparent roughness={0.6} />
       </mesh>
