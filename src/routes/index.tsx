@@ -1,7 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { SiteHeader } from "@/components/site/SiteHeader";
-import { SiteFooter } from "@/components/site/SiteFooter";
 import { StoryHero } from "@/components/home/StoryHero";
 import {
   EditorialBridge,
@@ -59,7 +57,6 @@ export const Route = createFileRoute("/")({
 function Index() {
   return (
     <>
-      <SiteHeader />
       <StoryHero>
         <EditorialBridge />
         <ServiceCards />
@@ -71,7 +68,6 @@ function Index() {
         <FaqSection />
         <FinalCta />
       </StoryHero>
-      <SiteFooter />
     </>
   );
 }
