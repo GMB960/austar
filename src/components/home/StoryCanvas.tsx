@@ -416,10 +416,10 @@ function HeatPumpUnit({ mats, grille }: { mats: Mats; grille: THREE.Texture }) {
       <mesh position={[0, 0.75, 0]} castShadow material={bodyMat}>
         <boxGeometry args={[1.0, 1.25, 0.62]} />
       </mesh>
-      <mesh position={[0.52, 0.85, 0]} rotation={[0, Math.PI / 2, 0]} material={mats.darkMetal}>
+      <mesh position={[-0.52, 0.85, 0]} rotation={[0, Math.PI / 2, 0]} material={mats.darkMetal}>
         <cylinderGeometry args={[0.3, 0.3, 0.06, 24]} />
       </mesh>
-      <mesh position={[0.556, 0.85, 0]} rotation={[0, Math.PI / 2, 0]}>
+      <mesh position={[-0.556, 0.85, 0]} rotation={[0, -Math.PI / 2, 0]}>
         <planeGeometry args={[0.58, 0.58]} />
         <meshStandardMaterial map={grille} transparent roughness={0.6} />
       </mesh>
@@ -440,10 +440,10 @@ function AcUnit({ mats, grille }: { mats: Mats; grille: THREE.Texture }) {
       <mesh position={[0, 0.34, 0]} castShadow material={bodyMat}>
         <boxGeometry args={[0.9, 0.68, 0.36]} />
       </mesh>
-      <mesh position={[-0.46, 0.34, 0]} rotation={[0, Math.PI / 2, 0]} material={mats.darkMetal}>
+      <mesh position={[0.46, 0.34, 0]} rotation={[0, Math.PI / 2, 0]} material={mats.darkMetal}>
         <cylinderGeometry args={[0.27, 0.27, 0.03, 24]} />
       </mesh>
-      <mesh position={[-0.478, 0.34, 0]} rotation={[0, -Math.PI / 2, 0]}>
+      <mesh position={[0.478, 0.34, 0]} rotation={[0, Math.PI / 2, 0]}>
         <planeGeometry args={[0.52, 0.52]} />
         <meshStandardMaterial map={grille} transparent roughness={0.6} />
       </mesh>
@@ -610,22 +610,24 @@ function HotspotLabel({
 
   return (
     <group ref={group} position={position}>
-      <Html center distanceFactor={9} zIndexRange={[20, 0]} pointerEvents={interactive ? "auto" : "none"}>
-        <button
-          type="button"
-          tabIndex={interactive ? 0 : -1}
-          onClick={(e) => {
-            e.stopPropagation();
-            onSelect(id);
-          }}
-          className={`glass whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold text-charcoal transition-shadow ${
-            active ? "ring-2 ring-leaf" : ""
-          }`}
-          aria-pressed={active}
-        >
-          {label}
-        </button>
-      </Html>
+      {interactive && (
+        <Html center distanceFactor={9} zIndexRange={[20, 0]}>
+          <button
+            type="button"
+            tabIndex={0}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect(id);
+            }}
+            className={`glass whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold text-charcoal transition-shadow ${
+              active ? "ring-2 ring-leaf" : ""
+            }`}
+            aria-pressed={active}
+          >
+            {label}
+          </button>
+        </Html>
+      )}
       <mesh>
         <sphereGeometry args={[0.09, 16, 16]} />
         <meshStandardMaterial
@@ -718,18 +720,22 @@ function CameraRig({
   pointerRef: MutableRefObject<{ x: number; y: number }>;
   beatRef: MutableRefObject<BeatSample>;
 }) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
   const current = useRef({
     pos: v3(BEATS[0]!.pos),
     target: v3(BEATS[0]!.target),
   });
   const offset = useMemo(() => new THREE.Vector3(), []);
+  const desired = useMemo(() => new THREE.Vector3(), []);
 
   useFrame((_, delta) => {
     const b = beatRef.current;
     const cur = current.current;
     const lambda = 2.8;
-    cur.pos.lerp(b.pos, Math.min(1, delta * lambda));
+    // narrow/portrait viewports pull the camera back so the home stays framed
+    const factor = size.width / size.height < 1 ? 1.55 : 1;
+    desired.copy(b.pos).sub(b.target).multiplyScalar(factor).add(b.target);
+    cur.pos.lerp(desired, Math.min(1, delta * lambda));
     cur.target.lerp(b.target, Math.min(1, delta * lambda));
     // pointer parallax — at most ~3 degrees
     offset.set(pointerRef.current.x * 0.2, pointerRef.current.y * 0.12, 0);
