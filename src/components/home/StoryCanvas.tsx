@@ -610,22 +610,24 @@ function HotspotLabel({
 
   return (
     <group ref={group} position={position}>
-      <Html center distanceFactor={9} zIndexRange={[20, 0]} pointerEvents={interactive ? "auto" : "none"}>
-        <button
-          type="button"
-          tabIndex={interactive ? 0 : -1}
-          onClick={(e) => {
-            e.stopPropagation();
-            onSelect(id);
-          }}
-          className={`glass whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold text-charcoal transition-shadow ${
-            active ? "ring-2 ring-leaf" : ""
-          }`}
-          aria-pressed={active}
-        >
-          {label}
-        </button>
-      </Html>
+      {interactive && (
+        <Html center distanceFactor={9} zIndexRange={[20, 0]}>
+          <button
+            type="button"
+            tabIndex={0}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect(id);
+            }}
+            className={`glass whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold text-charcoal transition-shadow ${
+              active ? "ring-2 ring-leaf" : ""
+            }`}
+            aria-pressed={active}
+          >
+            {label}
+          </button>
+        </Html>
+      )}
       <mesh>
         <sphereGeometry args={[0.09, 16, 16]} />
         <meshStandardMaterial
