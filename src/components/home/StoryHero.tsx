@@ -15,7 +15,7 @@ import houseModern from "@/assets/house-modern.asset.json";
 import houseDuskWarm from "@/assets/house-dusk-warm.asset.json";
 import solarHipRoof from "@/assets/solar-hip-roof.asset.json";
 import heatpumpUnit from "@/assets/heatpump-unit.asset.json";
-import acIndoor from "@/assets/ac-indoor.asset.json";
+import lounge from "@/assets/lounge.asset.json";
 
 export const HERO_COPY = {
   eyebrow: "Solar • Hot water • Air conditioning",
@@ -65,8 +65,8 @@ const CHAPTERS = [
     points: ["Split and multi-room systems", "Quiet, efficient reverse-cycle", "Placed for the rooms you actually use"],
     cta: "Explore air conditioning",
     to: "/air-conditioning",
-    image: acIndoor.url,
-    imageAlt: "Wall-mounted air conditioner in a bright, modern room",
+    image: lounge.url,
+    imageAlt: "Bright, comfortable modern living room",
     origin: "60% 35%",
   },
 ] as const;
@@ -349,7 +349,7 @@ function HeroCopy() {
         <h1 className="mt-5 font-display font-extrabold leading-[0.98] tracking-[-0.035em] text-charcoal [font-size:clamp(42px,10vw,60px)] md:[font-size:clamp(64px,7.5vw,120px)]">
           {HERO_COPY.headline.map((line) => (
             <span key={line} className="block overflow-hidden">
-              <span className="block translate-y-full animate-[heroRise_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards]">{line}</span>
+              <span className="block [transform:translateY(110%)] animate-[heroRise_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards]">{line}</span>
             </span>
           ))}
         </h1>
