@@ -1,6 +1,6 @@
 import { useMemo, useRef, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Lightformer, Html } from "@react-three/drei";
+import { Environment, Lightformer } from "@react-three/drei";
 import * as THREE from "three";
 import states from "@/lib/australia-map.json";
 
@@ -16,6 +16,28 @@ function tokenColor(name: string) {
   ctx.fillRect(0, 0, 1, 1);
   const pixel = ctx.getImageData(0, 0, 1, 1).data;
   return new THREE.Color(`rgb(${pixel[0]},${pixel[1]},${pixel[2]})`);
+}
+
+function CityLabel({ name, position, color }: { name: string; position: [number, number, number]; color: string }) {
+  const texture = useMemo(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 256; canvas.height = 80;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.fillStyle = `#${tokenColor("--charcoal").getHexString()}`;
+      ctx.fillRect(0, 0, 256, 80);
+      ctx.fillStyle = `#${tokenColor(color).getHexString()}`;
+      ctx.beginPath(); ctx.arc(24, 40, 7, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = `#${tokenColor("--ivory").getHexString()}`;
+      ctx.font = "500 27px sans-serif";
+      ctx.fillText(name, 44, 49);
+    }
+    const map = new THREE.CanvasTexture(canvas);
+    map.colorSpace = THREE.SRGBColorSpace;
+    return map;
+  }, [name, color]);
+  useEffect(() => () => texture.dispose(), [texture]);
+  return <sprite position={position} scale={[1.65, 0.52, 1]} renderOrder={10}><spriteMaterial map={texture} depthTest={false} toneMapped={false} /></sprite>;
 }
 
 function Atlas({ selected, onSelect, progress }: Props) {
@@ -88,12 +110,8 @@ function Atlas({ selected, onSelect, progress }: Props) {
           <lineSegments geometry={g.edges} material={materials.border} />
         </group>;
       })}
-      <Html position={[4.1, -1.95, 0.95]} center className="pointer-events-none">
-        <div className="atlas-pin"><span className="atlas-pin-dot" /><span>Sydney<span className="block text-[9px] text-ivory/60">NSW</span></span></div>
-      </Html>
-      <Html position={[3.05, -3.18, 0.95]} center className="pointer-events-none">
-        <div className="atlas-pin atlas-pin-vic"><span className="atlas-pin-dot" /><span>Melbourne<span className="block text-[9px] text-ivory/60">VIC</span></span></div>
-      </Html>
+      <CityLabel name="Sydney" position={[4.7, -2.1, 1]} color="--leaf" />
+      <CityLabel name="Melbourne" position={[3.1, -3.5, 1]} color="--amber" />
     </group>
   </>;
 }
