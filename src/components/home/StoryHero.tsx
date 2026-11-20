@@ -349,7 +349,7 @@ function HeroCopy() {
           <span className="sr-only">{HERO_COPY.eyebrow}</span>
           <span
             aria-hidden="true"
-            className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-black uppercase tracking-[0.14em] [transform:translateY(110%)] animate-[heroRise_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards] sm:gap-x-3 sm:text-[13px] sm:tracking-[0.2em] md:text-[19px] lg:text-[24px]"
+            className="hero-rise flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-black uppercase tracking-[0.14em] [transform:translateY(110%)] animate-[heroRise_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards] sm:gap-x-3 sm:text-[13px] sm:tracking-[0.2em] md:text-[19px] lg:text-[24px]"
           >
             <span className="mr-0.5 size-1.5 shrink-0 rounded-full bg-leaf md:size-2" />
             {HERO_COPY.eyebrow
@@ -366,7 +366,7 @@ function HeroCopy() {
         <h1 className="mt-4 font-display font-extrabold leading-[1.0] tracking-[-0.03em] text-charcoal [font-size:clamp(27px,6vw,36px)] md:mt-5 md:[font-size:clamp(38px,4.2vw,56px)]">
           {HERO_COPY.headline.map((line) => (
             <span key={line} className="block overflow-hidden">
-              <span className="block [transform:translateY(110%)] animate-[heroRise_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards]">{line}</span>
+              <span className="hero-rise block [transform:translateY(110%)] animate-[heroRise_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards]">{line}</span>
             </span>
           ))}
         </h1>

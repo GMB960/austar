@@ -263,6 +263,11 @@ html[data-reduced-motion="user"] *::after {
     opacity: 1;
     transition: none;
   }
+  /* Hero kicker + headline: never leave the text parked off its own line. */
+  html:not([data-reduced-motion="full"]) .hero-rise {
+    transform: none;
+    animation: none;
+  }
 }
 
 /* Slow ambient drift for decorative accents */
