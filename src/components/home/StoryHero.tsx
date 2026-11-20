@@ -345,8 +345,25 @@ function HeroCopy() {
   return (
     <div className="mx-auto w-full max-w-[1440px] px-5 md:px-8">
       <div className="max-w-[860px]">
-        <p className="font-sans text-[12px] font-extrabold uppercase tracking-[0.1em] text-forest sm:text-sm sm:tracking-[0.18em] md:text-base">{HERO_COPY.eyebrow}</p>
-        <h1 className="mt-5 font-display font-extrabold leading-[0.98] tracking-[-0.035em] text-charcoal [font-size:clamp(36px,8vw,50px)] md:[font-size:clamp(50px,5.4vw,78px)]">
+        <p className="font-sans text-forest-deep">
+          <span className="sr-only">{HERO_COPY.eyebrow}</span>
+          <span
+            aria-hidden="true"
+            className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-black uppercase tracking-[0.14em] [transform:translateY(110%)] animate-[heroRise_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards] sm:gap-x-3 sm:text-[13px] sm:tracking-[0.2em] md:text-[19px] lg:text-[24px]"
+          >
+            <span className="mr-0.5 size-1.5 shrink-0 rounded-full bg-leaf md:size-2" />
+            {HERO_COPY.eyebrow
+              .split(" • ")
+              .map((word, i, all) => (
+                <span key={word} className="flex items-center gap-x-2 sm:gap-x-3">
+                  {word}
+                  {i < all.length - 1 && <span className="font-black text-leaf-deep">•</span>}
+                </span>
+              ))}
+            <span className="hidden h-px w-16 shrink-0 bg-gradient-to-r from-leaf/80 to-transparent md:block lg:w-24" />
+          </span>
+        </p>
+        <h1 className="mt-4 font-display font-extrabold leading-[1.0] tracking-[-0.03em] text-charcoal [font-size:clamp(27px,6vw,36px)] md:mt-5 md:[font-size:clamp(38px,4.2vw,56px)]">
           {HERO_COPY.headline.map((line) => (
             <span key={line} className="block overflow-hidden">
               <span className="block [transform:translateY(110%)] animate-[heroRise_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards]">{line}</span>
