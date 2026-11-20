@@ -8,6 +8,8 @@
 - Header rebuilt: opens tall and see-through over the first photo, then settles
   into a slim solid cream panel with a reading-progress rail as you scroll
   (checked on desktop and phone)
+- Hero typography: headline kept small, "Solar • Hot water • Air conditioning"
+  line enlarged to black weight with green bullets, dot and trailing hairline
 
 ## Open
 - None
