@@ -345,8 +345,8 @@ function HeroCopy() {
   return (
     <div className="mx-auto w-full max-w-[1440px] px-5 md:px-8">
       <div className="max-w-[860px]">
-        <p className="eyebrow text-forest/80">{HERO_COPY.eyebrow}</p>
-        <h1 className="mt-5 font-display font-extrabold leading-[0.98] tracking-[-0.035em] text-charcoal [font-size:clamp(42px,9vw,60px)] md:[font-size:clamp(60px,6.6vw,96px)]">
+        <p className="font-sans text-sm font-extrabold uppercase tracking-[0.18em] text-forest md:text-base">{HERO_COPY.eyebrow}</p>
+        <h1 className="mt-5 font-display font-extrabold leading-[0.98] tracking-[-0.035em] text-charcoal [font-size:clamp(36px,8vw,50px)] md:[font-size:clamp(50px,5.4vw,78px)]">
           {HERO_COPY.headline.map((line) => (
             <span key={line} className="block overflow-hidden">
               <span className="block [transform:translateY(110%)] animate-[heroRise_0.9s_cubic-bezier(0.22,1,0.36,1)_forwards]">{line}</span>
