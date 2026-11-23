@@ -10,6 +10,7 @@
   (checked on desktop and phone)
 - Hero typography: headline kept small, "Solar • Hot water • Air conditioning"
   line enlarged to black weight with green bullets, dot and trailing hairline
+- Centered cold-call notice after the hero story, with close/Escape, new-visit reminder and permanent opt-out; verified on desktop and phone.
 
 ## Open
 - None

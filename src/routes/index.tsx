@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { StoryHero } from "@/components/home/StoryHero";
+import { ColdCallNotice } from "@/components/home/ColdCallNotice";
 import {
   EditorialBridge,
   EligibilityPanel,
@@ -58,6 +59,7 @@ function Index() {
   return (
     <>
       <StoryHero>
+        <ColdCallNotice />
         <EditorialBridge />
         <ServiceCards />
         <HomeExplorer />

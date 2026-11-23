@@ -27,6 +27,13 @@ export const SITE = {
 export const COLD_CALL_NOTICE =
   "Austar Energy does not conduct cold-call marketing. If someone calls you claiming to represent us and you're unsure, hang up and check with us directly using the contact details published on this site.";
 
+/** Full official statement for the homepage notice. */
+export const COLD_CALL_STATEMENT = [
+  "Austar Energy wishes to clarify that we do not engage in or endorse cold calling practices. Recently, we have received reports of cold calls falsely made in our name.",
+  "We want to assure our clients and the public that these actions are not authorized by Austar Energy and do not align with our operational standards or policies.",
+  "We are committed to conducting our business with integrity and transparency, and any cold calling activity claiming association with Austar Energy is fraudulent and not representative of our company's practices.",
+] as const;
+
 /** Standing eligibility wording required wherever offers are mentioned. */
 export const OFFERS_NOTICE =
   "Available offers and eligibility depend on your location, property, existing system and applicable program conditions.";

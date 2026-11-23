@@ -27,6 +27,8 @@
 
 ## Frequently asked questions
 
+- Keep the scroll-triggered homepage notice isolated after the complete hero story; browser-only preference reads run in effects and a single scheduled scroll check triggers it once per mount, so SSR remains stable.
+
 - Keep the homepage FAQ in its own module with topic filters and the shared accessible accordion; use one event-scheduled rAF for scroll/pointer photo depth and CSS for answer transitions, respecting both system and site motion settings to keep animations lightweight and accessible.
 - Reuse the shared eligibility and cold-call notices rather than duplicating business-policy wording in expanded answers.
 
